@@ -1,0 +1,4 @@
+doctor info - {
+    bookingAccuracy,
+    ragistrationNo,
+}

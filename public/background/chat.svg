@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.dev/svgjs" width="1440" height="560" preserveAspectRatio="none" viewBox="0 0 1440 560">
+    <g mask="url(&quot;#SvgjsMask2363&quot;)" fill="none">
+        <rect width="1440" height="560" x="0" y="0" fill="url(&quot;#SvgjsLinearGradient2364&quot;)"></rect>
+        <use xlink:href="#SvgjsSymbol2365" x="0" y="0"></use>
+        <use xlink:href="#SvgjsSymbol2365" x="720" y="0"></use>
+    </g>
+    <defs>
+        <mask id="SvgjsMask2363">
+            <rect width="1440" height="560" fill="#ffffff"></rect>
+        </mask>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" gradientUnits="userSpaceOnUse" id="SvgjsLinearGradient2364">
+            <stop stop-color="rgba(154, 230, 227, 1)" offset="0"></stop>
+            <stop stop-color="rgba(171, 176, 182, 1)" offset="1"></stop>
+        </linearGradient>
+        <path d="M-1 0 a1 1 0 1 0 2 0 a1 1 0 1 0 -2 0z"></path>
+        <path d="M-3 0 a3 3 0 1 0 6 0 a3 3 0 1 0 -6 0z"></path>
+        <path d="M-5 0 a5 5 0 1 0 10 0 a5 5 0 1 0 -10 0z"></path>
+        <path d="M2 -2 L-2 2z"></path>
+        <path d="M6 -6 L-6 6z"></path>
+        <path d="M30 -30 L-30 30z"></path>
+    </defs>
+    <symbol id="SvgjsSymbol2365"></symbol>
+</svg>
