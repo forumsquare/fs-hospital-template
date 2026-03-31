@@ -172,6 +172,11 @@ const Footer: FC<FooterProps> = ({ addresses, logo, media, title, timings, email
                 alt="Youtube"
                 src="/icons/youtube.svg"
               />
+              <SocialIcon
+                href={media.linkedin}
+                alt="LinkedIn"
+                src="/icons/linkedin.svg"
+              />
             </div>
           </ul>
           <TimingsInfo timings={timings} />

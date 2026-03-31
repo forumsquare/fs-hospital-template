@@ -30,6 +30,8 @@ export const socialVal: SocialMediaType = {
   instagram: "https://www.instagram.com",
   twitter: "https://www.twitter.com",
   youtube: "https://www.youtube.com",
+  linkedin: "https://www.linkedin.com",
+  whatsapp: "https://wa.me/91XXXXXXXXXX",
 };
 
 export const storeInfoVal: StoreInfoType = {

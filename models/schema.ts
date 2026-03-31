@@ -25,6 +25,8 @@ export const MediaSchema = z.object({
   facebook: z.string().url().optional(),
   twitter: z.string().url().optional(),
   youtube: z.string().url().optional(),
+  linkedin: z.string().url().optional(),
+  whatsapp: z.string().url().optional(),
 });
 
 export type SocialMediaType = z.infer<typeof MediaSchema>;
