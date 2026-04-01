@@ -37,7 +37,7 @@ export const useSignInWithTemplateMutation = () => {
 export const useVerifyTemplateMutation = () => {
   return useMutation({
     mutationKey: qKey(apiEndpoints.auth.verifyTemplateOtp),
-    mutationFn: async (data: { phoneNo: string, otp: string }) => await verifyTemplateOtp(data.phoneNo, data.otp),
+    mutationFn: async (data: { id: string, otp: string }) => await verifyTemplateOtp(data.id, data.otp),
     onSuccess: async (data) => {
       console.log({ data });
     },

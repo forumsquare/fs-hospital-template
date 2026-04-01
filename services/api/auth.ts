@@ -62,12 +62,12 @@ export const signInWithTemplate = async (phoneNo: string) => {
   }
 }
 
-export const verifyTemplateOtp = async (phoneNo: string, otp: string) => {
+export const verifyTemplateOtp = async (id: string, otp: string) => {
   try {
     const response = await apiInstance.post<APISnapshotType>(
       apiEndpoints.auth.verifyTemplateOtp,
       {
-        phoneNo,
+        id,
         otp
       }
     )

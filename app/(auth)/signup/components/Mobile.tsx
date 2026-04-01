@@ -9,7 +9,7 @@ import useAuthStore from "@/stores/auth";
 import { useSignInWithTemplateMutation } from "@/services/query/authQuery";
 
 const MobileComponent = () => {
-  const { setShowOTP, setPhoneNumber } = useAuthStore((state) => state);
+  const { setShowOTP, setPhoneNumber, setOtpId } = useAuthStore((state) => state);
   const { mutateAsync: signInWithTemplate } = useSignInWithTemplateMutation();
   const formSchema = z.object({
     mobileNo: z
@@ -27,11 +27,15 @@ const MobileComponent = () => {
     },
   });
 
-  const onSubmit = (val: MobileType) => {
+  const onSubmit = async (val: MobileType) => {
     console.log(val);
-    setShowOTP(true);
-    setPhoneNumber(val.mobileNo);
-    signInWithTemplate(val.mobileNo);
+    const response = await signInWithTemplate(val.mobileNo);
+    console.log({ response });
+    if (response.data?.id) {
+      setOtpId(response.data.id);
+      setPhoneNumber(val.mobileNo);
+      setShowOTP(true);
+    }
   };
   
   return (

@@ -22,7 +22,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState, useEffect, useCallback } from "react";
 import useAuthStore from "@/stores/auth";
-import { useVerifyTemplateMutation } from "@/services/query/authQuery";
+import { useVerifyTemplateMutation, useSignInWithTemplateMutation } from "@/services/query/authQuery";
 
 const FormSchema = z.object({
   pin: z
@@ -36,8 +36,9 @@ const FormSchema = z.object({
 });
 
 const OTPForm = () => {
-  const { setShowOTP, phoneNumber } = useAuthStore((state) => state);
+  const { setShowOTP, phoneNumber, otpId, setOtpId } = useAuthStore((state) => state);
   const { mutateAsync: verifyTemplateOtp, isPending } = useVerifyTemplateMutation();
+  const { mutateAsync: resendOtp, isPending: isResending } = useSignInWithTemplateMutation();
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -50,11 +51,11 @@ const OTPForm = () => {
 
   const onSubmit = useCallback(async (data: z.infer<typeof FormSchema>) => {
     console.log(data);
-    await verifyTemplateOtp({ phoneNo: phoneNumber, otp: data.pin });
+    await verifyTemplateOtp({ id: otpId, otp: data.pin });
     router.replace("/");
-  }, [verifyTemplateOtp, phoneNumber, router]);
+  }, [verifyTemplateOtp, otpId, router]);
 
-  const [timeLeft, setTimeLeft] = useState(0);
+  const [timeLeft, setTimeLeft] = useState(60);
   const [canResend, setCanResend] = useState(false);
 
   const pin = form.watch("pin");
@@ -78,11 +79,18 @@ const OTPForm = () => {
     return () => clearInterval(timer);
   }, [timeLeft]);
 
-  const handleResendOTP = () => {
-    // Add your resend OTP logic here
-    form.setValue("pin", "");
-    setTimeLeft(1);
-    setCanResend(false);
+  const handleResendOTP = async () => {
+    try {
+      const response = await resendOtp(phoneNumber);
+      if (response.data?.id) {
+        setOtpId(response.data.id);
+      }
+      form.setValue("pin", "");
+      setTimeLeft(60);
+      setCanResend(false);
+    } catch (error) {
+      console.error("Error resending OTP", error);
+    }
   };
 
   return (
@@ -93,16 +101,16 @@ const OTPForm = () => {
           name="pin"
           render={({ field }) => (
             <FormItem className="text-center w-full space-y-8 [data-input-otp-container]:">
-              <FormLabel className="bg-gradient-to-r from-gray-500 to-stone-400 bg-clip-text text-transparent text-4xl font-extrabold">
+              <FormLabel className="text-black drop-shadow-md text-4xl font-extrabold">
                 Verification Code
               </FormLabel>
               <FormDescription className="my-5 leading-5">
-                <span className="text-sm">
+                <span className="text-sm text-white/80 font-medium">
                   {" "}
-                  we have sent a verification code to the{" "}
+                  We have sent a verification code to{" "}
                 </span>
                 <br />
-                <span className="font-extrabold tracking-wide  text-black mt-1 text-md">
+                <span className="font-extrabold tracking-wide text-white drop-shadow-sm mt-1 text-md">
                   +91 {phoneNumber}
                 </span>
               </FormDescription>
@@ -111,11 +119,11 @@ const OTPForm = () => {
                   {Array.from({ length: 6 }).map((_, index) => (
                     <InputOTPGroup
                       key={index}
-                      className=" w-14 h-14 backdrop-blur-xl bg-gradient-to-r from-white/10 to-white/20 rounded-xl"
+                      className="w-14 h-14 backdrop-blur-xl border border-white/30 bg-white/20 rounded-xl shadow-inner transition-colors focus-within:bg-white/30 focus-within:border-white/60"
                     >
                       <InputOTPSlot
                         index={index}
-                        className=" rounded-xl  text-center w-full h-full"
+                        className="rounded-xl text-center w-full h-full text-white font-bold text-2xl "
                       />
                     </InputOTPGroup>
                   ))}
@@ -130,14 +138,14 @@ const OTPForm = () => {
             <Button
               type="button"
               variant="ghost"
+              disabled={isResending}
               onClick={handleResendOTP}
-              className="text-blue-400 hover:text-blue-500 shadow-none hover:bg-transparent
-              "
+              className="text-white font-bold underline hover:text-white/80 shadow-none hover:bg-transparent"
             >
               Resend OTP
             </Button>
           ) : (
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-white/80 font-medium">
               Resend OTP in {Math.floor(timeLeft / 60)}:
               {(timeLeft % 60).toString().padStart(2, "0")}
             </p>
@@ -147,7 +155,7 @@ const OTPForm = () => {
           <Button
             type="reset"
             variant={"outline"}
-            className="rounded-3xl flex-1 font-bold bg-black/30 backdrop-blur-lg py-[20px] border-white/10"
+            className="rounded-3xl flex-1 font-bold text-white bg-white/10 hover:bg-white/20 hover:text-white backdrop-blur-lg py-[20px] border-white/20 shadow-lg"
             onClick={() => setShowOTP(false)}
           >
             Back
