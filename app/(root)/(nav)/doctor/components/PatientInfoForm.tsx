@@ -16,8 +16,8 @@ import { useRouter } from "next/navigation";
 import AskForLogin from "@/components/custom/AskForLogin";
 
 const PatientInfoForm = () => {
-  const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
     (async () => {

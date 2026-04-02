@@ -10,7 +10,7 @@ import { APISnapshotType } from "@/models/types";
 
 export const bookSlot = async (data: SlotBookingType) => {
   const to = new Date(data.time).setTime(
-    new Date(data.time).getTime() + 20 * 60 * 1000 // Changed from 30 to 20 minutes
+    new Date(data.time).getTime() + (data.slotDuration || 20) * 60 * 1000
   );
   try {
     const response = await apiInstance.post<APISnapshotType>(

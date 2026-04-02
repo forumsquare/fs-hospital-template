@@ -30,7 +30,9 @@ const Comp = ({
   setIsOpen: (value: boolean) => void;
   chatRef: React.RefObject<HTMLDivElement>;
 }) => {
-  const isLoggedIn = auth.currentUser;
+  const [loading, setLoading] = useState(true);
+  // const [user, setUser] = useState<any>(null);
+  const [userId, setUserId] = useState("");
 
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
@@ -46,7 +48,6 @@ const Comp = ({
   const { mutate: sendMessageMutate } = useSendMessageMutation();
   const { mutate: updateSeenMutate } = useUpdateSeenMutation();
 
-  const [userId, setUserId] = useState("");
 
 
   useEffect(() => {
@@ -67,15 +68,18 @@ const Comp = ({
   const [chatMessages, setChatMessages] = useState<Message[]>([]);
 
   useEffect(() => {
+    setLoading(true)
     const fetchUser = async () => {
       const res = await getCookie("userInfo");
       if (res) {
         const user = JSON.parse(res);
         setUserId(user.id);
+        setLoading(false);
       }
     };
     fetchUser();
   }, []);
+
 
   useEffect(() => {
     if (userId) {
@@ -117,11 +121,11 @@ const Comp = ({
       }
     };
 
-    if (isLoggedIn) document.addEventListener("mousedown", handleClickOutside);
+    if (userId) document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isLoggedIn, chatRef, setIsOpen]);
+  }, [userId, chatRef, setIsOpen]);
 
   const isMobile = useMediaQuery("(max-width: 900px)");
   return (
@@ -129,10 +133,10 @@ const Comp = ({
       className={cn([
         `fixed right-0 top-0 pt-20 md:pt-0 md:right-4 md:top-[50%] md:translate-y-[-50%] transition-all duration-500 w-screen h-full md:w-[400px] md:h-[calc(100vh-150px)] 
           bg-card md:rounded-2xl  z-[20000000] animate-in fade-in slide-in-from-right-1/2  !overflow-hidden chat-shadow `,
-        !isLoggedIn && !isMobile && "!z-[1]",
+        !userId && !isMobile && "!z-[1]",
       ])}
     >
-      {!isLoggedIn && <AskForLogin onCancel={() => setIsOpen(false)} />}
+      {!userId && !loading && <AskForLogin onCancel={() => setIsOpen(false)} />}
       <div className="absolute top-0 left-0 w-full h-16 bg-green-600 p-4  flex justify-between items-center z-[1000000]">
         <div>
           <h3 className="text-white font-semibold">Chat with us</h3>
@@ -195,8 +199,8 @@ const Comp = ({
             options?: { experimental_attachments?: FileList }
           ) => {
             // event?.preventDefault();
-            console.log(input);
-            if (input.trim() !== "" && chatRoomId) {
+            console.log(input, { chatRoomId });
+            if (input.trim() !== "") {
               const tempMessage = {
                 id: Date.now().toString(),
                 content: input,
@@ -207,8 +211,9 @@ const Comp = ({
 
               setMessages([...messages, tempMessage]);
 
+              console.log({ chatRoomId, input, storeId });
               sendMessageMutate({
-                chatId: chatRoomId,
+                chatId: chatRoomId || null,
                 message: input,
                 storeId: storeId,
               });

@@ -4,31 +4,43 @@ import { motion } from "framer-motion";
 // import { navList } from "@/constants/list";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Bell } from "lucide-react";
 import { Badge } from "../ui/badge";
 import { useGetUnreadCountQuery } from "@/services/query/notificationsQuery";
 import { usePathname } from "next/navigation";
 import { auth } from "@/lib/firebase";
 import { NavType } from "@/models/types";
+import { getCookie } from "@/lib/serverCom";
 
 const HeaderSection = ({ logo, name }: { logo: string, name: string }) => {
-  const isLoggedIn = auth.currentUser;
+  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState<any>(null);
+
   const pathname = usePathname();
 
-  const { data } = useGetUnreadCountQuery(isLoggedIn);
+  const { data } = useGetUnreadCountQuery(!!user);
 
   const navList: NavType[] = [
     { href: "/", title: "Home" },
     { href: "/#doctors", title: "Doctors" },
     { href: "/specializations", title: "Specializations" },
     // { href: "/diagnostics", title: "Diagnostics" },
-    isLoggedIn
+    !!user
       ? { href: "/account", title: "Account" }
       : { href: "/signup", title: "Signup" },
     { href: "/account/notifications", title: "Notifications" },
   ];
 
+  useEffect(() => {
+    (async () => {
+      const userInfo = await getCookie("userInfo");
+      if (userInfo) {
+        setUser(JSON.parse(userInfo));
+      }
+      setLoading(false);
+    })();
+  }, []);
   // console.log({ data, isLoggedIn }, "notifications");
 
   return (
@@ -48,7 +60,7 @@ const HeaderSection = ({ logo, name }: { logo: string, name: string }) => {
               className="h-[50px] w-[150px] object-contain object-center "
             />
             {navList.map(({ title, href }) =>
-              title === "Notifications" && !isLoggedIn ? null : (
+              title === "Notifications" && !!user ? null : (
                 <motion.li
                   key={href}
                   className="h-3/4 flex items-center justify-center relative"

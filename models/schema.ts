@@ -339,6 +339,7 @@ export const SlotBookingSchema = z.object({
   age: z.string(),
   gender: z.string(),
   comments: z.string().optional(),
+  slotDuration: z.number().optional(),
 });
 
 export type SlotBookingType = z.infer<typeof SlotBookingSchema>;

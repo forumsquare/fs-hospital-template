@@ -208,7 +208,7 @@ apiInstance.interceptors.response.use(
       try {
         // Call refresh token endpoint with credentials to include HTTP-only cookies
         const refreshToken = await getCookie("refreshToken");
-
+        if (!refreshToken) throw new Error("No refresh token found");
         const response = await apiInstance.get(apiEndpoints.auth.accessToken, {
           headers: {
             Authorization: `Bearer ${refreshToken}`,
@@ -219,7 +219,7 @@ apiInstance.interceptors.response.use(
 
         // Store new access token
         // setCookie("accessToken", accessToken);
-        accessToken = newToken;
+        setAccessToken(newToken);
 
         // Update Authorization header
 

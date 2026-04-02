@@ -46,6 +46,7 @@ const DetailsConfirmation = () => {
       tax: "0",
       totalAmt: "0",
       comments: patientInfo?.comment,
+      slotDuration: doctorInfo?.slotDuration,
     });
     reset();
     // console.log({ data });

@@ -27,13 +27,13 @@ export const getMessages = async (
 };
 
 export const sendMessage = async (data: {
-  chatId: string;
+  chatId?: string | null;
   message: string;
   storeId: string;
 }) => {
   try {
     const formData = new FormData();
-    formData.append("chatId", data.chatId);
+    if (data.chatId) formData.append("chatId", data.chatId);
     formData.append("message", data.message);
     formData.append("storeId", data.storeId);
 

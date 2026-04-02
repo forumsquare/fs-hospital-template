@@ -198,6 +198,8 @@ const TimingsInfo = () => {
   };
 
   const TimeSlot = ({ slot }: { slot: Date }) => {
+
+    console.log({ slot });
     const status: BookingStatus = getBookingStatus(slot);
     return (
       <CustomToolTip content={<span>{status}</span>}>
