@@ -6,20 +6,20 @@ export function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
 
   // Define protected routes that start with /account
-  const isProtectedRoute = path.startsWith("/account");
+  // const isProtectedRoute = path.startsWith("/account");
 
   // Get the token from cookies
   const token = request.cookies.get("refreshToken")?.value;
 
-  
+
   if (path.startsWith("/signup") && token) {
     return NextResponse.redirect(new URL("/", request.url));
   }
   // If it's a protected route and there's no token, redirect to login
-  if (isProtectedRoute && !token) {
-    const response = NextResponse.redirect(new URL("/signup", request.url));
-    return response;
-  }
+  // if (isProtectedRoute && !token) {
+  //   const response = NextResponse.redirect(new URL("/signup", request.url));
+  //   return response;
+  // }
 
   return NextResponse.next();
 }

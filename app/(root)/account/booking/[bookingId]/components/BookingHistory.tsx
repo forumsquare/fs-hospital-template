@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import BookingStatus from "./BookingStatus";
 import DoctorInfo from "./DoctorInfo";
 import AppointmentTime from "./AppointmentTime";
@@ -9,10 +9,28 @@ import HospitalInfo from "./HospitalInfo";
 import { AppointmentType, HospitalInfoType } from "@/models/schema";
 import PatientInfo from "./PatientInfo";
 import { slotType } from "@/lib/enum";
+import { getCookie } from "@/lib/serverCom";
 
 const BookingHistory: React.FC<{ booking: AppointmentType }> = ({
   booking,
 }) => {
+  const [loading, setLoading] = useState(true);
+  // const [user, setUser] = useState<any>(null);
+  const [userId, setUserId] = useState("");
+
+  useEffect(() => {
+    setLoading(true)
+    const fetchUser = async () => {
+      const res = await getCookie("userInfo");
+      if (res) {
+        const user = JSON.parse(res);
+        setUserId(user.id);
+        setLoading(false);
+      }
+    };
+    fetchUser();
+  }, []);
+
   // console.log(booking.hospitalInfo);
   return (
     <div className="max-w-3xl mx-auto">
@@ -41,7 +59,7 @@ const BookingHistory: React.FC<{ booking: AppointmentType }> = ({
           <PatientInfo userInfo={booking} />
         </div>
 
-        <div className="px-3 sm:px-6 py-4 border-t border-gray-100">
+        {userId && <div className="px-3 sm:px-6 py-4 border-t border-gray-100">
           <ActionButtons
             storeId={booking.store.id}
             bookingId={booking.id}
@@ -52,7 +70,7 @@ const BookingHistory: React.FC<{ booking: AppointmentType }> = ({
               booking.status !== slotType.CANCELLED
             }
           />
-        </div>
+        </div>}
       </div>
     </div>
   );

@@ -28,7 +28,7 @@ export const apiEndpoints = {
   appointMents: {
     bookSlot: "/user/:consultantId/bookAppointment",
     getAppointments: "/user/appointmentList",
-    getAppointmentById: "/user/appointments/:appointmentId",
+    getAppointmentById: "/public/appointments/:appointmentId",
     cancelAppointment: "/user/appointments/:appointmentId/cancel",
     raiseComplaint: "/user/appointments/:appointmentId/raiseComplaint",
     rateAppointment: "/user/appointments/:appointmentId/setRating",
