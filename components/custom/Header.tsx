@@ -28,7 +28,7 @@ const HeaderSection = ({ logo, name }: { logo: string, name: string }) => {
     // { href: "/diagnostics", title: "Diagnostics" },
     !!user
       ? { href: "/account", title: "Account" }
-      : { href: "/signup", title: "Signup" },
+      : { href: `/signup?redirect=${pathname}`, title: "Signup" },
     { href: "/account/notifications", title: "Notifications" },
   ];
 

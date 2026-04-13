@@ -10,6 +10,8 @@ import { AppointmentType, HospitalInfoType } from "@/models/schema";
 import PatientInfo from "./PatientInfo";
 import { slotType } from "@/lib/enum";
 import { getCookie } from "@/lib/serverCom";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const BookingHistory: React.FC<{ booking: AppointmentType }> = ({
   booking,
@@ -30,6 +32,8 @@ const BookingHistory: React.FC<{ booking: AppointmentType }> = ({
     };
     fetchUser();
   }, []);
+
+  const pathname = usePathname();
 
   // console.log(booking.hospitalInfo);
   return (
@@ -59,7 +63,7 @@ const BookingHistory: React.FC<{ booking: AppointmentType }> = ({
           <PatientInfo userInfo={booking} />
         </div>
 
-        {userId && <div className="px-3 sm:px-6 py-4 border-t border-gray-100">
+        {userId ? <div className="px-3 sm:px-6 py-4 border-t border-gray-100">
           <ActionButtons
             storeId={booking.store.id}
             bookingId={booking.id}
@@ -70,6 +74,8 @@ const BookingHistory: React.FC<{ booking: AppointmentType }> = ({
               booking.status !== slotType.CANCELLED
             }
           />
+        </div> : <div className="px-3 sm:px-6 py-4 border-t border-gray-100">
+          Want to cancel the appointment? <Link className="text-blue-600 font-semibold" href={`/signup?redirect=${pathname}`}>Login</Link> to continue
         </div>}
       </div>
     </div>

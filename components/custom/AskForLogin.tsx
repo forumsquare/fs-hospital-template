@@ -1,12 +1,9 @@
 import React from "react";
 import CustomDialog from "./CustomDialog";
 import { CustomButton, SubmitButton } from "./CustomButtons";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { DialogOverlay } from "../ui/dialog";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
-
-
-
 
 const AskForLogin = ({
   title,
@@ -22,6 +19,7 @@ const AskForLogin = ({
   const [open, setOpen] = React.useState(true);
   const isMobile = useMediaQuery("(max-width: 1024px)");
   const router = useRouter();
+  const pathname = usePathname();
   return (
     <CustomDialog
       className="max-w-80 rounded-xl p-4 z-[1000000000000000000]"
@@ -49,7 +47,7 @@ const AskForLogin = ({
           onClick={() => {
             // debugger;
             console.log("click");
-            router.push("/signup");
+            router.push(`/signup?redirect=${pathname}`);
             onSubmit?.();
           }}
           className="!z-[200000000000000]"

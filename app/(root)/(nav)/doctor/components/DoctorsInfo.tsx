@@ -24,20 +24,21 @@ const DoctorsInfo = ({ doctorInfo }: { doctorInfo: DoctorDetailsType }) => {
     doctorId: doctorInfo.id,
     page: 1,
     limit: 5,
-    isAscending: true,
-    sortBy: "RATING",
+    isAscending: false,
+    sortBy: "DATE",
   });
 
   const fee = parseFloat(doctorInfo!.fee);
   const discountPercent = parseFloat(doctorInfo!.discountAmt);
   const payableAmount = fee - (fee * discountPercent) / 100;
+  const formattedRating = parseFloat(doctorInfo.rating || "0").toFixed(1);
 
   console.log({ language: doctorInfo.languages.map((lang) => lang + " ") });
   return isPending ? (
     <CustomLoading />
   ) : (
     <section className={cn("!w-full")}>
-      <article className="space-y-6   px-3 !w-full">
+      <article className="space-y-6 px-3 !w-full">
         <div className="flex flex-col sm:flex-row items-center rounded-2xl bg-white/50 backdrop-blur-xl p-4 gap-4 border ">
           <div className="flex flex-col gap-y-2 items-center ">
             <Image
@@ -103,7 +104,8 @@ const DoctorsInfo = ({ doctorInfo }: { doctorInfo: DoctorDetailsType }) => {
             </div>
           </div>
         </div>
-
+        
+        {/* I'll use a larger block to ensure I don't miss the tab rendering */}
         <div className="flex flex-col gap-y-2 rounded-2xl bg-white filter backdrop-blur-md p-4 sm:p-8 border overflow-y-auto mb-2 w-full">
           <ul className="mb-4 flex space-x-4 ">
             {list.map((item, index) => (
@@ -115,10 +117,10 @@ const DoctorsInfo = ({ doctorInfo }: { doctorInfo: DoctorDetailsType }) => {
               >
                 {item}{" "}
                 {item === "Patient Stories" && (
-                  <span className="flex items-center gap-x-1">
-                    <Star className="text-orange-400" fill="orange" />
-                    <span className="">{doctorInfo.rating}</span>
-                    <span>({doctorInfo.ratingCount})</span>
+                  <span className="flex items-center gap-x-1 ml-2 px-2 py-0.5 bg-slate-900 text-white rounded-full text-[10px]">
+                    <Star className="size-3 text-orange-400 fill-orange-400" />
+                    <span className="font-bold">{formattedRating}</span>
+                    <span className="opacity-70">({doctorInfo.ratingCount})</span>
                   </span>
                 )}
               </Button>

@@ -4,10 +4,12 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { useSigninWithGoogleMutation } from "@/services/query/authQuery";
 import { Loader2 } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const AuthPage = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get("redirect") || "/";
   const { mutateAsync: signIn, isPending } = useSigninWithGoogleMutation();
   return (
     <section className="gap-y-12 flex flex-col h-fit">
@@ -32,7 +34,7 @@ const AuthPage = () => {
           variant={"outline"}
           onClick={async () => {
             await signIn();
-            router.push("/");
+            router.push(redirect);
           }}
           disabled={isPending}
         >

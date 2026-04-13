@@ -35,7 +35,7 @@ export const useGetDoctorReviewsQuery = (
   options?: { initialData?: any }
 ) => {
   return useQuery({
-    queryKey: qKey([apiEndpoints.consultant.getReviews, data.doctorId]),
+    queryKey: qKey([apiEndpoints.consultant.getReviews, data.doctorId, data.page.toString(), data.limit.toString(), data.sortBy, data.isAscending.toString()]),
     queryFn: () => getDoctorReviews(data),
     enabled: !!data.doctorId,
     ...options

@@ -17,14 +17,16 @@ const DoctorCard = ({
   const fee = parseFloat(doctor.fee);
   const discountPercent = parseFloat(doctor.discountAmt);
   const payableAmount = fee - (fee * discountPercent) / 100;
+  const formattedRating = parseFloat(doctor.rating || "0").toFixed(1);
+  const hasDiscount = discountPercent > 0;
+
   return (
-    <Card className="max-w-[310px] bg-white rounded-2xl overflow-hidden  transition-all duration-500 border border-gray-200 ">
-      {/* Header Section */}
-      <div className="relative bg-secondary text-primary">
-        <div className="relative p-5 flex items-center gap-6">
-          {/* Doctor Image */}
-          <div className="relative group">
-            <div className="w-28 h-28 rounded-2xl overflow-hidden ring-4 ring-white/50 shadow-lg transform transition-transform duration-500 group-hover:scale-105">
+    <Card className="max-w-[325px] bg-white rounded-[2rem] overflow-hidden transition-all duration-500 border-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] hover:-translate-y-1 group relative">
+      <div className="relative p-6 flex flex-col gap-6">
+        {/* Top Section: Photo & Info */}
+        <div className="flex gap-5 items-start">
+          <div className="relative shrink-0">
+            <div className="size-24 rounded-2xl overflow-hidden ring-4 ring-slate-50 shadow-xl transition-transform duration-700 group-hover:scale-105">
               <Image
                 src={doctor.image}
                 alt={doctor.name}
@@ -33,89 +35,73 @@ const DoctorCard = ({
                 className="w-full h-full object-cover"
               />
             </div>
-            {/* TODO: Check availability from backend */}
-
-            {/* <Badge className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-[var(--green)] text-white p-1  text-[9px] font-medium border-0 shadow-lg whitespace-nowrap">
-              <span className="animate-pulse">Available Now</span>
-            </Badge> */}
+            <div className="absolute -bottom-2 -right-2 bg-emerald-500 size-5 rounded-full border-4 border-white shadow-lg" />
           </div>
 
-          {/* Doctor Info */}
-          <div className="flex-1">
-            <h3 className="text-xl font-bold flex items-center gap-2">
+          <div className="flex-1 min-w-0 pt-1">
+            <h3 className="text-xl font-bold text-slate-900 leading-tight truncate">
               {doctor.name}
             </h3>
-            <p className="text-muted-foreground font-medium ">
+            <p className="text-sm font-semibold text-slate-400 mt-1 uppercase tracking-wider">
               {doctor.categories[0]?.name ?? "Specialist"}
             </p>
-            {/* <p className="text-muted-foreground font-medium text-[11px] whitespace-nowrap ">
-              Booking Accuracy :{" "}
-              <span className="font-bold">{doctor.accuracy}%</span>
-            </p> */}
+            <div className="inline-flex items-center gap-1.5 px-2 py-0.5 bg-emerald-500/10 rounded-full mt-3">
+              <span className="text-[10px] font-black text-emerald-600 uppercase">Top Rated</span>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Content Section */}
-      <div className="p-4 px-3 space-y-4">
-        {/* Stats Grid */}
-        <div className="flex items-center justify-center gap-3">
-          {/* Rating */}
-          <div className="text-center p-2 py-3 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100/50 hover:from-blue-100 hover:to-blue-200/50 transition-all duration-300 group cursor-pointer w-full">
-            <div className="flex items-center justify-center gap-1 text-blue-600 mb-1">
-              <Star
-                className="h-5 w-5 transform group-hover:scale-110 transition-transform duration-300"
-                fill="currentColor"
-              />
-              <span className="text-lg font-bold">{doctor.rating}</span>
+        {/* Middle Section: Stats Grid */}
+        <div className="grid grid-cols-2 gap-3">
+          <div className="flex flex-col items-center justify-center p-3 rounded-2xl bg-indigo-50/50 border border-indigo-100/50 transition-all duration-300 hover:bg-indigo-50">
+            <div className="flex items-center gap-1.5 text-indigo-600 mb-0.5">
+              <Star className="h-4 w-4 fill-current" />
+              <span className="text-lg font-black text-slate-900">{formattedRating}</span>
             </div>
-            <p className="text-xs text-gray-600">
+            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
               {doctor.ratingCount} Reviews
             </p>
           </div>
 
-          {/* Experience */}
-          <div className="text-center p-2 py-3 rounded-xl bg-orange-50 hover:bg-orange-100 transition-all duration-300 group cursor-pointer w-full">
-            <div className="flex items-center justify-center gap-1 text-orange-600 mb-1">
-              <Clock className="h-5 w-5 transform group-hover:scale-110 transition-transform duration-300" />
-              <span className="text-lg font-bold">15+</span>
+          <div className="flex flex-col items-center justify-center p-3 rounded-2xl bg-amber-50/50 border border-amber-100/50 transition-all duration-300 hover:bg-amber-50">
+            <div className="flex items-center gap-1.5 text-amber-500 mb-0.5">
+              <Clock className="h-4 w-4" />
+              <span className="text-lg font-black text-slate-900">15+</span>
             </div>
-            <p className="text-xs text-gray-600">Years Exp.</p>
+            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">Years Exp.</p>
           </div>
-
-          {/* Patients */}
-          {/* <div className="text-center p-2 py-3 rounded-xl bg-gradient-to-br from-green-50 to-green-100/50 hover:from-green-100 hover:to-green-200/50 transition-all duration-300 group cursor-pointer">
-            <div className="flex items-center justify-center gap-1 text-green-600 mb-1">
-              <Calendar className="h-5 w-5 transform group-hover:scale-110 transition-transform duration-300" />
-              <span className="text-lg font-bold">1.2k+</span>
-            </div>
-            <p className="text-xs text-gray-600">Patients</p>
-          </div> */}
         </div>
 
-        {/* Booking Section */}
-        <div className="bg-gradient-to-br from-gray-50 via-gray-50 to-blue-50 rounded-xl p-5">
-          <div className="flex flex-col  items-center justify-between gap-4">
-            <div className="flex  justify-between w-full items-center">
-              <p className="text-sm text-gray-500 mb-1">Consulting Fee :</p>
-              <p className="font-medium ">
-                <span className="line-through mr-2 text-sm text-gray-500 ">
-                  ₹{doctor?.fee?.toLocaleString()}
-                </span>
-                <span className=" font-semibold text-green-600">
+        {/* Bottom Section: CTA & Fee */}
+        <div className="space-y-4">
+          <div className="flex items-center justify-between px-1">
+            <div className="flex flex-col">
+              <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none">Consulting Fee</span>
+              <div className="flex items-baseline gap-2 mt-1">
+                <span className="text-2xl font-black text-slate-900 tracking-tight">
                   ₹{payableAmount.toLocaleString()}
                 </span>
-              </p>
+                {hasDiscount && (
+                  <span className="text-xs text-slate-400 line-through">
+                    ₹{fee.toLocaleString()}
+                  </span>
+                )}
+              </div>
             </div>
-            <Button
-              variant={"outline"}
-              className="w-full rounded-full border-2 border-muted-foreground hover:scale-105 transition-all duration-300 active:scale-95 text-base font-bold py-5 "
-              onClick={() => onBookAppointment(doctor.id)}
-            >
-              Book Appointment
-              <ChevronRight className="h-4 w-4 animate-bounce-x" />
-            </Button>
+            {hasDiscount && (
+              <div className="h-fit px-2 py-1 bg-rose-500 rounded-lg shadow-lg shadow-rose-200">
+                <span className="text-[10px] font-black text-white">-{discountPercent}%</span>
+              </div>
+            )}
           </div>
+
+          <Button
+            className="w-full rounded-2xl bg-slate-900 hover:bg-slate-800 text-white transition-all duration-300 h-14 font-bold text-base shadow-xl shadow-slate-200 group/btn"
+            onClick={() => onBookAppointment(doctor.id)}
+          >
+            Book Appointment
+            <ChevronRight className="h-4 w-4 ml-1 transition-transform duration-300 group-hover/btn:translate-x-1" />
+          </Button>
         </div>
       </div>
     </Card>

@@ -19,7 +19,7 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useEffect, useCallback } from "react";
 import useAuthStore from "@/stores/auth";
 import { useVerifyTemplateMutation, useSignInWithTemplateMutation } from "@/services/query/authQuery";
@@ -48,12 +48,14 @@ const OTPForm = () => {
   });
 
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get("redirect") || "/";
 
   const onSubmit = useCallback(async (data: z.infer<typeof FormSchema>) => {
     console.log(data);
     await verifyTemplateOtp({ id: otpId, otp: data.pin });
-    router.replace("/");
-  }, [verifyTemplateOtp, otpId, router]);
+    router.replace(redirect);
+  }, [verifyTemplateOtp, otpId, router, redirect]);
 
   const [timeLeft, setTimeLeft] = useState(60);
   const [canResend, setCanResend] = useState(false);
