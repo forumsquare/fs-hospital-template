@@ -83,9 +83,9 @@ const DoctorsInfo = ({ doctorInfo }: { doctorInfo: DoctorDetailsType }) => {
                   {doctorInfo.fee}
                 </span> */}
                 <p className="font-medium text-gray-700">
-                  <span className="line-through mr-2 text-xs">
+                  {doctorInfo.discountAmt && doctorInfo.discountAmt !== "0" && <span className="line-through mr-2 text-xs">
                     ₹{doctorInfo?.fee?.toLocaleString()}
-                  </span>
+                  </span>}
                   <span className="text-green-700  font-semibold">
                     ₹{payableAmount.toLocaleString()}
                   </span>
@@ -104,9 +104,9 @@ const DoctorsInfo = ({ doctorInfo }: { doctorInfo: DoctorDetailsType }) => {
             </div>
           </div>
         </div>
-        
+
         {/* I'll use a larger block to ensure I don't miss the tab rendering */}
-        <div className="flex flex-col gap-y-2 rounded-2xl bg-white filter backdrop-blur-md p-4 sm:p-8 border overflow-y-auto mb-2 w-full">
+        <div className="flex flex-col gap-y-2 rounded-2xl bg-white filter backdrop-blur-md p-4 sm:p-8 border mb-2 w-full [scrollbar-gutter:stable]">
           <ul className="mb-4 flex space-x-4 ">
             {list.map((item, index) => (
               <Button
@@ -126,23 +126,22 @@ const DoctorsInfo = ({ doctorInfo }: { doctorInfo: DoctorDetailsType }) => {
               </Button>
             ))}
           </ul>
-          <AnimatePresence initial={true} mode="popLayout">
+          <AnimatePresence mode="wait">
             <motion.div
               key={activeTab}
-              transition={{ duration: 0.3, ease: "easeInOut" }}
-              variants={{
-                enter: { opacity: 0, y: -50, filter: "blur(4px)" },
-                center: { opacity: 1, y: 0, filter: "blur(0px)" },
-                exit: { opacity: 0, y: 50, filter: "blur(4px)" },
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{
+                duration: 0.3,
+                ease: [0.23, 1, 0.32, 1]
               }}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              className="w-full"
+              style={{ width: "100%" }}
+              className="w-full min-h-[400px]"
             >
-              <div className=" flex flex-wrap gap-7 justify-center border-none h-fit w-full">
+              <div className="h-fit w-full">
                 {activeTab === "About" && (
-                  <div className="w-full space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                  <div className="w-full space-y-8">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pb-6 border-b border-slate-100">
                       <div className="flex items-start gap-3">
                         <div className="p-2 rounded-lg bg-primary/10 text-primary">
@@ -185,9 +184,8 @@ const DoctorsInfo = ({ doctorInfo }: { doctorInfo: DoctorDetailsType }) => {
                         </div>
                       )}
                     </div>
-                    
                     <div className="max-w-none text-slate-600 leading-[1.8] text-[15px] space-y-4">
-                      <ReactMarkdown 
+                      <ReactMarkdown
                         remarkPlugins={[remarkGfm]}
                         components={{
                           p: ({ node, ...props }) => <p className="mb-4" {...props} />,
@@ -204,8 +202,8 @@ const DoctorsInfo = ({ doctorInfo }: { doctorInfo: DoctorDetailsType }) => {
                   </div>
                 )}
                 {activeTab === "Patient Stories" && (
-                  <div className=" flex flex-col gap-4 w-full overflow-x-hidden">
-                    <ul className={cn("space-y-4 w-full")}>
+                  <div className="flex flex-col gap-4 xl:w-[900px]">
+                    <ul className="space-y-4 w-fit mx-auto">
                       {data?.map((review: UserReviewType, i: number) => (
                         // <ReviewCard key={review.id} {...review} />
                         <Testimonial

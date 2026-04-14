@@ -48,7 +48,7 @@ const Comp = ({
   const { mutate: sendMessageMutate } = useSendMessageMutation();
   const { mutate: updateSeenMutate } = useUpdateSeenMutation();
 
-
+  console.log({ messages })
 
   useEffect(() => {
     if (chatRoomId && userId) {
@@ -78,6 +78,7 @@ const Comp = ({
       }
     };
     fetchUser();
+    setLoading(false)
   }, []);
 
 
@@ -88,9 +89,9 @@ const Comp = ({
           id: message.id,
           role: message.senderId === userId ? "user" : "assistant",
           content: message.content,
-          createdAt: !isNaN(Number(message.id))
-            ? new Date(Number(message.id))
-            : new Date(message.createdAt),
+          createdAt: message.id
+            ? new Date(Number(message.id.substring(0, 13)))
+            : new Date(),
         }))
       );
     }
@@ -128,6 +129,8 @@ const Comp = ({
   }, [userId, chatRef, setIsOpen]);
 
   const isMobile = useMediaQuery("(max-width: 900px)");
+
+  console.log({ userId, loading })
   return (
     <div
       className={cn([
@@ -182,10 +185,7 @@ const Comp = ({
               messages={chatMessages}
               isTyping={false}
               messageOptions={(message) => ({
-                className:
-                  message.role === "user"
-                    ? "!bg-secondary !text-secondary-foreground !rounded-xl !rounded-tr-none"
-                    : "!bg-primary !text-white !rounded-xl !rounded-tl-none",
+                className: "", // Now using themed defaults in ChatMessage
               })}
             />
           </ChatMessages>

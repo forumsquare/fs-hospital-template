@@ -29,7 +29,7 @@ const HeaderSection = ({ logo, name }: { logo: string, name: string }) => {
     !!user
       ? { href: "/account", title: "Account" }
       : { href: `/signup?redirect=${pathname}`, title: "Signup" },
-    { href: "/account/notifications", title: "Notifications" },
+    ...(!!user ? [{ href: "/account/notifications", title: "Notifications" }] : []),
   ];
 
   useEffect(() => {
@@ -46,7 +46,7 @@ const HeaderSection = ({ logo, name }: { logo: string, name: string }) => {
   return (
     <>
       <div className="lg:hidden fixed top-0 h-16 flex items-center p-5  backdrop-blur-md w-full z-[999999]">
-        <MobileSideBar data={data} logo={logo} name={name} />
+        <MobileSideBar data={data} logo={logo} name={name} navList={navList} />
       </div>
       <header className="hidden  fixed z-[999999] top-10 right-0 left-0  flex-center  lg:flex items-center justify-center ">
         <div className="fixed w-[41rem]  h-[3.5rem] left-1/2  -translate-x-1/2 rounded-full backdrop-blur-lg bg-white/40  border-black/[0.08] border"></div>
@@ -60,7 +60,7 @@ const HeaderSection = ({ logo, name }: { logo: string, name: string }) => {
               className="h-[50px] w-[150px] object-contain object-center "
             />
             {navList.map(({ title, href }) =>
-              title === "Notifications" && !!user ? null : (
+              title === "Notifications" && !user ? null : (
                 <motion.li
                   key={href}
                   className="h-3/4 flex items-center justify-center relative"

@@ -17,7 +17,7 @@ export const NotificationProvider = ({
 }) => {
     const socketRef = useRef<WebSocket | null>(null);
     const [isConnected, setIsConnected] = useState(false);
-    const { addMessage, chatRoomId, isChatOpen } = useChatMessageStore();
+    const { addMessage, chatRoomId, isChatOpen, setIsChatOpen } = useChatMessageStore();
     const chatRoomIdRef = useRef(chatRoomId);
     const isChatOpenRef = useRef(isChatOpen);
     const router = useRouter();
@@ -41,6 +41,7 @@ export const NotificationProvider = ({
 
         const unsubscribe: () => void = onTokenSet((token: string) => {
             if (socketRef.current) return;
+            // const { isChatOpen: isOpen, setIsChatOpen: setIsOpen } = useChatMessageStore();
 
             console.log("Initializing Notification WebSocket...");
 
@@ -63,7 +64,6 @@ export const NotificationProvider = ({
                         console.log("Notification received:", data);
 
                         if (data.status === StatusCode.OK) {
-                            toast.success(data.message || "Connection established");
                             return;
                         }
 
@@ -73,7 +73,7 @@ export const NotificationProvider = ({
                                 description: data.data.message || "A new appointment has been booked",
                                 action: {
                                     label: "View",
-                                    onClick: () => router.push(`/bookings?appointmentId=${data.data.appointmentId}`),
+                                    onClick: () => router.push(`/account/booking/${data.data.appointmentId}`),
                                 },
                             });
                             return;
@@ -86,7 +86,9 @@ export const NotificationProvider = ({
                                     description: data.data.message,
                                     action: {
                                         label: "View",
-                                        onClick: () => router.push(`/chats?chatId=${data.data.chatId}`),
+                                        onClick: () => {
+                                            setIsChatOpen(true);
+                                        },
                                     },
                                 });
                             }

@@ -62,6 +62,8 @@ const TimingsInfo = () => {
     night: [] as Date[],
   });
   const [bookedList, setBookedList] = useState<string[]>([]);
+  const [runningList, setRunningList] = useState<string[]>([]);
+  const [closedList, setClosedList] = useState<string[]>([]);
 
   useEffect(() => {
     console.log({ data });
@@ -135,28 +137,26 @@ const TimingsInfo = () => {
 
     setCategorizedTimes({ ...newCateTimes });
 
-    const newBookedList = data?.unAvailableSlots?.map(
-      (slot: { from: string; to: string }) => {
-        return slot.from;
+    const newBookedList: string[] = [];
+    const newRunningList: string[] = [];
+    const newClosedList: string[] = [];
+
+    data?.unAvailableSlots?.forEach(
+      (slot: { from: string; to: string; status: string }) => {
+        if (slot.status === "RUNNING") {
+          newRunningList.push(slot.from);
+        } else if (slot.status === "CLOSED") {
+          newClosedList.push(slot.from);
+        } else {
+          newBookedList.push(slot.from);
+        }
       }
     );
     setBookedList(newBookedList);
+    setRunningList(newRunningList);
+    setClosedList(newClosedList);
     // console.log({ newCateTimes });
   }, [data, bookStore.bookingDate, bookStore.doctorInfo?.slotDuration]);
-
-  console.log("<<<< morning >>>>");
-  console.log(categorizedTimes.morning);
-
-  console.log("<<<< afternoon >>>>");
-  console.log(categorizedTimes.afternoon);
-
-  console.log("<<<< evening >>>>");
-  console.log(categorizedTimes.evening);
-
-  console.log({ bookedList });
-
-  // const bookedList: string[] = ["1999-01-01T09:00:00.000"];
-  const RunningList: string[] = ["1999-01-01T12:00:00.000"];
 
   const getBookingStatus = (time: Date): BookingStatus => {
     const timeString = dateToStringWithoutOffset(time)
@@ -173,8 +173,12 @@ const TimingsInfo = () => {
       return BookingStatus.BOOKED;
     }
 
-    if (RunningList.indexOf(timeString) >= 0) {
+    if (runningList.indexOf(timeString) >= 0) {
       return BookingStatus.RUNNING;
+    }
+
+    if (closedList.indexOf(timeString) >= 0) {
+      return BookingStatus.CLOSED;
     }
 
     if (bookingDate.getDate() === new Date().getDate()) {

@@ -111,7 +111,7 @@ const TestimonialList = ({ testimonials }: TestimonialListProps) => {
               rating={review.rating}
               testimonial={review.testimonial}
               userName={review.userName}
-              // date={review.}
+            // date={review.}
             />
           ))}
         </InfiniteMovingCards>

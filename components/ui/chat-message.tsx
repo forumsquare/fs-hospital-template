@@ -12,8 +12,8 @@ const chatBubbleVariants = cva(
   {
     variants: {
       isUser: {
-        true: "bg-primary text-primary-foreground",
-        false: "bg-muted text-foreground",
+        true: "bg-slate-100 text-slate-900 rounded-tr-none",
+        false: "bg-green-600 text-white rounded-tl-none shadow-sm shadow-green-600/20",
       },
       animation: {
         none: "",
@@ -82,6 +82,8 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
 }) => {
   const isUser = role === "user";
 
+  console.log({ createdAt });
+
   const files = useMemo(() => {
     return experimental_attachments?.map((attachment) => {
       const dataArray = dataUrlToUint8Array(attachment.url);
@@ -132,6 +134,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
           )}
         >
           {formattedTime}
+          {/* {createdAt?.toLocaleString("en-IN")} */}
         </time>
       ) : null}
     </div>

@@ -6,7 +6,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { navList } from "@/constants/list";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
@@ -19,8 +18,9 @@ import { useGetUnreadCountQuery } from "@/services/query/notificationsQuery";
 import { UserType } from "@/models/schema";
 import { getCookie } from "@/lib/serverCom";
 import { auth } from "@/lib/firebase";
+import { NavType } from "@/models/types";
 
-const MobileSideBar = ({ data, logo, name }: { data: number, logo: string, name: string }) => {
+const MobileSideBar = ({ data, logo, name, navList }: { data: number, logo: string, name: string, navList: NavType[] }) => {
   const isLoggedIn = auth.currentUser;
   const path = usePathname();
   const [profile, setProfile] = useState<UserType | null>(null);
@@ -94,42 +94,42 @@ const MobileSideBar = ({ data, logo, name }: { data: number, logo: string, name:
 
         <nav className="flex flex-col gap-5 pt-6 flex-1 ">
           {navList.map(({ title, href }) =>
-            title === "Notifications" && !isLoggedIn ? null : (
-              <motion.div
-                key={href}
-                className="flex items-center justify-start"
-                initial={{ x: -100, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
+          (
+            <motion.div
+              key={href}
+              className="flex items-center justify-start"
+              initial={{ x: -100, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+            >
+              <Link
+                href={href}
+                className={cn([
+                  "text-lg font-medium flex items-center  py-2 w-full  gap-x-2 hover:bg-gray-100 duration-200 transition-all ",
+                  path === href
+                    ? "text-primary bg-primary/[0.05] font-extrabold "
+                    : "text-muted-foreground",
+                  title === "Notifications" && " relative",
+                ])}
+                onClick={() => setOpen(false)}
               >
-                <Link
-                  href={href}
+                <div
                   className={cn([
-                    "text-lg font-medium flex items-center  py-2 w-full  gap-x-2 hover:bg-gray-100 duration-200 transition-all ",
-                    path === href
-                      ? "text-primary bg-primary/[0.05] font-extrabold "
-                      : "text-muted-foreground",
-                    title === "Notifications" && " relative",
+                    "w-1 h-8  rounded-full",
+                    path === href && "bg-primary",
                   ])}
-                  onClick={() => setOpen(false)}
-                >
-                  <div
-                    className={cn([
-                      "w-1 h-8  rounded-full",
-                      path === href && "bg-primary",
-                    ])}
-                  />
-                  <span>{title}</span>
-                  {title === "Notifications" && data > 0 && (
-                    <Badge
-                      variant={"destructive"}
-                      className="h-4 !w-4 p-0 flex justify-center items-center"
-                    >
-                      {data}
-                    </Badge>
-                  )}
-                </Link>
-              </motion.div>
-            )
+                />
+                <span>{title}</span>
+                {title === "Notifications" && data > 0 && (
+                  <Badge
+                    variant={"destructive"}
+                    className="h-4 !w-4 p-0 flex justify-center items-center"
+                  >
+                    {data}
+                  </Badge>
+                )}
+              </Link>
+            </motion.div>
+          )
           )}
         </nav>
         <hr className="mx-6" />
