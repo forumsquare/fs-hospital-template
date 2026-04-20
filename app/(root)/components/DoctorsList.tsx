@@ -2,11 +2,12 @@
 import { Button } from "@/components/ui/button";
 import { DoctorType } from "@/models/schema";
 import { Card } from "@/components/ui/card";
-import { Star, Clock, ChevronRight } from "lucide-react";
+import { Star, Clock, ChevronRight, StarIcon } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+
 const DoctorCard = ({
   doctor,
   onBookAppointment,
@@ -17,94 +18,60 @@ const DoctorCard = ({
   const fee = parseFloat(doctor.fee);
   const discountPercent = parseFloat(doctor.discountAmt);
   const payableAmount = fee - (fee * discountPercent) / 100;
-  const formattedRating = parseFloat(doctor.rating || "0").toFixed(1);
+  const formattedRating = parseFloat(doctor.rating || "4.8").toFixed(1);
   const hasDiscount = discountPercent > 0;
 
   return (
-    <Card className="max-w-[325px] bg-white rounded-[2rem] overflow-hidden transition-all duration-500 border-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] hover:-translate-y-1 group relative">
-      <div className="relative p-6 flex flex-col gap-6">
-        {/* Top Section: Photo & Info */}
-        <div className="flex gap-5 items-start">
-          <div className="relative shrink-0">
-            <div className="size-24 rounded-2xl overflow-hidden ring-4 ring-slate-50 shadow-xl transition-transform duration-700 group-hover:scale-105">
-              <Image
-                src={doctor.image}
-                alt={doctor.name}
-                width={112}
-                height={112}
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div className="absolute -bottom-2 -right-2 bg-emerald-500 size-5 rounded-full border-4 border-white shadow-lg" />
-          </div>
-
-          <div className="flex-1 min-w-0 pt-1">
-            <h3 className="text-xl font-bold text-slate-900 leading-tight truncate">
-              {doctor.name}
-            </h3>
-            <p className="text-sm font-semibold text-slate-400 mt-1 uppercase tracking-wider">
-              {doctor.categories[0]?.name ?? "Specialist"}
-            </p>
-            <div className="inline-flex items-center gap-1.5 px-2 py-0.5 bg-emerald-500/10 rounded-full mt-3">
-              <span className="text-[10px] font-black text-emerald-600 uppercase">Top Rated</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Middle Section: Stats Grid */}
-        <div className="grid grid-cols-2 gap-3">
-          <div className="flex flex-col items-center justify-center p-3 rounded-2xl bg-indigo-50/50 border border-indigo-100/50 transition-all duration-300 hover:bg-indigo-50">
-            <div className="flex items-center gap-1.5 text-indigo-600 mb-0.5">
-              <Star className="h-4 w-4 fill-current" />
-              <span className="text-lg font-black text-slate-900">{formattedRating}</span>
-            </div>
-            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
-              {doctor.ratingCount} Reviews
-            </p>
-          </div>
-
-          <div className="flex flex-col items-center justify-center p-3 rounded-2xl bg-amber-50/50 border border-amber-100/50 transition-all duration-300 hover:bg-amber-50">
-            <div className="flex items-center gap-1.5 text-amber-500 mb-0.5">
-              <Clock className="h-4 w-4" />
-              <span className="text-lg font-black text-slate-900">15+</span>
-            </div>
-            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">Years Exp.</p>
-          </div>
-        </div>
-
-        {/* Bottom Section: CTA & Fee */}
-        <div className="space-y-4">
-          <div className="flex items-center justify-between px-1">
-            <div className="flex flex-col">
-              <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none">Consulting Fee</span>
-              <div className="flex items-baseline gap-2 mt-1">
-                <span className="text-2xl font-black text-slate-900 tracking-tight">
-                  ₹{payableAmount.toLocaleString()}
-                </span>
-                {hasDiscount && (
-                  <span className="text-xs text-slate-400 line-through">
-                    ₹{fee.toLocaleString()}
-                  </span>
-                )}
-              </div>
-            </div>
-            {hasDiscount && (
-              <div className="h-fit px-2 py-1 bg-rose-500 rounded-lg shadow-lg shadow-rose-200">
-                <span className="text-[10px] font-black text-white">-{discountPercent}%</span>
-              </div>
-            )}
-          </div>
-
-          <Button
-            className="w-full rounded-2xl bg-slate-900 hover:bg-slate-800 text-white transition-all duration-300 h-14 font-bold text-base shadow-xl shadow-slate-200 group/btn"
-            onClick={() => onBookAppointment(doctor.id)}
-          >
-            Book Appointment
-            <ChevronRight className="h-4 w-4 ml-1 transition-transform duration-300 group-hover/btn:translate-x-1" />
-          </Button>
+    <div
+      className="bg-white max-w-[325px] p-4 rounded-[28px] group border border-slate-100 hover:shadow-xl transition-all duration-300 shadow-[0px_4px_20px_rgba(0,0,0,0.03)] cursor-pointer flex flex-col"
+      onClick={() => onBookAppointment(doctor.id)}
+    >
+      <div className="relative h-[280px] rounded-[24px] overflow-hidden mb-5">
+        <img
+          alt={doctor.name}
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+          src={doctor.image}
+          onError={(e) => {
+            const target = e.target as HTMLImageElement;
+            target.src = "/icons/image.svg";
+          }}
+        />
+        <div className="absolute top-4 left-4 px-3 py-1.5 bg-white/90 backdrop-blur-md text-[#0057b7] text-[10px] font-extrabold uppercase tracking-wider rounded-full shadow-sm">
+          {hasDiscount ? `${discountPercent}% OFF` : 'Top Rated'}
         </div>
       </div>
-    </Card>
+
+      <div className="flex flex-col flex-1 px-2">
+        <div className="flex justify-between items-start mb-0.5">
+          <h3 className="font-bold text-xl text-slate-800 tracking-tight">{doctor.name}</h3>
+          <div className="flex items-center gap-1.5 text-[#0057b7]">
+            <StarIcon className="size-4 text-[#0057b7] fill-[#0057b7]" />
+            <span className="text-[13px] font-bold">{formattedRating}</span>
+          </div>
+        </div>
+
+        <p className="text-slate-500 text-sm font-medium">{doctor.categories[0]?.name ?? "Specialist"}</p>
+
+        <div className="w-full h-px bg-slate-100 my-5" />
+
+        <div className="flex justify-between items-center text-[12px] font-bold text-slate-600 mb-6 px-1">
+          <span className="flex items-center gap-1.5">
+            15+ Yrs Exp.
+          </span>
+          <span className="flex items-center gap-1.5">
+            Fee: ₹{payableAmount.toLocaleString()}
+          </span>
+        </div>
+
+        <Button
+          className="w-full rounded-2xl bg-slate-900 hover:bg-slate-800 text-white transition-all duration-300 h-14 font-bold text-base shadow-xl shadow-slate-200 group/btn"
+          onClick={() => onBookAppointment(doctor.id)}
+        >
+          Book Appointment
+          <ChevronRight className="h-4 w-4 ml-1 transition-transform duration-300 group-hover/btn:translate-x-1" />
+        </Button>
+      </div>
+    </div>
   );
 };
 
@@ -199,7 +166,7 @@ const DoctorsList = ({ doctors }: DoctorsListProps) => {
             animate="center"
             exit="exit"
           >
-            <div className="overflow-hidden flex flex-wrap gap-7 justify-center border-none backdrop-blur-md">
+            <div className="overflow-hidden grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7 justify-center border-none backdrop-blur-md">
               {filteredDoctorList.map((doctor, index) => (
                 <DoctorCard
                   key={index}

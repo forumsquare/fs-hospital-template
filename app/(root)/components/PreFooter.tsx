@@ -52,7 +52,7 @@ const PreFooter = ({ store }: { store: StoreInfoType }) => {
         </div>
 
         {/* Google Maps Section */}
-        <div className="flex flex-col gap-4 items-center">
+        {/* <div className="flex flex-col gap-4 items-center">
           <h4 className="text-2xl font-bold">Our Location</h4>
           <div className="h-[80vw] w-[80vw] md:h-[30vw] md:w-[30vw] lg:w-[25vw] lg:h-[25vw] border-2 border-gray-200 rounded-2xl overflow-hidden">
             <iframe
@@ -64,7 +64,7 @@ const PreFooter = ({ store }: { store: StoreInfoType }) => {
               title="Google Maps"
             ></iframe>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

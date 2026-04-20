@@ -21,6 +21,8 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 
+import LocationsSection from "@/components/custom/LocationsSection";
+
 export default async function HomePage() {
   const [doctorsResult, proceduresResult, testimonialsResult, storeResult] =
     await Promise.allSettled([
@@ -50,6 +52,7 @@ export default async function HomePage() {
       <TreatmentsList procedures={procedures} />
       <TestimonialList testimonials={testimonials} />
       <PreFooter store={store} />
+      {store.addressList && <LocationsSection addresses={store.addressList} />}
     </section>
   );
 }

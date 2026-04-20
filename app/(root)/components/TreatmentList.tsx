@@ -24,9 +24,9 @@ const TreatmentsList = ({ procedures }: TreatmentsListProps) => {
   return (
     <section
       className="py-6 space-y-1 flex flex-col items-center relative bg-transparent "
-      // style={{
-      //   opacity: ,
-      // }}
+    // style={{
+    //   opacity: ,
+    // }}
     >
       {/* <div className="absolute inset-0 -z-10  bg-[url('/background/bg2.svg')]  bg-no-repeat bg-cover" /> */}
       <h2 className="text-2xl sm:text-4xl font-bold">
@@ -51,7 +51,7 @@ const TreatmentsList = ({ procedures }: TreatmentsListProps) => {
       ) : (
         <TestTreatmentCards
           showHorizontal={true}
-          treatments={formattedProcedures}
+          treatments={formattedProcedures.slice(0, 3)}
         />
       )}
     </section>

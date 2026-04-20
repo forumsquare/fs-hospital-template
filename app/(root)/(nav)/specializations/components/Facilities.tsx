@@ -27,7 +27,7 @@ const Facilites = ({
     <>
       <ul
         className={cn(
-          "mx-auto w-full flex flex-wrap justify-center gap-7 px-6 mb-8 ",
+          "mx-auto w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7 mb-8 ",
           showHorizontal &&
           "flex-row flex-nowrap overflow-x-auto sm:py-3 pb-8 px-16 justify-start"
         )}
@@ -35,40 +35,27 @@ const Facilites = ({
         {facilities.map((facility) => (
           <motion.div
             key={facility.id}
-            className="w-64 cursor-pointer bg-white rounded-xl overflow-hidden border flex-shrink-0 hover:shadow-xl transition-shadow"
-            whileHover={{ scale: 1.05 }}
+            className="group cursor-pointer flex-shrink-0 flex flex-col"
+            whileHover={{ y: -5 }}
             onClick={() => handleTreatmentClick(facility)}
           >
-            <Image
-              src={facility.image}
-              alt={facility.name}
-              width={256}
-              height={160}
-              className="rounded-t-lg object-cover h-40"
-            />
-            <div className=" space-y-2 p-5">
-              <h3 className="text-xl font-bold">{facility.name}</h3>
-              <p className="text-gray-500 text-sm">
-                {facility.description.length > 80
-                  ? facility.description.slice(0, 80) + "..."
-                  : facility.description}
-              </p>
-              {/* {facility.amount && (
-                <p className="text-lg font-bold text-green-700 flex items-center gap-2">
-                  {formatAmount(facility.amount)}
-                </p>
-              )}
-              {facility.discount && (
-                <p className="text-sm text-red-500">{facility.discount}% off</p>
-              )}
-              <CustomButton
-                className="w-full rounded-full bg-card border-2 text-primary"
-                onClick={() => handleTreatmentClick(facility)}
-              >
-                Know More
-                <ArrowRightIcon className="w-4 h-4 animate-bounce-x" />
-              </CustomButton> */}
+            <div className="rounded-2xl overflow-hidden mb-6 aspect-video bg-slate-50">
+              <Image
+                src={facility.image || "https://lh3.googleusercontent.com/aida-public/AB6AXuCstbqzyyuLm5qCQhe2HB1bp39zPiR0v_XHFMSKt8bxWWm91Li4qBmJYFvpOKea1-uJDafqaNY0vuCyeIyJ-RzF4A-3LMup23IPtVyb9Gbrn6OUaeuaEUFLYYYc9xUoUmrHd1MdtlKx934__KVoy25HhFm1kjnHkTwJel3L5xPj5T8ec0B8AhyCDRSG_RvWVAB6_i0jLJcEnU67Stef8sMGUgU4_vDJo2bFRH9bpqMWUhst49UDEp3qucLsrXQtRgs57quXHJM8PQY"}
+                alt={facility.name}
+                width={320}
+                height={180}
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.src = "/icons/image.svg";
+                }}
+              />
             </div>
+            <h5 className="text-xl font-bold mb-2 text-slate-900 line-clamp-1">{facility.name}</h5>
+            <p className="text-slate-500 text-sm line-clamp-2">
+              {facility.description}
+            </p>
           </motion.div>
         ))}
       </ul>

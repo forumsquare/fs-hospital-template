@@ -46,7 +46,7 @@ const DoctorsInfo = ({ doctorInfo }: { doctorInfo: DoctorDetailsType }) => {
               alt={doctorInfo.name}
               width={160}
               height={160}
-              className=" w-28 h-28  sm:w-36 sm:h-36 rounded-full bg-slate-200 bg-cover bg-top  border-3 sshadow-md shadow-gray-200  "
+              className=" w-28 h-28  sm:!w-36 sm:!h-36 rounded-full bg-slate-200 bg-cover bg-top  border-3 sshadow-md shadow-gray-200  "
             />
             {doctorInfo.registrationNo && (
               <span className="text-[9px] text-slate-500 font-semibold w-20 text-center ">

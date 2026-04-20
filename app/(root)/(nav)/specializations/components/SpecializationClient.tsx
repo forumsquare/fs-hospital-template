@@ -50,7 +50,7 @@ const SpecializationClient = ({ initialCategories, initialProcedures, initialFac
     })) || [];
 
     return (
-        <section className=" rounded-2xl mt-14 space-y-7 mx-5 p-7 max-w-screen-lg sm:mx-auto">
+        <section className=" rounded-2xl mt-14 space-y-7 mx-5 px-10 py-7  sm:mx-auto">
             <h2 className="text-primary font-extrabold text-4xl">
                 Our Specializations
             </h2>
@@ -83,24 +83,38 @@ const SpecializationClient = ({ initialCategories, initialProcedures, initialFac
                     >
                         {categories!.map((item: CategoryType, index: number) => (
                             <article key={index} className="py-5 ">
-                                <h2 className="font-extrabold text-3xl font-sans">
-                                    {item.name}
-                                </h2>
-                                <div className="flex gap-5 py-6 items-center flex-col md:flex-row">
-                                    <Image
-                                        src={item.image}
-                                        alt={item.name}
-                                        width={150}
-                                        height={150}
-                                        className="size-[200px]  sm:size-[250px] rounded-2xl bg-black/10"
-                                    />
-                                    <p className="text-sm font-sans italic text-muted-foreground leading-6 tracking-wide font-medium">
-                                        {item.description}
-                                    </p>
-                                </div>
+                                <section className="max-w-screen-2xl mx-auto mb-10 sm:mb-24 relative z-10">
+                                    <div className="grid grid-cols-1 lg:grid-cols-12 md:gap-12 gap-5 items-center">
+                                        <div className="lg:col-span-7">
+                                            <div className="rounded-3xl overflow-hidden shadow-2xl relative group">
+                                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                                <img
+                                                    alt={item.name}
+                                                    className="w-full h-[300px] md:h-[500px] object-cover transition-transform duration-700 group-hover:scale-105"
+                                                    src={item.image || "https://lh3.googleusercontent.com/aida-public/AB6AXuCQV9wTK83KcYu8NHiVqouMUfqPgD9ESxWcxGfWGHoJm5tcFlt99cDVQHHVXgHJ2D77KHoKe8Ux8MEjy26vtnjleKEFNAiJQLzceOCLsZeRFwxjvvhaOaxGKnzDs0qw7uN1knPCHoPAu6_xHiqS4SkxFEsptxSzCZ2lbP1cXOdFwylSqG3jwDXIYg7Ty8tmKNDnGMjGqhQ1PR6F5mzDO9hUQQjC1ZPX6ZmS9PwvBiMxZZTj7SgaTLakpV0PHOezI-eb1Ta4ltmi5KE"}
+                                                />
+                                                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                                            </div>
+                                        </div>
+                                        <div className="lg:col-span-5 sm:pr-8">
+                                            <span className="inline-block px-4 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-widest mb-4">Core Specialization</span>
+                                            <h2 className="text-4xl font-bold mb-6">{item.name}</h2>
+                                            <p className="text-muted-foreground text-lg leading-relaxed mb-8">
+                                                {item.description}
+                                            </p>
+                                            <div className="flex items-center gap-4 text-primary font-semibold">
+                                                <span className="material-symbols-outlined">verified</span>
+                                                <span>Board Certified Specialists</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
                                 <h4 className="font-bold text-3xl mt-5">
                                     Procedures & Treatments
                                 </h4>
+                                <p className="text-sm font-sans italic text-muted-foreground leading-6 tracking-wide font-medium pb-5 pt-1">
+                                    Signature protocols curated for exceptional results.
+                                </p>
                                 {proceduresPending ? (
                                     <CustomLoading />
                                 ) : (

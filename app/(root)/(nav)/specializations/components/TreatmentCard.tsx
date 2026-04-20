@@ -29,69 +29,77 @@ const TestTreatmentCards = ({
     <>
       <ul
         className={cn(
-          "mx-auto w-full flex flex-wrap justify-center gap-7 px-6 ",
+          "mx-auto w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7  ",
           showHorizontal &&
-            "flex-row flex-nowrap overflow-x-auto py-8 md:pb-12 px-16 justify-start"
+          "flex-row flex-nowrap overflow-x-auto py-8 md:pb-12 px-16 justify-start"
         )}
       >
         {treatments.map((treatment) => (
           <motion.div
             key={treatment.id}
-            className="w-72 bg-white rounded-2xl overflow-hidden border border-slate-100 flex flex-col flex-shrink-0 hover:shadow-xl transition-all duration-300 group"
+            className="bg-white border border-slate-100 rounded-[24px] overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col flex-shrink-0"
             whileHover={{ y: -5 }}
           >
-            <div className="relative aspect-[4/3] w-full bg-slate-50 overflow-hidden">
-               <Image
-                src={treatment.image || "/icons/image-placeholder.svg"} 
+            <div className="relative h-64 overflow-hidden">
+              <Image
+                src={treatment.image || "/icons/image-placeholder.svg"}
                 alt={treatment.name}
                 fill
-                className="object-cover transition-transform duration-500 group-hover:scale-105"
+                className="object-cover transition-transform duration-500 hover:scale-105"
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
                   target.src = "/icons/image.svg"; // Fallback to icon
                 }}
               />
+              {treatment.discount && treatment.discount > 0 ? (
+                <div className="absolute top-4 left-4 px-3 py-1 bg-red-500 text-white text-[10px] font-bold rounded-full uppercase tracking-tighter">
+                  {treatment.discount}% OFF
+                </div>
+              ) : (
+                <div className="absolute top-4 left-4 px-3 py-1 bg-primary text-white text-[10px] font-bold rounded-full uppercase tracking-tighter">
+                  Popular
+                </div>
+              )}
             </div>
-            
-            <div className="flex-1 flex flex-col p-6 space-y-4">
-              <div className="space-y-2 flex-1">
-                <h3 className="text-lg font-bold text-slate-900 line-clamp-2 min-h-[3rem] leading-tight">
-                  {treatment.name}
-                </h3>
-                
-                <div className="flex flex-col gap-1 min-h-[3.5rem] justify-center">
-                  {treatment.amount && treatment.amount > 0 ? (
-                    <div className="flex flex-col">
-                      <div className="flex items-center gap-2">
-                        <p className="text-xl font-bold text-green-600">
-                          {formatAmount(treatment.amount - (treatment.amount * (treatment.discount || 0)) / 100)}
-                        </p>
-                        {treatment.discount && treatment.discount > 0 ? (
-                          <span className="text-sm text-slate-400 line-through">
-                            {formatAmount(treatment.amount)}
-                          </span>
-                        ) : null}
-                      </div>
-                    </div>
-                  ) : (
-                    <p className="text-lg font-bold text-slate-400 italic">Price on request</p>
-                  )}
-                  
-                  {treatment.discount && treatment.discount > 0 ? (
-                    <div className="text-sm font-bold text-red-500">
-                      {treatment.discount}% off
-                    </div>
-                  ) : null}
+
+            <div className="p-6 sm:p-8 flex-1 flex flex-col">
+              <div className="flex justify-between items-start mb-4">
+                <h4 className="text-xl font-bold line-clamp-2">{treatment.name}</h4>
+                <div className="flex items-center text-xs text-slate-500 gap-1 whitespace-nowrap ml-4">
+                  <span className="material-symbols-outlined text-sm">schedule</span> 45m
                 </div>
               </div>
-              
-              <CustomButton
-                className="w-full rounded-full bg-white border-2 border-slate-200 text-slate-700 hover:bg-slate-900 hover:text-white hover:border-slate-900 transition-all duration-300 font-bold group/btn"
-                onClick={() => handleTreatmentClick(treatment)}
-              >
-                <span>Know More</span>
-                <ArrowRightIcon className="w-4 h-4 ml-2 animate-bounce-x" />
-              </CustomButton>
+
+              <div className="relative mb-6 flex-1 h-[40px] overflow-hidden">
+                <p className="text-slate-500 text-sm leading-[20px]">
+                  {treatment.description}
+                </p>
+                <div className="absolute bottom-0 inset-x-0 h-5 bg-gradient-to-t from-white via-white/80 to-transparent backdrop-blur-[1px] pointer-events-none fade-out-mask"></div>
+              </div>
+
+              <div className="flex items-center justify-between mt-auto">
+                {treatment.amount && treatment.amount > 0 ? (
+                  <div className="flex flex-col">
+                    <span className="text-lg font-bold text-green-600">
+                      {formatAmount(treatment.amount - (treatment.amount * (treatment.discount || 0)) / 100)}
+                    </span>
+                    {treatment.discount && treatment.discount > 0 ? (
+                      <span className="text-xs text-slate-400 line-through">
+                        {formatAmount(treatment.amount)}
+                      </span>
+                    ) : null}
+                  </div>
+                ) : (
+                  <span className="text-sm font-semibold text-primary">Price on request</span>
+                )}
+                <button
+                  onClick={() => handleTreatmentClick(treatment)}
+                  className="group bg-transparent border-none flex items-center gap-2 text-slate-900 hover:text-primary font-bold text-sm transition-colors cursor-pointer"
+                >
+                  Know More
+                  <ArrowRightIcon className="w-4 h-4" />
+                </button>
+              </div>
             </div>
           </motion.div>
         ))}
