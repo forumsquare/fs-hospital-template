@@ -17,12 +17,61 @@ type FooterProps = {
   phoneNo?: string | null;
 };
 
+const TimingsInfo = ({ timings }: { timings?: { day: number; fromTime: string; toTime: string }[] }) => {
+  const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+  const formatTime = (timeString: string) => {
+    // Assuming timeString could be an ISO string or similar, but the API may return it as ISO string
+    // Since the database expects timestamps, let's extract HH:mm portion and convert
+    try {
+      const date = new Date(timeString);
+      return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+    } catch {
+      return timeString;
+    }
+  };
+
+  if (!timings || timings.length === 0) return null;
+
+  // Group timings by day
+  const timingsByDay = timings.reduce((acc, t) => {
+    if (!acc[t.day]) acc[t.day] = [];
+    acc[t.day].push(t);
+    return acc;
+  }, {} as Record<number, typeof timings>);
+
+  return (
+    <section className=" rounded-2xl max-w-xs mx-auto text-neutral-200  p-0.5 text-[13px] font-medium  ">
+      <h4 className="text-center text-base">Timings</h4>
+      <ul className="space-y-2">
+        {days.map((day, index) => {
+          const dayTimings = timingsByDay[index];
+          if (!dayTimings || dayTimings.length === 0) return null;
+
+          return (
+            <li key={index}>
+              <div className="px-6 flex gap-x-3 items-start justify-between my-3 text-gray-400 flex-col sm:flex-row">
+                <p className="w-12 text-left">{day}</p>
+                <div className="flex flex-col text-xs text-right">
+                  {dayTimings.map((t, idx) => (
+                    <p key={idx}>{formatTime(t.fromTime)} - {formatTime(t.toTime)}</p>
+                  ))}
+                </div>
+              </div>
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+  );
+};
+
 const Footer: FC<FooterProps> = ({ addresses, logo, media, title, timings, email, phoneNo }) => {
   const LinkComponent = ({ link, title }: { link: string; title: string }) => {
     return (
       <Link
         href={link}
-        className="text-[13px] text-slate-500 font-medium hover:text-slate-900 transition-colors"
+        className="font-medium text-secondary/70 hover:text-secondary  hover:scale-105 duration-200  text-sm hover:font-bold "
       >
         {title}
       </Link>
@@ -38,17 +87,17 @@ const Footer: FC<FooterProps> = ({ addresses, logo, media, title, timings, email
     alt: string;
     href?: string;
   }) => {
-    return !href ? null : (
+    return !href ? (
+      <></>
+    ) : (
       <Link href={href}>
-        <div className="w-9 h-9 flex items-center justify-center rounded-full bg-[#f1f5f9] hover:bg-[#e2e8f0] transition-colors">
-          <Image
-            src={src}
-            alt={alt}
-            width={14}
-            height={14}
-            className="w-[14px] h-[14px] object-contain opacity-70 hover:opacity-100 transition-opacity"
-          />
-        </div>
+        <Image
+          src={src}
+          alt={alt}
+          width={25}
+          height={25}
+          className="w-6 h-6 cursor-pointer hover:scale-125 duration-250 my-[2px] !text-primary  "
+        />
       </Link>
     );
   };
@@ -56,11 +105,9 @@ const Footer: FC<FooterProps> = ({ addresses, logo, media, title, timings, email
   return (
     <footer
       id="contact-us"
-      className="flex py-10 flex-col items-center justify-center text-neutral-600 bg-primary bg-[url('/background/footer.svg')] bg-cover !z-10"
+      className="flex flex-col items-center justify-center text-neutral-600 bg-primary bg-[url('/background/footer.svg')] bg-cover !z-10"
     >
-      <div className="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
-
-        {/* Column 1: Logo & Info */}
+      <div className=" flex  flex-col gap-5 gap-y-10 justify-center items-center mx-auto py-10 px-8  md:flex-row md:justify-around md:items-start  md:gap-x-12  lg:gap-x-20 ">
         <div className="flex flex-col gap-6 lg:pr-8">
           {logo && (
             <div className="relative h-8 w-44">
@@ -71,7 +118,6 @@ const Footer: FC<FooterProps> = ({ addresses, logo, media, title, timings, email
             Redefining health through the digital biome. The intersection of technology and human vitality.
           </p>
           <div className="flex gap-3 mt-1 items-center">
-            {/* Added standard share icon to perfectly match reference aesthetics */}
             <button className="w-9 h-9 flex items-center justify-center rounded-full bg-[#f1f5f9] hover:bg-[#e2e8f0] transition-colors text-slate-600">
               <Share />
             </button>
@@ -88,34 +134,38 @@ const Footer: FC<FooterProps> = ({ addresses, logo, media, title, timings, email
             )}
           </div>
         </div>
-
-        {/* Column 2: Explore */}
-        <div className="flex flex-col gap-4">
-          <h4 className="text-slate-800 text-sm font-bold mb-2">Explore</h4>
-          <LinkComponent link="/#clinics" title="Clinics Near Me" />
-          <LinkComponent link="/specializations" title="Treatments" />
-          <LinkComponent link="/tech-stack" title="Tech Stack" />
-          <LinkComponent link="/career" title="Career" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12 w-full">
+          <ul className="flex flex-col gap-y-4 items-center sm:items-start flex-1">
+            <p className="font-bold text-secondary text-base uppercase tracking-wider mb-2">
+              Quick Links
+            </p>
+            <LinkComponent link="/#doctors" title="Doctors" />
+            <LinkComponent link="/specializations" title="Specializations" />
+            <LinkComponent link="/#diagnostics" title="Diagnostics" />
+            <LinkComponent link="/reviews" title="Reviews" />
+            <LinkComponent link="/career" title="Career" />
+          </ul>
+          <ul className="flex flex-col gap-y-4 items-center sm:items-start flex-1">
+            <p className="font-bold text-secondary text-base uppercase tracking-wider mb-2">
+              Contact us
+            </p>
+            <div className="text-secondary/70 text-sm flex flex-col items-center sm:items-start gap-y-3 font-medium">
+              {email && (
+                <Link href={`mailto:${email}`} className="hover:text-secondary hover:underline transition-all flex items-center gap-2">
+                  <Mail className="size-4" /> {email}
+                </Link>
+              )}
+              {phoneNo && (
+                <Link href={`tel:${phoneNo}`} className="hover:text-secondary hover:underline transition-all flex items-center gap-2">
+                  <span className="material-symbols-outlined text-base">phone</span> {phoneNo}
+                </Link>
+              )}
+            </div>
+          </ul>
+          <div className="sm:col-span-2 lg:col-span-1 flex flex-col items-center sm:items-start">
+             <TimingsInfo timings={timings} />
+          </div>
         </div>
-
-        {/* Column 3: Legal */}
-        <div className="flex flex-col gap-4">
-          <h4 className="text-slate-800 text-sm font-bold mb-2">Legal</h4>
-          <LinkComponent link="/privacy" title="Privacy Policy" />
-          <LinkComponent link="/terms" title="Terms of Service" />
-          <LinkComponent link="/accessibility" title="Accessibility" />
-          <LinkComponent link="/compliance" title="Compliance" />
-        </div>
-
-        {/* Column 4: Patient Support */}
-        <div className="flex flex-col gap-4">
-          <h4 className="text-slate-800 text-sm font-bold mb-2">Patient Support</h4>
-          <LinkComponent link="/contact" title="Contact Us" />
-          <LinkComponent link="/faqs" title="FAQs" />
-          <LinkComponent link="/insurance" title="Insurance Portal" />
-          <LinkComponent link="/emergency" title="Emergency Services" />
-        </div>
-
       </div>
       <p className="mb-5 mt-2 text-center text-white/50 font-medium tracking-wide  text-sm">
         Copyright © 2024 Forumsquare Inc.

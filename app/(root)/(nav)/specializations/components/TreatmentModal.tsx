@@ -17,7 +17,7 @@ export const ModelCard = ({
   <motion.div
     //   layoutId={`card-${active.id}-${id}`}
     //   ref={ref}
-    className="w-full md:max-w-[500px]  h-full  flex flex-col bg-white dark:bg-neutral-900 sm:rounded-3xl overflow-y-auto"
+    className="w-full md:max-w-[500px] pt-6  h-full  flex flex-col bg-white dark:bg-neutral-900 sm:rounded-3xl overflow-y-auto"
   >
     <motion.div>
       <Image

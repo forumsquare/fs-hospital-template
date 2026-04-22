@@ -27,7 +27,7 @@ export const Testimonial: FC<TestimonialProps> = ({
   return (
     <div
       className={cn(
-        "bg-card max-w-[200px] border border-border rounded-3xl transition-all p-2 h-full flex flex-col justify-between !min-w-[calc(100vw-8rem)] md:!min-w-[calc(100vw-10rem)] lg:!min-w-[calc(100vw-50rem)] xl:!min-w-[calc(100vw-65rem)]  shrink-0",
+        "bg-card max-w-[200px] border border-border rounded-3xl transition-all p-2 h-full flex flex-col justify-between !min-w-[calc(100vw-8rem)] md:!min-w-[calc(100vw-15rem)] lg:!min-w-[calc(100vw-55rem)] xl:!min-w-[calc(100vw-70rem)]  shrink-0",
         className
       )}
     >
@@ -85,20 +85,24 @@ type TestimonialListProps = {
 const TestimonialList = ({ testimonials }: TestimonialListProps) => {
   return (
     <div className=" p-4">
-      <h2 className="text-2xl sm:text-4xl font-bold text-center pb-1">
-        Testimonials
-      </h2>
-      <p className="text-center text-sm font-sans italic text-primary/50 font-medium max-w-screen-md px-2 mb-4 mx-auto">
-        Hear from our patients about their experiences and the exceptional care
-        they received from our dedicated team.
-      </p>
+      <div className="flex flex-col sm:flex-row items-start gap-4 sm:items-center justify-between w-full px-4 sm:px-8">
+        <div className="flex-1 flex flex-col items-start">
+          <h2 className="text-2xl sm:text-4xl font-bold text-center pb-1">
+            Testimonials
+          </h2>
+          <p className="text-sm font-sans italic text-slate-500 font-medium leading-relaxed">
+            Hear from our patients about their experiences and the exceptional care
+            they received from our dedicated team.
+          </p>
+        </div>
 
-      <Link
-        href="/reviews"
-        className="w-fit mx-auto flex items-center gap-1 text-primary  transition-all duration-200 hover:scale-110 active:scale-95 font-medium border p-2 px-5 rounded-xl border-primary my-4 mt-8"
-      >
-        View All <ArrowRight className="size-4 animate-bounce-x" />
-      </Link>
+        <Link
+          href="/reviews"
+          className="flex-shrink-0 flex items-center gap-2 px-8 py-3 text-[#0057b7] transition-all duration-300 hover:bg-[#0057b7] hover:text-white font-bold border-2 rounded-2xl border-[#0057b7]/20 hover:border-[#0057b7]"
+        >
+          View All <ArrowRight className="size-4" />
+        </Link>
+      </div>
       {testimonials.length === 0 ? (
         <p className="text-center text-sm text-muted-foreground">
           No testimonials available right now.

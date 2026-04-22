@@ -45,7 +45,7 @@ const HeaderSection = ({ logo, name }: { logo: string, name: string }) => {
 
   return (
     <>
-      <div className="lg:hidden fixed top-0 h-16 flex items-center p-5  backdrop-blur-md w-full z-[999999]">
+      <div className="lg:hidden fixed top-0 h-16 flex items-center p-5 backdrop-blur-md bg-white/70 border-b border-slate-100 w-full z-[999999]">
         <MobileSideBar data={data} logo={logo} name={name} navList={navList} />
       </div>
       <header className="hidden  fixed z-[999999] top-10 right-0 left-0  flex-center  lg:flex items-center justify-center ">

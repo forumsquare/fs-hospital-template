@@ -6,7 +6,7 @@ import { TreatmentType } from "@/models/schema";
 import TreatmentModal from "./TreatmentModal";
 import { cn, formatAmount } from "@/lib/utils";
 import { CustomButton } from "@/components/custom/CustomButtons";
-import { ArrowRightIcon } from "lucide-react";
+import { ArrowRightIcon, Clock } from "lucide-react";
 
 const TestTreatmentCards = ({
   treatments,
@@ -66,12 +66,12 @@ const TestTreatmentCards = ({
               <div className="flex justify-between items-start mb-4">
                 <h4 className="text-xl font-bold line-clamp-2">{treatment.name}</h4>
                 <div className="flex items-center text-xs text-slate-500 gap-1 whitespace-nowrap ml-4">
-                  <span className="material-symbols-outlined text-sm">schedule</span> 45m
+                  <Clock className="size-4" /> 45m
                 </div>
               </div>
 
               <div className="relative mb-6 flex-1 h-[40px] overflow-hidden">
-                <p className="text-slate-500 text-sm leading-[20px]">
+                <p className="text-slate-500 !line-clamp-3 text-sm leading-[20px]">
                   {treatment.description}
                 </p>
                 <div className="absolute bottom-0 inset-x-0 h-5 bg-gradient-to-t from-white via-white/80 to-transparent backdrop-blur-[1px] pointer-events-none fade-out-mask"></div>

@@ -29,21 +29,25 @@ const TreatmentsList = ({ procedures }: TreatmentsListProps) => {
     // }}
     >
       {/* <div className="absolute inset-0 -z-10  bg-[url('/background/bg2.svg')]  bg-no-repeat bg-cover" /> */}
-      <h2 className="text-2xl sm:text-4xl font-bold">
-        Procedures and Treatments
-      </h2>
-      <p className="text-center text-sm font-sans italic text-primary/50 font-medium max-w-screen-md px-2">
-        Explore a wide range of advanced procedures and treatments tailored to
-        ensure your health and well-being. From preventive care to specialized
-        interventions, our expert team is here to provide the best possible
-        outcomes.
-      </p>
-      <Link
-        href="/specializations"
-        className=" flex items-center gap-1 px-5 text-primary  transition-all duration-200 hover:scale-110 active:scale-95 font-medium border p-2 rounded-xl border-primary !mt-8"
-      >
-        View All <ArrowRight className="size-4 animate-bounce-x" />
-      </Link>
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between w-full px-6 sm:px-12 gap-6 sm:gap-12">
+        <div className="max-w-2xl">
+          <h2 className="text-2xl sm:text-4xl font-bold text-slate-900 mb-3 leading-tight">
+            Procedures and Treatments
+          </h2>
+          <p className="text-sm font-sans italic text-slate-500 font-medium leading-relaxed">
+            Explore a wide range of advanced procedures and treatments tailored to
+            ensure your health and well-being. From preventive care to specialized
+            interventions, our expert team is here to provide the best possible
+            outcomes.
+          </p>
+        </div>
+        <Link
+          href="/specializations"
+          className="flex-shrink-0 flex items-center gap-2 px-6 py-2.5 text-[#0057b7] transition-all duration-300 hover:bg-[#0057b7] hover:text-white font-bold border-2 rounded-2xl border-[#0057b7]/20 hover:border-[#0057b7]"
+        >
+          View All <ArrowRight className="size-4" />
+        </Link>
+      </div>
       {formattedProcedures.length === 0 ? (
         <p className="text-sm text-muted-foreground mt-6">
           No procedures available right now.
@@ -59,3 +63,4 @@ const TreatmentsList = ({ procedures }: TreatmentsListProps) => {
 };
 
 export default TreatmentsList;
+

@@ -107,6 +107,7 @@ export const CategorySchema = z.object({
   id: z.string(),
   name: z.string(),
   image: z.string(),
+  images: z.array(z.string()),
   description: z.string(),
   specializationId: z.string(),
 });

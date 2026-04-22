@@ -13,44 +13,54 @@ import {
 // TODO : need to dicsuss on the aspect ratios
 const Gallery = ({ media }: { media: { url: string; type: "IMAGE" | "CERTIFICATE" }[] }) => {
   const images = media.filter((m) => m.type === "IMAGE").map((m) => m.url);
+  
   return (
-    <div className="py-6 pt-10 flex flex-col items-center space-y-6">
-      <div className="flex flex-col items-center gap-4">
-        <h2 className="text-2xl sm:text-5xl font-bold">Moments of care</h2>
-        <p className="text-center text-sm font-sans italic text-primary/50 font-medium max-w-screen-md px-2">
-          Experience Our Facilities, Expertise, and Compassion in Every Image
+    <div className="py-20 flex flex-col items-center space-y-12">
+      <div className="flex flex-col items-center gap-4 text-center px-4">
+        <span className="text-primary font-bold tracking-widest uppercase text-xs">Visual Journey</span>
+        <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-slate-900">Moments of care</h2>
+        <p className="text-sm font-sans italic text-slate-500 font-medium max-w-screen-md">
+          Experience Our Facilities, Expertise, and Compassion in Every Image
         </p>
       </div>
-      <Carousel
-        opts={{
-          align: "start",
-        }}
-        className="max-w-[calc(100vw-2rem)] mx-auto"
-      >
-        <CarouselContent>
-          {images.map((img) => (
-            <CarouselItem
-              key={img}
-              className=" md:basis-1/2 lg:basis-1/3 xl:basis-1/4"
-            >
-              <div
-                key={img}
-                className="w-[343px] sm:w-[360px] aspect-[4/3]   shadow-md shadow-black/20 rounded-2xl"
+
+      <div className="w-full max-w-screen-2xl mx-auto px-12 relative group">
+        <Carousel
+          opts={{
+            align: "start",
+            loop: true,
+          }}
+          className="w-full"
+        >
+          <CarouselContent className="-ml-6">
+            {images.map((img, index) => (
+              <CarouselItem
+                key={index}
+                className="pl-6 basis-full sm:basis-1/2 lg:basis-1/3 xl:basis-1/4"
               >
-                <Image
-                  src={img}
-                  alt="gallery"
-                  width={300}
-                  height={300}
-                  className="w-full h-full  object-cover object-center rounded-2xl"
-                />
-              </div>
-            </CarouselItem>
-          ))}
-        </CarouselContent>
-        <CarouselPrevious className="left-2 sm:left-5 shadow-[0_0_10px_10px_rgba(0,0,0,0.2)]" />
-        <CarouselNext className="right-2 sm:right-5 shadow-[0_0_10px_10px_rgba(0,0,0,0.2)]" />
-      </Carousel>
+                <div 
+                  className={`transition-all duration-700 ease-in-out ${
+                    index % 2 === 0 ? "pt-0 pb-12" : "pt-12 pb-0"
+                  }`}
+                >
+                  <div className="group/card relative overflow-hidden rounded-[32px] shadow-[0_8px_30px_rgb(0,0,0,0.08)] bg-white aspect-[3/4]">
+                    <Image
+                      src={img}
+                      alt={`care moment ${index + 1}`}
+                      fill
+                      className="object-cover transition-transform duration-700 group-hover/card:scale-110"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-500" />
+                  </div>
+                </div>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          
+          <CarouselPrevious className="hidden md:flex -left-6 lg:-left-12 h-12 w-12 border-none bg-white shadow-xl hover:bg-primary hover:text-white transition-all" />
+          <CarouselNext className="hidden md:flex -right-6 lg:-right-12 h-12 w-12 border-none bg-white shadow-xl hover:bg-primary hover:text-white transition-all" />
+        </Carousel>
+      </div>
     </div>
   );
 };
