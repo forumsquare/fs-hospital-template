@@ -17,8 +17,8 @@ export default function LocationsSection({ addresses }: { addresses: AddressType
     : encodeURIComponent(`${selectedAddress.address}, ${selectedAddress.city}`);
 
   return (
-    <section className="w-full py-20">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+    <section className="w-full py-10 sm:py-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4 tracking-tight">
             Find Your Nearest Location
@@ -71,7 +71,7 @@ export default function LocationsSection({ addresses }: { addresses: AddressType
         </div>
 
         {/* Global Network Map Representation */}
-        <div className="rounded-[32px] overflow-hidden bg-[#f8fbff] aspect-[16/9] md:aspect-[21/9] relative shadow-2xl border border-slate-100">
+        <div className="rounded-[32px] overflow-hidden bg-[#f8fbff] aspect-[4/5] sm:aspect-[16/9] md:aspect-[21/9] relative shadow-2xl border border-slate-100">
           <iframe
             style={{ height: "100%", width: "100%", border: 0 }}
             src={`https://www.google.com/maps/embed/v1/place?q=${query}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8"}`}

@@ -28,7 +28,7 @@ export const addressVal: AddressType = {
 export const socialVal: SocialMediaType = {
   facebook: "https://www.facebook.com",
   instagram: "https://www.instagram.com",
-  twitter: "https://www.twitter.com",
+  x: "https://x.com",
   youtube: "https://www.youtube.com",
   linkedin: "https://www.linkedin.com",
   whatsapp: "https://wa.me/91XXXXXXXXXX",

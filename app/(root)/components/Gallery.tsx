@@ -24,7 +24,7 @@ const Gallery = ({ media }: { media: { url: string; type: "IMAGE" | "CERTIFICATE
         </p>
       </div>
 
-      <div className="w-full max-w-screen-2xl mx-auto px-12 relative group">
+      <div className="w-full max-w-screen-2xl mx-auto px-4 sm:px-12 relative group">
         <Carousel
           opts={{
             align: "start",

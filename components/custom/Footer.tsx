@@ -90,15 +90,17 @@ const Footer: FC<FooterProps> = ({ addresses, logo, media, title, timings, email
     return !href ? (
       <></>
     ) : (
-      <Link href={href}>
-        <Image
-          src={src}
-          alt={alt}
-          width={25}
-          height={25}
-          className="w-6 h-6 cursor-pointer hover:scale-125 duration-250 my-[2px] !text-primary  "
-        />
-      </Link>
+      <div className="size-9 flex items-center justify-center rounded-full bg-gray-700/20 backdrop-blur-sm transition-colors shadow-sm">
+        <Link href={href}>
+          <Image
+            src={src}
+            alt={alt}
+            width={35}
+            height={35}
+            className="w-5 h-5 cursor-pointer hover:scale-110 duration-200"
+          />
+        </Link>
+      </div>
     );
   };
 
@@ -118,16 +120,18 @@ const Footer: FC<FooterProps> = ({ addresses, logo, media, title, timings, email
             Redefining health through the digital biome. The intersection of technology and human vitality.
           </p>
           <div className="flex gap-3 mt-1 items-center">
-            <button className="w-9 h-9 flex items-center justify-center rounded-full bg-[#f1f5f9] hover:bg-[#e2e8f0] transition-colors text-slate-600">
+            <button className="w-9 h-9 flex items-center justify-center rounded-full bg-gray-700/20 transition-colors text-slate-600">
               <Share />
             </button>
             <SocialIcon href={media?.facebook} alt="Facebook" src="/icons/facebook.svg" />
             <SocialIcon href={media?.instagram} alt="Instagram" src="/icons/instagram.svg" />
-            <SocialIcon href={media?.twitter} alt="Twitter" src="/icons/twitter.svg" />
+            <SocialIcon href={media?.x} alt="X" src="/icons/twitter.svg" />
             <SocialIcon href={media?.linkedin} alt="LinkedIn" src="/icons/linkedin.svg" />
+            <SocialIcon href={media?.whatsapp} alt="Whatsapp" src="/icons/whatsapp.svg" />
+            <SocialIcon href={media?.youtube} alt="Youtube" src="/icons/youtube.svg" />
             {email && (
               <Link href={`mailto:${email}`}>
-                <div className="w-9 h-9 flex items-center justify-center rounded-full bg-[#f1f5f9] hover:bg-[#e2e8f0] transition-colors text-slate-600">
+                <div className="w-9 h-9 flex items-center justify-center rounded-full bg-gray-700/20 transition-colors text-slate-600">
                   <Mail />
                 </div>
               </Link>
@@ -163,7 +167,7 @@ const Footer: FC<FooterProps> = ({ addresses, logo, media, title, timings, email
             </div>
           </ul>
           <div className="sm:col-span-2 lg:col-span-1 flex flex-col items-center sm:items-start">
-             <TimingsInfo timings={timings} />
+            <TimingsInfo timings={timings} />
           </div>
         </div>
       </div>

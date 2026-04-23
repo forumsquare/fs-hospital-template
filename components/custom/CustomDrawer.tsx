@@ -38,7 +38,7 @@ export default function CustomDrawer({
         </DrawerTrigger>
       )}
       <DrawerContent
-        className={cn([`h-fit pb-5 z-[10000000] rounded-t-3xl `, className])}
+        className={cn([`h-fit max-h-[80%] pb-5 z-[10000000] rounded-t-3xl `, className])}
       >
         {/* <DrawerTrigger className=" fixed top-4 right-4">
           <X />

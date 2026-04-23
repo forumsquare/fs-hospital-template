@@ -129,16 +129,16 @@ const DoctorsList = ({ doctors }: DoctorsListProps) => {
   return (
     <section
       id="doctors"
-      className="flex w-full  flex-col items-center gap-6 justify-center mt-10 scroll-mt-28 rounded-2xl mx-2 py-5 px-8"
+      className="flex w-full  flex-col items-center gap-6 justify-center mt-10 scroll-mt-28 rounded-2xl mx-2 py-5 px-4 sm:px-8"
     >
       {/* <h2 className="text-2xl sm:text-5xl font-bold">Meet Our Top Doctors</h2> */}
       <div className="flex flex-col items-center gap-6 justify-center w-full">
         <div className="text-center space-y-3 sticky top-16 z-10 lg:static bg-secondary/5 rounded-xl p-2 backdrop-blur-md border flex flex-col sm:flex-row items-center justify-between !w-full ">
-          <div className="min-w-fit flex flex-col items-start">
-            <h4 className="text-3xl font-bold ">Our Specialized Team</h4>
-            <p className="text-sm text-muted-foreground">Top medical experts available at our various center</p>
+          <div className="min-w-fit flex flex-col items-start px-2">
+            <h4 className="text-2xl sm:text-3xl font-bold ">Our Specialized Team</h4>
+            <p className="text-xs sm:text-sm text-muted-foreground">Top medical experts available at our various center</p>
           </div>
-          <ul className="mb-4 flex space-x-4 overflow-x-auto max-w-[50vw]  sticky top-16 z-10 lg:static ">
+          <ul className="mb-4 flex space-x-4 overflow-x-auto max-w-full sm:max-w-[50vw] sticky top-16 z-10 lg:static px-2 scrollbar-hide">
             {specializationList.map((specialization, index) => (
               <Button
                 variant={

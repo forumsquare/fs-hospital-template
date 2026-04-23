@@ -29,13 +29,13 @@ const Facilites = ({
         className={cn(
           "mx-auto w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7 mb-8 ",
           showHorizontal &&
-          "flex-row flex-nowrap overflow-x-auto sm:py-3 pb-8 px-16 justify-start"
+          "flex-row flex-nowrap overflow-x-auto sm:py-3 pb-8 px-6 md:px-16 justify-start scrollbar-hide"
         )}
       >
         {facilities.map((facility) => (
           <motion.div
             key={facility.id}
-            className="group cursor-pointer flex-shrink-0 flex flex-col"
+            className="group cursor-pointer flex-shrink-0 flex flex-col  bg-slate-50 !p-4 rounded-xl"
             whileHover={{ y: -5 }}
             onClick={() => handleTreatmentClick(facility)}
           >
@@ -65,7 +65,7 @@ const Facilites = ({
             active={active}
             id={id}
             open={open}
-            setOpen={() => setOpen((prev) => !prev)}
+            setOpen={setOpen}
           />
         )}
       </AnimatePresence>

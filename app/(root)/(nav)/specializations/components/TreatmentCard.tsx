@@ -31,7 +31,7 @@ const TestTreatmentCards = ({
         className={cn(
           "mx-auto w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7  ",
           showHorizontal &&
-          "flex-row flex-nowrap overflow-x-auto py-8 md:pb-12 px-16 justify-start"
+          "flex-row flex-nowrap overflow-x-auto py-8 md:pb-12 px-6 md:px-16 justify-start scrollbar-hide"
         )}
       >
         {treatments.map((treatment) => (
@@ -110,7 +110,7 @@ const TestTreatmentCards = ({
             active={active}
             id={id}
             open={open}
-            setOpen={() => setOpen((prev) => !prev)}
+            setOpen={setOpen}
           />
         )}
       </AnimatePresence>
