@@ -113,7 +113,7 @@ const DoctorsInfo = ({ doctorInfo }: { doctorInfo: DoctorDetailsType }) => {
                 variant={activeTab === item ? "default" : "outline"}
                 key={index}
                 onClick={() => setActiveTab(item)}
-                className="shadow-none sm:px-7 rounded-full"
+                className="shadow-none sm:px-7 rounded-xl"
               >
                 {item}{" "}
                 {item === "Patient Stories" && (
@@ -202,8 +202,8 @@ const DoctorsInfo = ({ doctorInfo }: { doctorInfo: DoctorDetailsType }) => {
                   </div>
                 )}
                 {activeTab === "Patient Stories" && (
-                  <div className="flex flex-col gap-4 xl:w-[900px]">
-                    <ul className="space-y-4 w-fit mx-auto">
+                  <div className="flex flex-col gap-4  xl:w-[900px]">
+                    <ul className="space-y-4 w-full mx-auto ">
                       {data?.map((review: UserReviewType, i: number) => (
                         // <ReviewCard key={review.id} {...review} />
                         <Testimonial

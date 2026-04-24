@@ -11,10 +11,10 @@ export const useSigninWithGoogleMutation = () => {
     onSuccess: async (data) => {
       console.log({ data });
     },
-    onError: (error) => {
-      console.log({ error });
-      //TODO: Error Handling
-      toast.error(error.message ?? "Invalid Credentials");
+    onError: (error: any) => {
+      console.log("Detailed Error:", error);
+      const message = error?.message || (error?.code === "ERR_NETWORK" ? "Network Error: Unable to reach server" : "Login Failed: Please check your connection");
+      toast.error(message);
     },
   });
 };
@@ -26,10 +26,10 @@ export const useSignInWithTemplateMutation = () => {
     onSuccess: async (data) => {
       console.log({ data });
     },
-    onError: (error) => {
-      console.log({ error });
-      //TODO: Error Handling
-      toast.error(error.message ?? "Invalid Credentials");
+    onError: (error: any) => {
+      console.log("Detailed Error:", error);
+      const message = error?.message || (error?.code === "ERR_NETWORK" ? "Network Error: Unable to reach server" : "Sign-in Failed: Please check your connection");
+      toast.error(message);
     },
   });
 };
@@ -41,10 +41,10 @@ export const useVerifyTemplateMutation = () => {
     onSuccess: async (data) => {
       console.log({ data });
     },
-    onError: (error) => {
-      console.log({ error });
-      //TODO: Error Handling
-      toast.error(error.message ?? "Invalid Credentials");
+    onError: (error: any) => {
+      console.log("Detailed Error:", error);
+      const message = error?.message || (error?.code === "ERR_NETWORK" ? "Network Error: Unable to reach server" : "Verification Failed: Please check your connection");
+      toast.error(message);
     },
   });
 };

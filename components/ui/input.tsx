@@ -12,7 +12,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, leading, trailing, ...props }, ref) => {
     return (
       <div className="flex items-center gap-x-3 h-12 w-full rounded-2xl  border px-3 py-2 text-sm ring-offset-background focus-within:ring-1 focus-within:ring-offset-[0px] focus-within:ring-ring/30  focus-within:ring-offset-white bg-white ">
-        {leading && <span className="">{leading}</span>}
+        {leading && <span className="flex-shrink-0">{leading}</span>}
         <input
           type={type}
           className={cn(
@@ -22,7 +22,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           ref={ref}
           {...props}
         />
-        {trailing && <span className="">{trailing}</span>}
+        {trailing && <span className="flex-shrink-0">{trailing}</span>}
       </div>
     );
   }

@@ -16,7 +16,7 @@ const MobileComponent = () => {
       .string()
       .length(10, { message: "Enter 10 digit mobile number" })
       .regex(/^[0-9]{10}$/, { message: "Only numbers are allowed" }),
-  }); 
+  });
 
   type MobileType = z.infer<typeof formSchema>;
 
@@ -37,7 +37,7 @@ const MobileComponent = () => {
       setShowOTP(true);
     }
   };
-  
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -53,10 +53,9 @@ const MobileComponent = () => {
             <button
               type="submit"
               className="rounded-full p-2  bg-gradient-to-b from-neutral-200 to-neutral-400 "
-              // onClick={() => {
-              //   console.log();
-              //   setOTP(true);
-              // }}
+            // onClick={() => {
+            //   form.handleSubmit(onSubmit)();
+            // }}
             >
               <Image
                 src="/icons/arrow.svg"

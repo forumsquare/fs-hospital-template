@@ -102,8 +102,8 @@ const OTPForm = () => {
           control={form.control}
           name="pin"
           render={({ field }) => (
-            <FormItem className="text-center w-full space-y-8 [data-input-otp-container]:">
-              <FormLabel className="text-black drop-shadow-md text-4xl font-extrabold">
+            <FormItem className="text-center w-full space-y-8">
+              <FormLabel className="text-black drop-shadow-md text-2xl sm:text-4xl font-extrabold flex justify-center">
                 Verification Code
               </FormLabel>
               <FormDescription className="my-5 leading-5">
@@ -117,18 +117,20 @@ const OTPForm = () => {
                 </span>
               </FormDescription>
               <FormControl className="mx-auto w-fit">
-                <InputOTP maxLength={6} {...field} className="!mx-auto w-fit">
-                  {Array.from({ length: 6 }).map((_, index) => (
-                    <InputOTPGroup
-                      key={index}
-                      className="w-14 h-14 backdrop-blur-xl border border-white/30 bg-white/20 rounded-xl shadow-inner transition-colors focus-within:bg-white/30 focus-within:border-white/60"
-                    >
-                      <InputOTPSlot
-                        index={index}
-                        className="rounded-xl text-center w-full h-full text-white font-bold text-2xl "
-                      />
-                    </InputOTPGroup>
-                  ))}
+                <InputOTP maxLength={6} {...field} className="mx-auto w-full flex justify-center">
+                  <div className="flex gap-1.5 sm:gap-3  mx-auto">
+                    {Array.from({ length: 6 }).map((_, index) => (
+                      <InputOTPGroup
+                        key={index}
+                        className="w-10 h-12 sm:w-14 sm:h-14 backdrop-blur-xl border border-white/30 bg-white/20 rounded-xl shadow-inner transition-all duration-300 focus-within:bg-white/30 focus-within:ring-2 focus-within:ring-white/50"
+                      >
+                        <InputOTPSlot
+                          index={index}
+                          className="rounded-xl text-center w-full h-full text-white font-bold text-xl sm:text-2xl focus:ring-0"
+                        />
+                      </InputOTPGroup>
+                    ))}
+                  </div>
                 </InputOTP>
               </FormControl>
               <FormMessage />
@@ -147,29 +149,32 @@ const OTPForm = () => {
               Resend OTP
             </Button>
           ) : (
-            <p className="text-sm text-white/80 font-medium">
+            <p className="text-sm text-white/80 font-medium tracking-wide">
               Resend OTP in {Math.floor(timeLeft / 60)}:
               {(timeLeft % 60).toString().padStart(2, "0")}
             </p>
           )}
         </div>
-        <div className="flex gap-4 max-w-md">
+        <div className="flex flex-row-reverse gap-4">
           <Button
             type="reset"
             variant={"outline"}
-            className="rounded-3xl flex-1 font-bold text-white bg-white/10 hover:bg-white/20 hover:text-white backdrop-blur-lg py-[20px] border-white/20 shadow-lg"
+            className="rounded-full flex-1 font-bold text-white bg-white/10 hover:bg-white/20 hover:text-white backdrop-blur-lg border-white/20 shadow-lg order-2 sm:order-1"
             onClick={() => setShowOTP(false)}
           >
             Back
           </Button>
-          <Button type="submit" className="rounded-3xl flex-1 font-bold">
-            <span className="w-full flex-1">Continue</span>
+          <Button type="submit"
+            variant={"default"}
+            className="rounded-full flex-1 font-bold order-1 sm:order-2 flex items-center justify-center gap-2"
+          >
+            <span>Continue</span>
             <Image
               src="/icons/arrow.svg"
               alt=""
               width={16}
               height={16}
-              className="filter invert"
+              className="filter group-hover:translate-x-1 transition-transform"
             />
           </Button>
         </div>

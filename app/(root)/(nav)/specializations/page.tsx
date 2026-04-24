@@ -13,7 +13,8 @@ export async function generateMetadata(): Promise<Metadata> {
 
 const SpecializationPage = async () => {
   try {
-    const categories = await getCategoriesSSR();
+    const rawCategories = await getCategoriesSSR();
+    const categories = (rawCategories || []).sort((a, b) => a.name.localeCompare(b.name));
     const firstCategoryId = categories?.[0]?.specializationId || categories?.[0]?.id;
 
     const [procedures, facilities] = await Promise.all([

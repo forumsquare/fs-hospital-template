@@ -27,12 +27,12 @@ export const Testimonial: FC<TestimonialProps> = ({
   return (
     <div
       className={cn(
-        "bg-card max-w-[200px] border border-border rounded-3xl transition-all p-2 h-full flex flex-col justify-between !min-w-[calc(100vw-8rem)] md:!min-w-[calc(100vw-15rem)] lg:!min-w-[calc(100vw-55rem)] xl:!min-w-[calc(100vw-70rem)]  shrink-0",
+        "bg-card w-full max-w-[300px] sm:max-w-full border border-border rounded-3xl transition-all p-2 h-full flex flex-col justify-between ",
         className
       )}
     >
       {testimonial && (
-        <blockquote className="p-8 relative">
+        <blockquote className="p-6 md:p-8 relative">
           <Image
             src="/icons/quote-open.svg"
             alt="quote-open"
@@ -40,7 +40,7 @@ export const Testimonial: FC<TestimonialProps> = ({
             width={25}
             height={25}
           />
-          <p className="font-sans italic text-sm text-card-foreground leading-relaxed tracking-wide font-medium">
+          <p className="font-sans break-words italic text-sm text-card-foreground leading-relaxed tracking-wide font-medium">
             {testimonial}
           </p>
           <Image

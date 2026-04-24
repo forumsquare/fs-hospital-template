@@ -47,7 +47,7 @@ export default async function DoctorPage({ params }: DoctorPageProps) {
         {/* Pass data to client wrapper for state management like useBookingStore */}
         <DoctorClientWrapper doctorInfo={doctorInfo} />
         <section className="!-z-20 flex flex-col p-5 pt-24  gap-10 items-center justify-center max-w-screen-[1200px]   !scroll-mt-20 overflow-visible ">
-          <div className="lg:flex justify-center gap-x-5 h-fit">
+          <div className="lg:grid grid-cols-[2fr_1fr] gap-x-5 h-fit">
             <div className="mx-auto max-w-[900px] w-full flex-1 scroll-mt-0">
               <DoctorsInfo doctorInfo={doctorInfo} />
             </div>

@@ -403,6 +403,7 @@ export const UserReviewSchema = z.object({
   user: z.object({
     firstName: z.string(),
     lastName: z.string(),
+    image: z.string().optional(),
   }),
 });
 
