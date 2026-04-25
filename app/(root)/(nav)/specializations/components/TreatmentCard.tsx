@@ -46,10 +46,10 @@ const TestTreatmentCards = ({
                 alt={treatment.name}
                 fill
                 className="object-cover transition-transform duration-500 hover:scale-105"
-                onError={(e) => {
-                  const target = e.target as HTMLImageElement;
-                  target.src = "/icons/image.svg"; // Fallback to icon
-                }}
+              // onError={(e) => {
+              //   const target = e.target as HTMLImageElement;
+              //   target.src = "/icons/image.svg"; // Fallback to icon
+              // }}
               />
               {treatment.discount && treatment.discount > 0 ? (
                 <div className="absolute top-4 left-4 px-3 py-1 bg-red-500 text-white text-[10px] font-bold rounded-full uppercase tracking-tighter">

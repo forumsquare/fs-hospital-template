@@ -46,10 +46,10 @@ const Facilites = ({
                 width={320}
                 height={180}
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                onError={(e) => {
-                  const target = e.target as HTMLImageElement;
-                  target.src = "/icons/image.svg";
-                }}
+              // onError={(e) => {
+              //   const target = e.target as HTMLImageElement;
+              //   target.src = "/icons/image.svg";
+              // }}
               />
             </div>
             <h5 className="text-xl font-bold mb-2 text-slate-900 line-clamp-1">{facility.name}</h5>

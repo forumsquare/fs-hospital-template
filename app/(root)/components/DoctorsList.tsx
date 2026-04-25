@@ -31,10 +31,10 @@ const DoctorCard = ({
           alt={doctor.name}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
           src={doctor.image}
-          onError={(e) => {
-            const target = e.target as HTMLImageElement;
-            target.src = "/icons/image.svg";
-          }}
+        // onError={(e) => {
+        //   const target = e.target as HTMLImageElement;
+        //   target.src = "/icons/image.svg";
+        // }}
         />
         <div className="absolute top-4 left-4 px-3 py-1.5 bg-white/90 backdrop-blur-md text-[#0057b7] text-[10px] font-extrabold uppercase tracking-wider rounded-full shadow-sm">
           {hasDiscount ? `${discountPercent}% OFF` : 'Top Rated'}
