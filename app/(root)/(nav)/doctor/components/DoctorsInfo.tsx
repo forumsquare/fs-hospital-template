@@ -46,7 +46,7 @@ const DoctorsInfo = ({ doctorInfo }: { doctorInfo: DoctorDetailsType }) => {
               alt={doctorInfo.name}
               width={160}
               height={160}
-              className=" w-28 h-28  sm:w-36 sm:h-36 rounded-full  bg-slate-200 !bg-cover border-3 sshadow-md shadow-gray-200  "
+              className="w-28 h-28 sm:w-40 sm:h-40 rounded-full object-cover bg-slate-200 border-4 border-white shadow-lg shadow-slate-200/50"
             />
             {doctorInfo.registrationNo && (
               <span className="text-[9px] text-slate-500 font-semibold w-20 text-center ">
@@ -142,7 +142,7 @@ const DoctorsInfo = ({ doctorInfo }: { doctorInfo: DoctorDetailsType }) => {
               <div className="h-fit w-full">
                 {activeTab === "About" && (
                   <div className="w-full space-y-8">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pb-6 border-b border-slate-100">
+                    {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pb-6 border-b border-slate-100">
                       <div className="flex items-start gap-3">
                         <div className="p-2 rounded-lg bg-primary/10 text-primary">
                           <GraduationCap className="size-5" />
@@ -183,7 +183,7 @@ const DoctorsInfo = ({ doctorInfo }: { doctorInfo: DoctorDetailsType }) => {
                           </div>
                         </div>
                       )}
-                    </div>
+                    </div> */}
                     <div className="max-w-none text-slate-600 leading-[1.8] text-[15px] space-y-4">
                       <ReactMarkdown
                         remarkPlugins={[remarkGfm]}
@@ -202,8 +202,8 @@ const DoctorsInfo = ({ doctorInfo }: { doctorInfo: DoctorDetailsType }) => {
                   </div>
                 )}
                 {activeTab === "Patient Stories" && (
-                  <div className="flex flex-col gap-4  xl:w-[900px]">
-                    <ul className="space-y-4 w-full mx-auto ">
+                  <div className="flex flex-col gap-4 ">
+                    <ul className="space-y-4 w-full sm:w-[85%] mx-auto ">
                       {data?.map((review: UserReviewType, i: number) => (
                         // <ReviewCard key={review.id} {...review} />
                         <Testimonial

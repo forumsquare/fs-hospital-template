@@ -73,7 +73,7 @@ export const InfiniteMovingCards = ({
       <ul
         ref={scrollerRef}
         className={cn(
-          " grid grid-flow-col  min-w-full shrink-0 gap-x-6 py-4 w-max",
+          " grid grid-flow-col md:grid-cols-[repeat(auto-fill,minmax(500px,1fr))]  min-w-full shrink-0 gap-x-6 py-4 w-max",
           start && "animate-scroll ",
           pauseOnHover && "hover:[animation-play-state:paused]"
         )}

@@ -5,7 +5,7 @@ import Link from "next/link";
 import React, { FC } from "react";
 import { AddressType, SocialMediaType } from "@/models/schema";
 import { cn } from "@/lib/utils";
-import { Mail, Share } from "lucide-react";
+import { Mail, Phone } from "lucide-react";
 
 type FooterProps = {
   addresses: AddressType[];
@@ -53,9 +53,9 @@ const TimingsInfo = ({ timings }: { timings?: { day: number; fromTime: string; t
               <div className="px-6 flex gap-x-3 items-start justify-between my-3 text-gray-400 flex-col sm:flex-row">
                 <p className="w-12 text-left">{day}</p>
                 <div className="flex flex-col text-xs text-right">
-                  {dayTimings.map((t, idx) => (
-                    <p key={idx}>{formatTime(t.fromTime)} - {formatTime(t.toTime)}</p>
-                  ))}
+                  <p>
+                    {formatTime(dayTimings[0].fromTime)} - {formatTime(dayTimings[dayTimings.length - 1].toTime)}
+                  </p>
                 </div>
               </div>
             </li>
@@ -120,22 +120,19 @@ const Footer: FC<FooterProps> = ({ addresses, logo, media, title, timings, email
             Redefining health through the digital biome. The intersection of technology and human vitality.
           </p>
           <div className="flex gap-3 mt-1 items-center">
-            <button className="w-9 h-9 flex items-center justify-center rounded-full bg-gray-700/20 transition-colors text-slate-600">
-              <Share />
-            </button>
+            {phoneNo && (
+              <Link href={`tel:${phoneNo}`}>
+                <div className="w-9 h-9 flex items-center justify-center rounded-full bg-gray-700/20 transition-colors test-white">
+                  <Phone className="size-5" />
+                </div>
+              </Link>
+            )}
             <SocialIcon href={media?.facebook} alt="Facebook" src="/icons/facebook.svg" />
             <SocialIcon href={media?.instagram} alt="Instagram" src="/icons/instagram.svg" />
             <SocialIcon href={media?.x} alt="X" src="/icons/twitter.svg" />
             <SocialIcon href={media?.linkedin} alt="LinkedIn" src="/icons/linkedin.svg" />
             <SocialIcon href={media?.whatsapp} alt="Whatsapp" src="/icons/whatsapp.svg" />
             <SocialIcon href={media?.youtube} alt="Youtube" src="/icons/youtube.svg" />
-            {email && (
-              <Link href={`mailto:${email}`}>
-                <div className="w-9 h-9 flex items-center justify-center rounded-full bg-gray-700/20 transition-colors text-slate-600">
-                  <Mail />
-                </div>
-              </Link>
-            )}
           </div>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12 w-full">
@@ -145,9 +142,8 @@ const Footer: FC<FooterProps> = ({ addresses, logo, media, title, timings, email
             </p>
             <LinkComponent link="/#doctors" title="Doctors" />
             <LinkComponent link="/specializations" title="Specializations" />
-            <LinkComponent link="/#diagnostics" title="Diagnostics" />
             <LinkComponent link="/reviews" title="Reviews" />
-            <LinkComponent link="/career" title="Career" />
+            <LinkComponent link="/account" title="Account" />
           </ul>
           <ul className="flex flex-col gap-y-4 items-center sm:items-start flex-1">
             <p className="font-bold text-secondary text-base uppercase tracking-wider mb-2">

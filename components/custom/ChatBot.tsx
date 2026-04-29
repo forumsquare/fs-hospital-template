@@ -22,6 +22,7 @@ import { getCookie } from "@/lib/serverCom";
 import { auth } from "@/lib/firebase";
 import AskForLogin from "./AskForLogin";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { usePathname } from "next/navigation";
 
 const Comp = ({
   setIsOpen,
@@ -242,6 +243,7 @@ const Comp = ({
 };
 export default function ChatBot() {
   // const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
   const { isChatOpen: isOpen, setIsChatOpen: setIsOpen } = useChatMessageStore();
   const chatRef = useRef<HTMLDivElement>(null);
   const { setChatRoomId, chatRoomId } = useChatMessageStore();
@@ -255,9 +257,11 @@ export default function ChatBot() {
     }
   }, [unreadData, setChatRoomId]);
 
+  console.log({ pathname });
+
   return (
     <div ref={chatRef}>
-      <div className="fixed bottom-4 right-4 z-[1000]">
+      <div className={cn("fixed bottom-4 right-4 z-[1000]", pathname.includes("doctor") && "!bottom-20 lg:!bottom-4")}>
         <Button
           className={cn(
             "hover:scale-[1.1] transition-all duration-200 active:!scale-[0.9] !z-[1000] p-0 rounded-full h-12 w-12 !bg-card relative",

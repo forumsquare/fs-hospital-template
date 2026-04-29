@@ -51,7 +51,7 @@ export default async function HomePage() {
       <DoctorsList doctors={doctors} />
       <TreatmentsList procedures={procedures} />
       <TestimonialList testimonials={testimonials} />
-      <PreFooter store={store} />
+      {/* <PreFooter store={store} /> */}
       {store.addressList && <LocationsSection addresses={store.addressList} />}
     </section>
   );

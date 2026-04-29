@@ -41,13 +41,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="!scroll-smooth">
+    <html lang="en" className="!scroll-smooth overflow-x-hidden">
       <body
         className={cn([
-          // `${geistSans.variable} ${geistMono.variable} antialiased`
           nunito.className,
           "antialiased",
           "scroll-smooth",
+          "overflow-x-hidden",
         ])}
       >
         <AppProvider>

@@ -17,13 +17,13 @@ const navigationItems = [
     gradient: "from-blue-500 to-cyan-400",
     shadowColor: "shadow-blue-500/20",
   },
-  {
-    icon: Bell,
-    title: "Notifications",
-    href: "/account/notifications",
-    gradient: "from-violet-500 to-purple-400",
-    shadowColor: "shadow-violet-500/20",
-  },
+  // {
+  //   icon: Bell,
+  //   title: "Notifications",
+  //   href: "/account/notifications",
+  //   gradient: "from-violet-500 to-purple-400",
+  //   shadowColor: "shadow-violet-500/20",
+  // },
   {
     icon: ReceiptText,
     title: "Terms & Conditions",

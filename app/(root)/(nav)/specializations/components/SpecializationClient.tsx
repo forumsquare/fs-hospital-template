@@ -1,6 +1,6 @@
 'use client';
 import TestTreatmentCards from "../components/TreatmentCard";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { TransitionPanel } from "@/components/ui/transition-panel";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -18,7 +18,7 @@ import CustomLoading from "@/components/custom/CustomLoading";
 import { useGetProceduresListQuery } from "@/services/query/procedureQuery";
 import { useGetFacilitiesQuery } from "@/services/query/facilitiesQuery";
 import { CategoryType, FacilityType, ProcedureType } from "@/models/schema";
-import { Verified } from "lucide-react";
+import { ChevronLeft, ChevronRight, Verified } from "lucide-react";
 
 interface SpecializationClientProps {
     initialCategories: CategoryType[];
@@ -37,6 +37,23 @@ const SpecializationClient = ({ initialCategories, initialProcedures, initialFac
     }, [categories]);
 
     const [activeIndex, setActiveIndex] = useState(0);
+    const [showLeftArrow, setShowLeftArrow] = useState(false);
+    const [showRightArrow, setShowRightArrow] = useState(false);
+    const scrollRef = useRef<HTMLUListElement>(null);
+
+    const checkScroll = () => {
+        if (scrollRef.current) {
+            const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+            setShowLeftArrow(scrollLeft > 10);
+            setShowRightArrow(scrollLeft < scrollWidth - clientWidth - 10);
+        }
+    };
+
+    useEffect(() => {
+        checkScroll();
+        window.addEventListener('resize', checkScroll);
+        return () => window.removeEventListener('resize', checkScroll);
+    }, [sortedCategories]);
     const [categoryId, setCategoryId] = useState(() => {
         const initialSorted = [...initialCategories].sort((a, b) => a.name.localeCompare(b.name));
         return initialSorted.length > 0
@@ -64,26 +81,44 @@ const SpecializationClient = ({ initialCategories, initialProcedures, initialFac
     })) || [];
 
     return (
-        <section className=" rounded-2xl mt-14 space-y-7 mx-0 sm:mx-5 px-6 sm:px-10 py-14 sm:mx-auto">
+        <section className=" rounded-2xl sm:mt-14 space-y-7 mx-0 sm:mx-5 px-6 sm:px-10 py-14 sm:mx-auto">
             <h2 className="text-primary font-extrabold text-3xl sm:text-4xl px-2">
                 Our Specializations
             </h2>
             <div>
-                <ul className="mb-4 flex space-x-4 overflow-scroll">
-                    {sortedCategories.map((item: CategoryType, index: number) => (
-                        <Button
-                            variant={activeIndex === index ? "default" : "outline"}
-                            key={index}
-                            onClick={() => {
-                                setCategoryId(item.specializationId || item.id);
-                                setActiveIndex(index);
-                            }}
-                            className="shadow-none px-7 rounded-full"
-                        >
-                            {item.name}
-                        </Button>
-                    ))}
-                </ul>
+                <div className="relative group/nav">
+                    {showLeftArrow && sortedCategories.length > 1 && (
+                        <div className="absolute -left-6 top-0 bottom-1 w-12  z-20 flex items-center justify-start pointer-events-none transition-all duration-300">
+                            <ChevronLeft className="h-5 w-5 text-primary animate-pulse ml-1" />
+                        </div>
+                    )}
+
+                    <ul
+                        ref={scrollRef}
+                        onScroll={checkScroll}
+                        className="mb-4 flex space-x-4 overflow-x-auto no-scrollbar scroll-smooth relative"
+                    >
+                        {sortedCategories.map((item: CategoryType, index: number) => (
+                            <Button
+                                variant={activeIndex === index ? "default" : "outline"}
+                                key={index}
+                                onClick={() => {
+                                    setCategoryId(item.specializationId || item.id);
+                                    setActiveIndex(index);
+                                }}
+                                className="shadow-none px-7 rounded-full shrink-0"
+                            >
+                                {item.name}
+                            </Button>
+                        ))}
+                    </ul>
+
+                    {showRightArrow && sortedCategories.length > 1 && (
+                        <div className="absolute -right-6 top-0 bottom-1 w-12 z-20 flex items-center justify-end pointer-events-none transition-all duration-300">
+                            <ChevronRight className="h-5 w-5 text-primary animate-pulse mr-1" />
+                        </div>
+                    )}
+                </div>
 
                 <div className="overflow-hidden border-t border-zinc-200 dark:border-zinc-700">
                     <TransitionPanel
