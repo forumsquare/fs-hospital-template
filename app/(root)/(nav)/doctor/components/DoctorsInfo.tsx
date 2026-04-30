@@ -219,7 +219,7 @@ const DoctorsInfo = ({ doctorInfo }: { doctorInfo: DoctorDetailsType }) => {
                       ))}
                     </ul>
                     <Button
-                      onClick={() => router.push("/reviews")}
+                      onClick={() => router.push(`/reviews?id=${doctorInfo.id}`)}
                       className="w-40 !mx-auto rounded-xl border-muted-foreground bg-transparent border shadow-none text-primary hover:bg-transparent font-semibold"
                     >
                       View more{" "}

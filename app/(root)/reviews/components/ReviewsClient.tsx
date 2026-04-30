@@ -33,16 +33,17 @@ const ITEMS_PER_PAGE = 12;
 interface ReviewsClientProps {
     initialDoctors: DoctorType[];
     initialReviews: UserReviewType[];
+    initialDoctorId?: string;
 }
 
-const ReviewsClient: React.FC<ReviewsClientProps> = ({ initialDoctors, initialReviews }) => {
+const ReviewsClient: React.FC<ReviewsClientProps> = ({ initialDoctors, initialReviews, initialDoctorId }) => {
 
     const router = useRouter()
     const { data: doctorsList, isPending: doctorsPending } = useGetDoctorListQuery({
         initialData: initialDoctors
     });
 
-    const [selectedDoctor, setSelectedDoctor] = useState(initialDoctors?.[0]?.id || "");
+    const [selectedDoctor, setSelectedDoctor] = useState(initialDoctorId || initialDoctors?.[0]?.id || "");
     const [sortBy, setSortBy] = useState<"DATE" | "RATING">("DATE");
     const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
     const [currentPage, setCurrentPage] = useState(1);
@@ -59,12 +60,12 @@ const ReviewsClient: React.FC<ReviewsClientProps> = ({ initialDoctors, initialRe
         sortBy,
         isAscending: sortOrder === "asc",
     }, {
-        initialData: (selectedDoctor === (initialDoctors?.[0]?.id || "") && currentPage === 1 && sortBy === "DATE" && sortOrder === "desc")
+        initialData: (selectedDoctor === (initialDoctorId || initialDoctors?.[0]?.id || "") && currentPage === 1 && sortBy === "DATE" && sortOrder === "desc")
             ? initialReviews
             : undefined
     });
 
-    const reviews = reviewsData || [];
+    const reviews = useMemo(() => reviewsData || [], [reviewsData]);
     const totalPages = Math.ceil(reviews.length / ITEMS_PER_PAGE) || 1;
 
     // Calculate Breakdown Stats (based on current reviews as proxy)
@@ -150,7 +151,7 @@ const ReviewsClient: React.FC<ReviewsClientProps> = ({ initialDoctors, initialRe
                                         <SelectGroup>
                                             <SelectItem value="ALL">All Doctors</SelectItem>
                                             {doctorsList?.map((doc: DoctorType) => (
-                                                <SelectItem key={doc.id} value={doc.id}>Dr. {doc.name}</SelectItem>
+                                                <SelectItem key={doc.id} value={doc.id}>{doc.name}</SelectItem>
                                             ))}
                                         </SelectGroup>
                                     </SelectContent>

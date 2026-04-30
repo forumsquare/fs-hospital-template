@@ -15,10 +15,11 @@ export async function generateMetadata(): Promise<Metadata> {
 
 const ITEMS_PER_PAGE = 12;
 
-export default async function ReviewsPage() {
+export default async function ReviewsPage({ searchParams }: { searchParams: Promise<{ id?: string }> }) {
+  const { id } = await searchParams;
   try {
     const doctorsList = await getDoctorsListSSR();
-    const initialDoctorId = doctorsList?.[0]?.id || "";
+    const initialDoctorId = id || doctorsList?.[0]?.id || "";
 
     let initialReviews: UserReviewType[] = [];
     if (initialDoctorId) {
@@ -35,6 +36,7 @@ export default async function ReviewsPage() {
       <ReviewsClient
         initialDoctors={doctorsList || []}
         initialReviews={initialReviews || []}
+        initialDoctorId={initialDoctorId}
       />
     );
   } catch (error) {

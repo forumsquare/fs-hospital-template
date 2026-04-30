@@ -157,7 +157,7 @@ const Footer: FC<FooterProps> = ({ addresses, logo, media, title, timings, email
               )}
               {phoneNo && (
                 <Link href={`tel:${phoneNo}`} className="hover:text-secondary hover:underline transition-all flex items-center gap-2">
-                  <span className="material-symbols-outlined text-base">phone</span> {phoneNo}
+                  <Phone className="size-4" /> {phoneNo}
                 </Link>
               )}
             </div>
