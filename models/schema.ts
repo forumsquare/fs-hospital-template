@@ -121,6 +121,7 @@ export const TreatmentSchema = z.object({
   image: z.string().url(),
   amount: z.number().optional(),
   discount: z.number().optional(),
+  duration: z.string().optional().nullable(),
   description: z.string().max(250),
 });
 
@@ -130,6 +131,7 @@ export const ProcedureSchema = z.object({
   id: z.string(),
   name: z.string(),
   description: z.string(),
+  duration: z.string().nullable().optional(),
   image: z.string().url(),
   cost: z.string(),
   discount: z.string(),

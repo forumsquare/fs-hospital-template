@@ -5,6 +5,7 @@ import CustomDrawer from "@/components/custom/CustomDrawer";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { TreatmentType } from "@/models/schema";
 import { motion } from "framer-motion";
+import { Clock } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
@@ -16,7 +17,7 @@ export const ModelCard = ({
   id: string;
 }) => (
   <div
-    className="w-full md:max-w-[500px] flex flex-col bg-white dark:bg-neutral-900 sm:rounded-3xl overflow-y-auto"
+    className="w-full md:max-w-[500px] flex flex-col bg-white dark:bg-neutral-900 sm:rounded-3xl overflow-y-auto sm:pt-8"
   >
     <div className="p-4 pt-2">
       <div className="relative w-full aspect-square max-h-[300px] rounded-2xl overflow-hidden border mb-6">
@@ -30,9 +31,16 @@ export const ModelCard = ({
       </div>
 
       <div className="space-y-4 px-2">
-        <h3 className="font-bold text-neutral-800 text-2xl">
-          {active.name}
-        </h3>
+        <div className="flex items-center justify-between">
+          <h3 className="font-bold text-neutral-800 text-2xl">
+            {active.name}
+          </h3>
+          {active.duration && (
+            <div className="flex items-center text-xs font-bold bg-slate-100 px-3 py-1 rounded-full text-slate-600 gap-1.5 whitespace-nowrap">
+              <Clock className="size-3.5" /> {active.duration}
+            </div>
+          )}
+        </div>
 
         <p className="text-neutral-600 text-[15px] leading-relaxed tracking-wide font-medium pb-4">
           {active.description}

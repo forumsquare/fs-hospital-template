@@ -65,9 +65,11 @@ const TestTreatmentCards = ({
             <div className="p-6 sm:p-8 flex-1 flex flex-col">
               <div className="flex justify-between items-start mb-4">
                 <h4 className="text-xl font-bold line-clamp-2">{treatment.name}</h4>
-                <div className="flex items-center text-xs text-slate-500 gap-1 whitespace-nowrap ml-4">
-                  <Clock className="size-4" /> 45m
-                </div>
+                {treatment.duration && (
+                  <div className="flex items-center text-xs text-slate-500 gap-1 whitespace-nowrap ml-4">
+                    <Clock className="size-4" /> {treatment.duration}
+                  </div>
+                )}
               </div>
 
               <div className="relative mb-6 flex-1 h-[40px] overflow-hidden">

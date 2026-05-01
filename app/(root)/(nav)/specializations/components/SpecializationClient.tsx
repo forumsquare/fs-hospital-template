@@ -77,6 +77,7 @@ const SpecializationClient = ({ initialCategories, initialProcedures, initialFac
         image: proc.image,
         amount: proc.cost ? parseFloat(proc.cost) : undefined,
         discount: proc.discount ? parseFloat(proc.discount) : undefined,
+        duration: proc.duration,
         description: proc.description,
     })) || [];
 
