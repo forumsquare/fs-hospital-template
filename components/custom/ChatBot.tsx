@@ -78,22 +78,28 @@ const Comp = ({
         setLoading(false);
       }
     };
-    fetchUser();
-    setLoading(false)
+    fetchUser().then(() => setLoading(false)).catch(() => setLoading(false));
   }, []);
 
 
   useEffect(() => {
     if (userId) {
       setChatMessages(
-        messages.map((message) => ({
-          id: message.id,
-          role: message.senderId === userId ? "user" : "assistant",
-          content: message.content,
-          createdAt: message.id
-            ? new Date(Number(message.id.substring(0, 13)))
-            : new Date(),
-        }))
+        messages.map((message) => {
+          let date = new Date();
+          if (message.createdAt) {
+            date = new Date(message.createdAt);
+          } else if (message.id && message.id.length >= 13 && !isNaN(Number(message.id.substring(0, 13)))) {
+            date = new Date(Number(message.id.substring(0, 13)));
+          }
+
+          return {
+            id: message.id,
+            role: message.senderId === userId ? "user" : "assistant",
+            content: message.content,
+            createdAt: date,
+          };
+        })
       );
     }
     setIsEmpty(messages.length === 0);
@@ -108,7 +114,11 @@ const Comp = ({
           id: generatedId,
           content: message.message,
           senderId: message.senderId,
-          createdAt: message.createdAt || new Date(Number(generatedId)).toISOString(),
+          createdAt:
+            message.createdAt ||
+            new Date(
+              Number(generatedId.toString().substring(0, 13))
+            ).toISOString(),
           status: message.status || "sent",
         };
       });
@@ -141,7 +151,7 @@ const Comp = ({
       ])}
     >
       {!userId && !loading && <AskForLogin onCancel={() => setIsOpen(false)} />}
-      <div className="absolute top-0 left-0 w-full h-16 bg-green-600 p-4  flex justify-between items-center z-[1000000]">
+      <div className="absolute top-0 left-0 w-full h-16 bg-blue-500 p-4  flex justify-between items-center z-[1000000]">
         <div>
           <h3 className="text-white font-semibold">Chat with us</h3>
           <p className="text-indigo-100 text-sm">

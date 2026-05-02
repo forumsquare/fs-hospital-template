@@ -35,7 +35,7 @@ const Facilites = ({
         {facilities.map((facility) => (
           <motion.div
             key={facility.id}
-            className="group cursor-pointer flex-shrink-0 flex flex-col  bg-slate-50 !p-4 rounded-xl"
+            className="group border cursor-pointer flex-shrink-0 flex flex-col  bg-slate-50 !p-4 rounded-xl"
             whileHover={{ y: -5 }}
             onClick={() => handleTreatmentClick(facility)}
           >

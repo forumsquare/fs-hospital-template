@@ -49,11 +49,12 @@ export const getDoctorReviews = async ({
   isAscending: boolean;
 }): Promise<UserReviewType[]> => {
   try {
+    const url = doctorId
+      ? apiEndpoints.consultant.getReviews.replace(":consultantId", doctorId)
+      : apiEndpoints.store.getReviews.replace(":storeId", storeId);
+
     const response = await apiInstance.get<APISnapshotType>(
-      `${apiEndpoints.consultant.getReviews.replace(
-        ":consultantId",
-        doctorId
-      )}?page=${page}&limit=${limit}&sortBy=${sortBy}&isAscending=${isAscending}`
+      `${url}?page=${page}&limit=${limit}&sortBy=${sortBy}&isAscending=${isAscending}`
     );
     if (response.data.status === StatusCode.OK) {
       return response.data.data;

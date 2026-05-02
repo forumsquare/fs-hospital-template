@@ -181,7 +181,7 @@ const SpecializationClient = ({ initialCategories, initialProcedures, initialFac
                                         <h4 className="font-bold text-3xl mt-5">
                                             Procedures & Treatments
                                         </h4>
-                                        <p className="text-sm font-sans italic text-muted-foreground leading-6 tracking-wide font-medium pb-5 pt-1">
+                                        <p className="text-sm font-sans italic text-muted-foreground tracking-wide font-medium pb-5">
                                             Signature protocols curated for exceptional results.
                                         </p>
                                         {proceduresPending ? (
@@ -197,7 +197,7 @@ const SpecializationClient = ({ initialCategories, initialProcedures, initialFac
                     <h4 className="font-bold text-3xl mt-10">
                         Facilities
                     </h4>
-                    <p className="text-sm font-sans italic text-muted-foreground leading-6 tracking-wide font-medium pb-5 pt-1">
+                    <p className="text-sm font-sans italic text-muted-foreground  tracking-wide font-medium pb-5">
                         Explore various Facilities we provide.
                     </p>
                     {facilitiesPending ? (

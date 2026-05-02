@@ -60,6 +60,7 @@ export const apiEndpoints = {
   },
   store: {
     get: "/public/store/:storeId",
+    getReviews: "/public/store/:storeId/reviews",
   },
 };
 

@@ -50,7 +50,7 @@ const AskForLogin = ({
             router.push(`/signup?redirect=${pathname}`);
             onSubmit?.();
           }}
-          className="!z-[200000000000000]"
+          className="!z-[200000000000000] !text-white !bg-blue-500"
         >
           Login
         </SubmitButton>

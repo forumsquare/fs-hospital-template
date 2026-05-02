@@ -120,13 +120,7 @@ const Footer: FC<FooterProps> = ({ addresses, logo, media, title, timings, email
             Redefining health through the digital biome. The intersection of technology and human vitality.
           </p>
           <div className="flex gap-3 mt-1 items-center">
-            {phoneNo && (
-              <Link href={`tel:${phoneNo}`}>
-                <div className="w-9 h-9 flex items-center justify-center rounded-full bg-gray-700/20 transition-colors test-white">
-                  <Phone className="size-5" />
-                </div>
-              </Link>
-            )}
+
             <SocialIcon href={media?.facebook} alt="Facebook" src="/icons/facebook.svg" />
             <SocialIcon href={media?.instagram} alt="Instagram" src="/icons/instagram.svg" />
             <SocialIcon href={media?.x} alt="X" src="/icons/twitter.svg" />
@@ -168,7 +162,7 @@ const Footer: FC<FooterProps> = ({ addresses, logo, media, title, timings, email
         </div>
       </div>
       <p className="mb-5 mt-2 text-center text-white/50 font-medium tracking-wide  text-sm">
-        Copyright © 2024 Forumsquare Inc.
+        Copyright © 2026 Forumsquare Inc.
       </p>
     </footer>
   );

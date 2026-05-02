@@ -25,11 +25,11 @@ const Hero = ({ store }: { store: StoreInfoType }) => {
   };
 
   return (
-    <section className="text-center space-y-9 flex flex-col items-center justify-center p-4 md:p-10 py-12 sm:py-20 overflow-hidden relative min-h-screen">
+    <section className="text-center space-y-9 flex flex-col items-start justify-center p-4 md:p-10 py-12 sm:py-20 overflow-hidden relative min-h-screen">
       <div className="absolute top-0 inset-0 hero-bg !max-w-screen bg-cover bg-right bg-no-repeat h-full scale-x-[-1]" />
 
       {/* Content */}
-      <div className="relative z-10 space-y-6 sm:space-y-9 flex flex-col items-center w-full max-w-6xl">
+      <div className="relative z-10 space-y-6 sm:space-y-9 flex flex-col items-center  !w-fit ">
         <TimingButton />
         <div className="space-y-2 px-4">
           <h1 className="text-4xl sm:text-7xl font-[900] tracking-tight text-slate-900 drop-shadow-sm leading-tight">

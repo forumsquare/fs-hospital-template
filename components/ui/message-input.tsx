@@ -219,9 +219,9 @@ export function MessageInput({
               }
             }}
             size="icon"
-            className="h-8 w-10  transition-opacity flex justify-center items-center bg-green-600 hover:bg-green-700 !duration-300"
+            className="h-8 w-10  transition-opacity flex justify-center items-center bg-blue-500 hover:bg-blue-600 !duration-300"
             aria-label="Send message"
-            // disabled={props.value === "" || isGenerating}
+          // disabled={props.value === "" || isGenerating}
           >
             <AnimatePresence mode="wait">
               {status === "idle" && (
