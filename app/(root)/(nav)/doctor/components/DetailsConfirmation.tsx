@@ -10,7 +10,7 @@ import CustomLoading from "@/components/custom/CustomLoading";
 import { Loader2 } from "lucide-react";
 
 const DetailsConfirmation = () => {
-  const { setIndex, reset, doctorInfo, bookingDate, bookingTime, patientInfo } =
+  const { setIndex, reset, doctorInfo, bookingDate, bookingTime, patientInfo, bookingAddress } =
     useBookingStore();
   const router = useRouter();
 
@@ -34,7 +34,7 @@ const DetailsConfirmation = () => {
       consultantId: doctorInfo?.id,
       date: bookingDate.toISOString(),
       time: bookingTime?.toISOString(),
-      addressId: address_id, //TODO: get from user
+      addressId: bookingAddress?.id || address_id,
       age: patientInfo?.age,
       name: patientInfo?.name,
       phoneNo: patientInfo?.phone,

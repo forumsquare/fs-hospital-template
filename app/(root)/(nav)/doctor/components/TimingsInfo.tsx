@@ -31,14 +31,14 @@ const TimingsInfo = () => {
   const { data, refetch, isFetching } = useGetSlotsQuery({
     doctorId: docSlug as string,
     date: bookStore.bookingDate?.toISOString() || "",
-    addressId: address_id, //TODO: Need to change it
+    addressId: bookStore.bookingAddress?.id || address_id,
   });
 
   useEffect(() => {
     if (bookStore.bookingDate) {
       refetch();
     }
-  }, [bookStore.bookingDate, refetch]);
+  }, [bookStore.bookingDate, bookStore.bookingAddress?.id, refetch]);
 
   const available = "border border-green-800 shadow-neutral-200 bg-white";
   const selected =
