@@ -79,6 +79,26 @@ export const NotificationProvider = ({
                             return;
                         }
 
+                        if (data.type === "appointment_cancellation") {
+                            // The patient triggered this cancellation themselves
+                            // (the action already shows a confirmation toast), so we
+                            // only refresh their booking data here to keep any other
+                            // open sessions/tabs in sync. No popup — otherwise the
+                            // generic fallback below would dump the raw payload.
+                            queryClient.invalidateQueries({
+                                queryKey: qKey(apiEndpoints.appointMents.getAppointments),
+                            });
+                            if (data.data?.appointmentId) {
+                                queryClient.invalidateQueries({
+                                    queryKey: qKey([
+                                        apiEndpoints.appointMents.getAppointmentById,
+                                        data.data.appointmentId,
+                                    ]),
+                                });
+                            }
+                            return;
+                        }
+
                         if (data.type === "new_message") {
                             if (!isChatOpenRef.current) {
                                 playNotificationSound();
