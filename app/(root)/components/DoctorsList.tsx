@@ -23,7 +23,7 @@ const DoctorCard = ({
 
   return (
     <div
-      className="bg-white max-w-[325px] p-4 rounded-[28px] group border border-slate-100 hover:shadow-xl transition-all duration-300 shadow-[0px_4px_20px_rgba(0,0,0,0.03)] cursor-pointer flex flex-col"
+      className="bg-white w-[325px] p-4 rounded-[28px] group border border-slate-100 hover:shadow-xl transition-all duration-300 shadow-[0px_4px_20px_rgba(0,0,0,0.03)] cursor-pointer flex flex-col"
       onClick={() => onBookAppointment(doctor.id)}
     >
       <div className="relative h-[280px] rounded-[24px] overflow-hidden mb-5">
@@ -31,33 +31,35 @@ const DoctorCard = ({
           alt={doctor.name}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
           src={doctor.image}
-        // onError={(e) => {
-        //   const target = e.target as HTMLImageElement;
-        //   target.src = "/icons/image.svg";
-        // }}
+          // onError={(e) => {
+          //   const target = e.target as HTMLImageElement;
+          //   target.src = "/icons/image.svg";
+          // }}
         />
         <div className="absolute top-4 left-4 px-3 py-1.5 bg-white/90 backdrop-blur-md text-[#0057b7] text-[10px] font-extrabold uppercase tracking-wider rounded-full shadow-sm">
-          {hasDiscount ? `${discountPercent}% OFF` : 'Top Rated'}
+          {hasDiscount ? `${discountPercent}% OFF` : "Top Rated"}
         </div>
       </div>
 
       <div className="flex flex-col flex-1 px-2">
         <div className="flex justify-between items-start mb-0.5">
-          <h3 className="font-bold text-xl text-slate-800 tracking-tight">{doctor.name}</h3>
+          <h3 className="font-bold text-xl text-slate-800 tracking-tight">
+            {doctor.name}
+          </h3>
           <div className="flex items-center gap-1.5 text-[#0057b7]">
             <StarIcon className="size-4 text-[#0057b7] fill-[#0057b7]" />
             <span className="text-[13px] font-bold">{formattedRating}</span>
           </div>
         </div>
 
-        <p className="text-slate-500 text-sm font-medium">{doctor.categories[0]?.name ?? "Specialist"}</p>
+        <p className="text-slate-500 text-sm font-medium">
+          {doctor.categories[0]?.name ?? "Specialist"}
+        </p>
 
         <div className="w-full h-px bg-slate-100 my-5" />
 
         <div className="flex justify-between items-center text-[12px] font-bold text-slate-600 mb-6 px-1">
-          <span className="flex items-center gap-1.5">
-            15+ Yrs Exp.
-          </span>
+          <span className="flex items-center gap-1.5">15+ Yrs Exp.</span>
           <span className="flex items-center gap-1.5">
             Fee: ₹{payableAmount.toLocaleString()}
           </span>
@@ -84,12 +86,10 @@ const DoctorsList = ({ doctors }: DoctorsListProps) => {
     () =>
       Array.from(
         new Set(
-          doctors.flatMap((doctor) =>
-            doctor.categories.map((cat) => cat.name)
-          )
-        )
+          doctors.flatMap((doctor) => doctor.categories.map((cat) => cat.name)),
+        ),
       ),
-    [doctors]
+    [doctors],
   );
 
   const [activeSpecialization, setActiveSpecialization] = useState<
@@ -98,8 +98,8 @@ const DoctorsList = ({ doctors }: DoctorsListProps) => {
 
   const filteredDoctorList = activeSpecialization
     ? doctors.filter((doctor) =>
-      doctor.categories.some((cat) => cat.name === activeSpecialization)
-    )
+        doctor.categories.some((cat) => cat.name === activeSpecialization),
+      )
     : doctors;
 
   const router = useRouter();
@@ -135,8 +135,12 @@ const DoctorsList = ({ doctors }: DoctorsListProps) => {
       <div className="flex flex-col items-center gap-6 justify-center w-full">
         <div className="text-center space-y-3 sticky top-16 z-10 lg:static bg-secondary/5 rounded-xl p-2 backdrop-blur-md border flex flex-col sm:flex-row items-center justify-between !w-full ">
           <div className="min-w-fit flex flex-col items-start px-2">
-            <h4 className="text-2xl sm:text-3xl font-bold ">Our Specialized Team</h4>
-            <p className="text-xs sm:text-sm text-muted-foreground">Top medical experts available at our various center</p>
+            <h4 className="text-2xl sm:text-3xl font-bold ">
+              Our Specialized Team
+            </h4>
+            <p className="text-xs sm:text-sm text-muted-foreground">
+              Top medical experts available at our various center
+            </p>
           </div>
           <ul className="mb-4 flex space-x-4 overflow-x-auto max-w-full sm:max-w-[50vw] sticky top-16 z-10 lg:static px-2 scrollbar-hide">
             {specializationList.map((specialization, index) => (
@@ -153,7 +157,6 @@ const DoctorsList = ({ doctors }: DoctorsListProps) => {
                 {specialization}
               </Button>
             ))}
-
           </ul>
         </div>
 
@@ -170,7 +173,7 @@ const DoctorsList = ({ doctors }: DoctorsListProps) => {
             animate="center"
             exit="exit"
           >
-            <div className="overflow-hidden grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7 justify-center border-none backdrop-blur-md">
+            <div className="mx-auto w-full flex flex-wrap justify-center gap-7 backdrop-blur-md">
               {filteredDoctorList.map((doctor, index) => (
                 <DoctorCard
                   key={index}

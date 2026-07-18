@@ -13,7 +13,7 @@ import { auth } from "@/lib/firebase";
 import { NavType } from "@/models/types";
 import { getCookie } from "@/lib/serverCom";
 
-const HeaderSection = ({ logo, name }: { logo: string, name: string }) => {
+const HeaderSection = ({ logo, name }: { logo: string; name: string }) => {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<any>(null);
 
@@ -29,7 +29,9 @@ const HeaderSection = ({ logo, name }: { logo: string, name: string }) => {
     !!user
       ? { href: "/account", title: "Account" }
       : { href: `/signup?redirect=${pathname}`, title: "Signup" },
-    ...(!!user ? [{ href: "/account/notifications", title: "Notifications" }] : []),
+    ...(!!user
+      ? [{ href: "/account/notifications", title: "Notifications" }]
+      : []),
   ];
 
   useEffect(() => {
@@ -72,14 +74,14 @@ const HeaderSection = ({ logo, name }: { logo: string, name: string }) => {
                     className={cn([
                       "whitespace-nowrap font-semibold  transition-all duration-700 flex items-center justify-center  text-sm  text-neutral-800 hover:text-neutral-400",
                       pathname === href &&
-                      "text-white font-bold text-sm  px-4 py-1.5",
+                        "text-white font-bold text-sm  px-4 py-1.5",
                       title === "Notifications" && "px-2 relative",
                     ])}
                   >
                     {title === "Notifications" && !!data && (
                       <Badge
                         variant={"destructive"}
-                        className="absolute -top-2 -right-1 h-4 !w-4 p-0 flex justify-center items-center"
+                        className="absolute -top-2 -right-2 h-4 !w-4 p-0 flex justify-center items-center"
                       >
                         {data}
                       </Badge>
@@ -101,7 +103,7 @@ const HeaderSection = ({ logo, name }: { logo: string, name: string }) => {
                     )}
                   </Link>
                 </motion.li>
-              )
+              ),
             )}
           </ul>
         </nav>
