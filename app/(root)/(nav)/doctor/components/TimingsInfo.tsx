@@ -28,17 +28,21 @@ const TimingsInfo = () => {
     bookingDate: bookStore.bookingDate,
     bookingTime: bookStore.bookingTime,
   });
+  // `refetch` is still used deliberately just before confirming a booking, to
+  // re-check that the chosen slot is still free.
   const { data, refetch, isFetching } = useGetSlotsQuery({
     doctorId: docSlug as string,
     date: bookStore.bookingDate?.toISOString() || "",
-    addressId: bookStore.bookingAddress?.id || address_id,
+    // No constant fallback here: an empty id leaves the query disabled until
+    // AddressSelector resolves the real address, so exactly one slots request
+    // goes out instead of one throwaway plus one real.
+    addressId: bookStore.bookingAddress?.id ?? "",
   });
 
-  useEffect(() => {
-    if (bookStore.bookingDate) {
-      refetch();
-    }
-  }, [bookStore.bookingDate, bookStore.bookingAddress?.id, refetch]);
+  // The date and address are part of the query key, so React Query refetches on
+  // its own when either changes. The effect that used to sit here called
+  // refetch() on those same dependencies — a workaround for the key omitting
+  // them — which fired a second, identical request on every change.
 
   const available = "border border-green-800 shadow-neutral-200 bg-white";
   const selected =
@@ -98,7 +102,9 @@ const TimingsInfo = () => {
     const allSlots: Date[] = [];
 
     data?.timeslots?.forEach((slot: { from: string; to: string }) => {
-      const datePrefix = (bookStore.bookingDate || new Date()).toISOString().slice(0, 11);
+      const datePrefix = (bookStore.bookingDate || new Date())
+        .toISOString()
+        .slice(0, 11);
       const toTime = new Date(`${datePrefix}${slot.to}`);
 
       toTime.setMinutes(toTime.getMinutes() - slotDuration);
@@ -150,7 +156,7 @@ const TimingsInfo = () => {
         } else {
           newBookedList.push(slot.from);
         }
-      }
+      },
     );
     setBookedList(newBookedList);
     setRunningList(newRunningList);
@@ -202,7 +208,6 @@ const TimingsInfo = () => {
   };
 
   const TimeSlot = ({ slot }: { slot: Date }) => {
-
     console.log({ slot });
     const status: BookingStatus = getBookingStatus(slot);
     return (
@@ -215,17 +220,17 @@ const TimingsInfo = () => {
             }
           }}
           className={cn([
-            "text-[13px] text-white rounded-full px-3 py-1  transition-all duration-600 font-bold shadow-md cursor-not-allowed",
+            "text-[13px] text-white rounded-full px-3 py-1  transition-all duration-600 font-bold shadow-md cursor-not-allowed whitespace-nowrap",
             status === BookingStatus.AVAILABLE &&
-            "border-[2px] text-green-800 bg-white border-green-700 shadow-none cursor-pointer hover:scale-110 active:scale-[0.9]",
+              "border-[2px] text-green-800 bg-white border-green-700 shadow-none cursor-pointer hover:scale-110 active:scale-[0.9]",
             status === BookingStatus.SELECTED &&
-            "border-2 bg-gradient-to-tr from-green-500 to-green-700 border-green-600 font-extrabold shadow-neutral-200 cursor-pointer transition-all duration-600",
+              "border-2 bg-gradient-to-tr from-green-500 to-green-700 border-green-600 font-extrabold shadow-neutral-200 cursor-pointer transition-all duration-600",
             status === BookingStatus.BOOKED &&
-            "bg-gradient-to-r from-rose-700 to-pink-600 text-pink-100 shadow-pink-400/30",
+              "bg-gradient-to-r from-rose-700 to-pink-600 text-pink-100 shadow-pink-400/30",
             status === BookingStatus.RUNNING &&
-            "bg-gradient-to-tr from-orange-400 to-orange-500 text-orange-100  ",
+              "bg-gradient-to-tr from-orange-400 to-orange-500 text-orange-100  ",
             status === BookingStatus.CLOSED &&
-            "bg-gradient-to-r from-neutral-200 to-gray-300 text-slate-600  opacity-60  shadow-none ",
+              "bg-gradient-to-r from-neutral-200 to-gray-300 text-slate-600  opacity-60  shadow-none ",
           ])}
         >
           {formatTime(slot)}
@@ -326,16 +331,21 @@ const TimingsInfo = () => {
             const result = await refetch();
 
             if (result.data) {
-              const timeString = dateToStringWithoutOffset(bookStore.bookingTime)
+              const timeString = dateToStringWithoutOffset(
+                bookStore.bookingTime,
+              )
                 .split("Z")[0]
                 .slice(11, 19);
 
-              const newBookedList = result.data?.unAvailableSlots?.map(
-                (slot: { from: string; to: string }) => slot.from
-              ) || [];
+              const newBookedList =
+                result.data?.unAvailableSlots?.map(
+                  (slot: { from: string; to: string }) => slot.from,
+                ) || [];
 
               if (newBookedList.includes(timeString)) {
-                toast.error("Selected slot is no longer available. Please choose another slot.");
+                toast.error(
+                  "Selected slot is no longer available. Please choose another slot.",
+                );
                 bookStore.setBookingTime(undefined);
                 return;
               }

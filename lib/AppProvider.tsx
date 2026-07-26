@@ -4,7 +4,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactNode, useEffect, useState } from "react";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { getCookie } from "./serverCom";
-import { apiInstance, setAccessToken } from "./utils";
+import { apiInstance, isTerminalRequestError, setAccessToken } from "./utils";
 import { apiEndpoints } from "@/constants/api";
 
 const AppProvider = ({ children }: { children: ReactNode }) => {
@@ -13,9 +13,18 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
       new QueryClient({
         defaultOptions: {
           queries: {
-            retry: 5,
-            retryDelay: 1500,
-            refetchOnWindowFocus: true,
+            // A 401/403/404 will never succeed on retry. The previous flat
+            // `retry: 5` turned every one of them into six requests spread
+            // over 7.5 seconds.
+            retry: (failureCount, error) =>
+              isTerminalRequestError(error) ? false : failureCount < 2,
+            retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 15000),
+            // Was `true` with the default staleTime of 0, so every tab focus
+            // refetched every mounted query.
+            refetchOnWindowFocus: false,
+            // Treat data as fresh for a minute; remounting a component that
+            // already has data no longer refires the request.
+            staleTime: 60_000,
           },
         },
       })

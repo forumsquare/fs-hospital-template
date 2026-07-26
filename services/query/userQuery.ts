@@ -4,6 +4,7 @@ import { getUserInfo, updateUser } from "../api/user";
 import { UserType } from "@/models/schema";
 import { qKey } from "@/lib/utils";
 import { toast } from "sonner";
+import { useSession } from "@/hooks/useSession";
 
 export const useUpdateUserMutation = () => {
   return useMutation({
@@ -21,8 +22,10 @@ export const useUpdateUserMutation = () => {
 };
 
 export const useGetUserInfoQuery = () => {
+  const { isLoggedIn } = useSession();
   return useQuery({
     queryKey: qKey(apiEndpoints.user.update),
     queryFn: () => getUserInfo(),
+    enabled: isLoggedIn,
   });
 };

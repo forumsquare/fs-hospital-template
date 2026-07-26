@@ -12,6 +12,7 @@ import {
 import { toast } from "sonner";
 import { AppointmentHistoryType, SlotBookingType } from "@/models/schema";
 import { slotType } from "@/lib/enum";
+import { useSession } from "@/hooks/useSession";
 
 export const useBookSlotMutation = () => {
   return useMutation({
@@ -33,16 +34,24 @@ export const useGetAppointmentsQuery = (data: {
   page: number;
   limit: number;
 }) => {
+  const { isLoggedIn } = useSession();
   return useQuery({
-    queryKey: qKey(apiEndpoints.appointMents.getAppointments),
+    queryKey: qKey([
+      apiEndpoints.appointMents.getAppointments,
+      String(data.page),
+      String(data.limit),
+    ]),
     queryFn: () => getAppointments(data),
+    enabled: isLoggedIn,
   });
 };
 
 export const useGetAppointmentByIdQuery = (id: string) => {
+  const { isLoggedIn } = useSession();
   return useQuery({
     queryKey: qKey([apiEndpoints.appointMents.getAppointmentById, id]),
     queryFn: () => getAppointmentById(id),
+    enabled: isLoggedIn && !!id,
   });
 };
 

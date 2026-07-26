@@ -14,19 +14,15 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { Badge } from "../ui/badge";
-import { useGetUnreadCountQuery } from "@/services/query/notificationsQuery";
-import { UserType } from "@/models/schema";
-import { getCookie } from "@/lib/serverCom";
-import { auth } from "@/lib/firebase";
+import { useSession } from "@/hooks/useSession";
 import { NavType } from "@/models/types";
 
 const MobileSideBar = ({ data, logo, name, navList }: { data: number, logo: string, name: string, navList: NavType[] }) => {
-  const isLoggedIn = auth.currentUser;
   const path = usePathname();
-  const [profile, setProfile] = useState<UserType | null>(null);
-  const [pending, setPending] = useState<boolean>(true);
+  // Shared session read — this used to be a second server-action round trip
+  // for the same cookie the header had already fetched.
+  const { user: profile, isSessionLoading: pending } = useSession();
 
-  console.log("Loggedin", isLoggedIn);
   const [open, setOpen] = useState(false);
 
   const handleResize = () => {
@@ -35,16 +31,6 @@ const MobileSideBar = ({ data, logo, name, navList }: { data: number, logo: stri
       setOpen(false);
     }
   };
-  useEffect(() => {
-    (async () => {
-      const user = await getCookie("userInfo");
-      if (user) {
-        setProfile(JSON.parse(user));
-      }
-      setPending(false);
-    })();
-  }, []);
-
   // New function to handle clicks outside the sidebar
   const handleClickOutside = (event: MouseEvent) => {
     const sidebar = document.getElementById("mobile-sidebar"); // Add an id to the sidebar

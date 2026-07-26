@@ -11,15 +11,16 @@ import { useGetUnreadCountQuery } from "@/services/query/notificationsQuery";
 import { usePathname } from "next/navigation";
 import { auth } from "@/lib/firebase";
 import { NavType } from "@/models/types";
-import { getCookie } from "@/lib/serverCom";
+import { useSession } from "@/hooks/useSession";
 
 const HeaderSection = ({ logo, name }: { logo: string; name: string }) => {
-  const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState<any>(null);
+  // Shared with every other consumer, so the cookie server action runs once for
+  // the whole page instead of once per component.
+  const { user, isSessionLoading: loading } = useSession();
 
   const pathname = usePathname();
 
-  const { data } = useGetUnreadCountQuery(!!user);
+  const { data } = useGetUnreadCountQuery();
 
   const navList: NavType[] = [
     { href: "/", title: "Home" },
@@ -34,15 +35,6 @@ const HeaderSection = ({ logo, name }: { logo: string; name: string }) => {
       : []),
   ];
 
-  useEffect(() => {
-    (async () => {
-      const userInfo = await getCookie("userInfo");
-      if (userInfo) {
-        setUser(JSON.parse(userInfo));
-      }
-      setLoading(false);
-    })();
-  }, []);
   // console.log({ data, isLoggedIn }, "notifications");
 
   return (

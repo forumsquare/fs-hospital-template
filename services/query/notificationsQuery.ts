@@ -6,7 +6,7 @@ import {
   getUnreadCount,
   markAsRead,
 } from "../api/notifications";
-import { auth } from "@/lib/firebase";
+import { useSession } from "@/hooks/useSession";
 
 export const useGetNotificationsQuery = ({
   page,
@@ -15,25 +15,26 @@ export const useGetNotificationsQuery = ({
   page: number;
   limit: number;
 }) => {
+  const { isLoggedIn } = useSession();
   return useQuery({
-    queryKey: qKey(apiEndpoints.notification.history),
+    queryKey: qKey([
+      apiEndpoints.notification.history,
+      String(page),
+      String(limit),
+    ]),
     queryFn: () => getNotifications({ page, limit }),
+    enabled: isLoggedIn,
   });
 };
 
-export const useGetUnreadCountQuery = (isLoggedIn: any) => {
-  // if (!isLoggedIn) {
-  //   return {
-  //     data: 0,
-  //     isLoading: false,
-  //     isError: false,
-  //     isSuccess: true,
-  //   };
-  // }
-
+export const useGetUnreadCountQuery = () => {
+  const { isLoggedIn } = useSession();
   return useQuery({
     queryKey: qKey(apiEndpoints.notification.unreadCount),
     queryFn: getUnreadCount,
+    // Previously this took an `isLoggedIn` argument and ignored it — the guard
+    // was commented out — so the query ran regardless of auth state.
+    enabled: isLoggedIn,
   });
 };
 

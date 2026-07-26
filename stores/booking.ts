@@ -29,10 +29,13 @@ type Actions = {
 const initialState: State = {
   index: 0,
   bookingDate: getOnlyDate(),
-  bookingAddress: {
-    id: "1",
-    name: "23-78/129, 12, E Anandbagh Main Rd,RK Nagar Colony, East anandhbagh, Hyderabad, Telangana, india, 500047",
-  },
+  // Deliberately unset. This used to be seeded with a hard-coded placeholder
+  // whose id was "1", which is not a valid address uuid — every doctor page
+  // fired a slots request with it and got a 422 back before AddressSelector
+  // replaced it with the real first address. AddressSelector sets this as soon
+  // as the address list loads, and the UI already shows "Select Address" until
+  // then.
+  bookingAddress: undefined,
 };
 
 export const useBookingStore = create<State & Actions>((set) => ({

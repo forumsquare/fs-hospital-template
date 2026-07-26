@@ -5,7 +5,7 @@ import { apiEndpoints } from "@/constants/api";
 
 export const useTestimonialsQuery = ({ page, limit }: { page: number, limit: number }) => {
     return useQuery({
-        queryKey: qKey(apiEndpoints.testimonials.list),
+        queryKey: qKey([apiEndpoints.testimonials.list, String(page), String(limit)]),
         queryFn: () => getTestimonials({ page, limit }),
     })
 }

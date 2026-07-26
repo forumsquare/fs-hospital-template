@@ -47,8 +47,17 @@ export const useGetSlotsQuery = (data: {
   date: string;
 }) => {
   return useQuery({
-    queryKey: qKey([apiEndpoints.consultant.getSlots, data.doctorId]),
+    // addressId and date are both sent to the API, so both must be in the key.
+    // Without them, picking a different date or clinic re-used the first
+    // result's cached slots — showing availability for the wrong day.
+    queryKey: qKey([
+      apiEndpoints.consultant.getSlots,
+      data.doctorId,
+      data.addressId,
+      data.date,
+    ]),
     queryFn: () => getSlots(data),
+    enabled: !!data.doctorId && !!data.addressId && !!data.date,
   });
 };
 

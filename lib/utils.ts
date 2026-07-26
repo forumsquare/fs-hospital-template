@@ -243,9 +243,27 @@ export const handleErr = (e: unknown) => {
     const axiosError = e as AxiosError;
     const err = axiosError.response?.data;
     console.log("error message --> ", err);
-    throw err;
+    // Keep the API's error body (callers read `message`) but carry the HTTP
+    // status alongside it. The API does not include `status` in every error
+    // body, and React Query needs it to tell a retryable failure from a
+    // hopeless one like 401.
+    const base =
+      typeof err === "object" && err !== null
+        ? { ...(err as Record<string, unknown>) }
+        : { message: err ?? axiosError.message };
+    throw Object.assign(base, { httpStatus: axiosError.response?.status });
   }
   throw e;
+};
+
+/**
+ * True for failures that will never succeed on retry — auth, permission and
+ * not-found responses. Retrying these just multiplies the request count.
+ */
+export const isTerminalRequestError = (error: unknown): boolean => {
+  const status = (error as { httpStatus?: number; status?: number } | null)
+    ?.httpStatus ?? (error as { status?: number } | null)?.status;
+  return typeof status === "number" && status >= 400 && status < 500;
 };
 
 export function toLocalISOString(date: string | Date) {
