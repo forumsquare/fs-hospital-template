@@ -1,13 +1,12 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React from "react";
 import { Bell, ShoppingBag, LogOut, ReceiptText } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { ProfileCard } from "../../account/components/UserNavItem";
 import { UserNavItem } from "../../account/components/UserNav";
 import CustomLoading from "@/components/custom/CustomLoading";
 import { useGetUserInfoQuery } from "@/services/query/userQuery";
-import { useSession } from "@/hooks/useSession";
+import { useRequireAuth } from "@/hooks/useRequireAuth";
 
 const navigationItems = [
   {
@@ -41,22 +40,12 @@ const navigationItems = [
 ];
 
 const AccountPage = () => {
-  const router = useRouter();
-  const { isLoggedIn, isSessionLoading } = useSession();
+  const { isAuthed } = useRequireAuth();
   const { data: profile, isPending } = useGetUserInfoQuery();
 
-  // The profile query is disabled while logged out, which leaves it in the
-  // `pending` state forever. Without this the page just spins with nothing to
-  // show, so send logged-out visitors to the login screen instead.
-  useEffect(() => {
-    if (!isSessionLoading && !isLoggedIn) {
-      router.replace("/signup?redirect=/account");
-    }
-  }, [isSessionLoading, isLoggedIn, router]);
-
-  // Loader while: resolving the session, redirecting a logged-out user, or
-  // fetching the profile for a logged-in user.
-  if (isSessionLoading || !isLoggedIn || isPending || !profile) {
+  // Loader while resolving the session / redirecting a logged-out user, or
+  // while fetching the profile for a logged-in user.
+  if (!isAuthed || isPending || !profile) {
     return <CustomLoading />;
   }
 

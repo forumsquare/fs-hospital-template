@@ -12,11 +12,13 @@ import { useEffect, useState } from "react";
 import { getCookie } from "@/lib/serverCom";
 import CustomLoading from "@/components/custom/CustomLoading";
 import { useGetUserInfoQuery } from "@/services/query/userQuery";
+import { useRequireAuth } from "@/hooks/useRequireAuth";
 
 const EditAccount = () => {
+  const { isAuthed } = useRequireAuth();
   const { data: profile, isPending } = useGetUserInfoQuery();
 
-  return isPending ? (
+  return !isAuthed || isPending || !profile ? (
     <CustomLoading />
   ) : (
     <section className="min-h-screen  relative py-12 pt-16 -top-12">

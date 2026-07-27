@@ -19,11 +19,13 @@ import { useGetAppointmentsQuery } from "@/services/query/appointmentQuery";
 import CustomLoading from "@/components/custom/CustomLoading";
 import { slotType } from "@/lib/enum";
 import NoDataPage from "@/components/custom/NoDataPage";
+import { useRequireAuth } from "@/hooks/useRequireAuth";
 
 const BookingPage = () => {
   const router = useRouter();
   // const { bookingHistory, cancelAppointment } = useBookingHistory();
 
+  const { isAuthed } = useRequireAuth();
   const { data, isPending } = useGetAppointmentsQuery({ page: 1, limit: 10 });
 
   const getStatusColor = (status: slotType) => {
@@ -40,7 +42,7 @@ const BookingPage = () => {
     <div className="  mx-auto p-4 mt-3 md:mt-9 items-center md:flex md:flex-col md:items-center">
       <CustomHeader title="My Appointments" />
 
-      {isPending ? (
+      {!isAuthed || isPending ? (
         <CustomLoading />
       ) : !data || data.length === 0 ? (
         <NoDataPage title="No Appointments" />

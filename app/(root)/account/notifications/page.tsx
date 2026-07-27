@@ -10,8 +10,10 @@ import { useGetNotificationsQuery } from "@/services/query/notificationsQuery";
 import CustomLoading from "@/components/custom/CustomLoading";
 import { format } from "date-fns";
 import NoDataPage from "@/components/custom/NoDataPage";
+import { useRequireAuth } from "@/hooks/useRequireAuth";
 
 export default function NotificationsPage() {
+  const { isAuthed } = useRequireAuth();
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [hasMore, setHasMore] = useState(true);
@@ -57,7 +59,7 @@ export default function NotificationsPage() {
     }
   }, [data, limit]);
 
-  if (isPending) return <CustomLoading />;
+  if (!isAuthed || isPending) return <CustomLoading />;
 
   return (
     <section className="flex flex-col gap-y-5 mx-3 sm:mx-auto !max-w-screen-sm my-10 min-h-screen ">

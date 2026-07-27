@@ -5,9 +5,11 @@ import { CustomHeader } from "@/components/custom/CustomHeader";
 import { useGetAppointmentByIdQuery } from "@/services/query/appointmentQuery";
 import { useParams } from "next/navigation";
 import CustomLoading from "@/components/custom/CustomLoading";
+import { useRequireAuth } from "@/hooks/useRequireAuth";
 
 const Page = () => {
   const { bookingId } = useParams();
+  const { isAuthed } = useRequireAuth();
   const { data: appointmentInfo, isPending } = useGetAppointmentByIdQuery(
     bookingId as string
   );
@@ -17,7 +19,7 @@ const Page = () => {
         title="Appointment Details"
         className="mx-auto w-full [&>h4]:mx-auto "
       />
-      {isPending || !appointmentInfo ? (
+      {!isAuthed || isPending || !appointmentInfo ? (
         <CustomLoading />
       ) : (
         <BookingHistory booking={appointmentInfo} />
