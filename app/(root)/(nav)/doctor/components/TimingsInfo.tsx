@@ -220,7 +220,7 @@ const TimingsInfo = () => {
             }
           }}
           className={cn([
-            "text-[13px] text-white rounded-full px-3 py-1  transition-all duration-600 font-bold shadow-md cursor-not-allowed whitespace-nowrap",
+            "text-[13px] text-white rounded-full xl:px-3 py-1  transition-all duration-600 font-bold shadow-md cursor-not-allowed whitespace-nowrap ",
             status === BookingStatus.AVAILABLE &&
               "border-[2px] text-green-800 bg-white border-green-700 shadow-none cursor-pointer hover:scale-110 active:scale-[0.9]",
             status === BookingStatus.SELECTED &&

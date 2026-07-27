@@ -17,7 +17,11 @@ type FooterProps = {
   phoneNo?: string | null;
 };
 
-const TimingsInfo = ({ timings }: { timings?: { day: number; fromTime: string; toTime: string }[] }) => {
+const TimingsInfo = ({
+  timings,
+}: {
+  timings?: { day: number; fromTime: string; toTime: string }[];
+}) => {
   const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
   const formatTime = (timeString: string) => {
@@ -25,7 +29,11 @@ const TimingsInfo = ({ timings }: { timings?: { day: number; fromTime: string; t
     // Since the database expects timestamps, let's extract HH:mm portion and convert
     try {
       const date = new Date(timeString);
-      return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+      return date.toLocaleTimeString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+      });
     } catch {
       return timeString;
     }
@@ -34,11 +42,14 @@ const TimingsInfo = ({ timings }: { timings?: { day: number; fromTime: string; t
   if (!timings || timings.length === 0) return null;
 
   // Group timings by day
-  const timingsByDay = timings.reduce((acc, t) => {
-    if (!acc[t.day]) acc[t.day] = [];
-    acc[t.day].push(t);
-    return acc;
-  }, {} as Record<number, typeof timings>);
+  const timingsByDay = timings.reduce(
+    (acc, t) => {
+      if (!acc[t.day]) acc[t.day] = [];
+      acc[t.day].push(t);
+      return acc;
+    },
+    {} as Record<number, typeof timings>,
+  );
 
   return (
     <section className=" rounded-2xl max-w-xs mx-auto text-neutral-200  p-0.5 text-[13px] font-medium  ">
@@ -50,11 +61,12 @@ const TimingsInfo = ({ timings }: { timings?: { day: number; fromTime: string; t
 
           return (
             <li key={index}>
-              <div className="px-6 flex gap-x-3 items-start justify-between my-3 text-gray-400 flex-col sm:flex-row">
-                <p className="w-12 text-left">{day}</p>
-                <div className="flex flex-col text-xs text-right">
+              <div className="px-6 flex gap-x-3 items-center justify-between my-3 text-gray-400 flex-col sm:flex-row">
+                <p className=" text-left">{day}</p>
+                <div className="flex flex-col text-xs text-right whitespace-nowrap">
                   <p>
-                    {formatTime(dayTimings[0].fromTime)} - {formatTime(dayTimings[dayTimings.length - 1].toTime)}
+                    {formatTime(dayTimings[0].fromTime)} -{" "}
+                    {formatTime(dayTimings[dayTimings.length - 1].toTime)}
                   </p>
                 </div>
               </div>
@@ -66,7 +78,15 @@ const TimingsInfo = ({ timings }: { timings?: { day: number; fromTime: string; t
   );
 };
 
-const Footer: FC<FooterProps> = ({ addresses, logo, media, title, timings, email, phoneNo }) => {
+const Footer: FC<FooterProps> = ({
+  addresses,
+  logo,
+  media,
+  title,
+  timings,
+  email,
+  phoneNo,
+}) => {
   const LinkComponent = ({ link, title }: { link: string; title: string }) => {
     return (
       <Link
@@ -109,24 +129,49 @@ const Footer: FC<FooterProps> = ({ addresses, logo, media, title, timings, email
       id="contact-us"
       className="flex flex-col items-center justify-center text-neutral-600 bg-primary bg-[url('/background/footer.svg')] bg-cover !z-10"
     >
-      <div className=" flex  flex-col gap-5 gap-y-10 justify-center items-center mx-auto py-10 px-8  md:flex-row md:justify-around md:items-start  md:gap-x-12  lg:gap-x-20 ">
+      <div className=" flex  flex-col gap-5 gap-y-10 justify-center items-center mx-auto py-10 px-8  md:flex-row md:justify-around md:items-start  md:gap-x-6  xl:gap-x-20 ">
         <div className="flex flex-col gap-6 lg:pr-8">
           {logo && (
             <div className="relative h-8 w-44">
-              <Image src={logo} alt={title || "Logo"} fill className="object-contain object-left" />
+              <Image
+                src={logo}
+                alt={title || "Logo"}
+                fill
+                className="object-contain object-left"
+              />
             </div>
           )}
           <p className="text-[13px] leading-relaxed text-slate-500">
-            Redefining health through the digital biome. The intersection of technology and human vitality.
+            Redefining health through the digital biome. The intersection of
+            technology and human vitality.
           </p>
           <div className="flex gap-3 mt-1 items-center">
-
-            <SocialIcon href={media?.facebook} alt="Facebook" src="/icons/facebook.svg" />
-            <SocialIcon href={media?.instagram} alt="Instagram" src="/icons/instagram.svg" />
+            <SocialIcon
+              href={media?.facebook}
+              alt="Facebook"
+              src="/icons/facebook.svg"
+            />
+            <SocialIcon
+              href={media?.instagram}
+              alt="Instagram"
+              src="/icons/instagram.svg"
+            />
             <SocialIcon href={media?.x} alt="X" src="/icons/twitter.svg" />
-            <SocialIcon href={media?.linkedin} alt="LinkedIn" src="/icons/linkedin.svg" />
-            <SocialIcon href={media?.whatsapp} alt="Whatsapp" src="/icons/whatsapp.svg" />
-            <SocialIcon href={media?.youtube} alt="Youtube" src="/icons/youtube.svg" />
+            <SocialIcon
+              href={media?.linkedin}
+              alt="LinkedIn"
+              src="/icons/linkedin.svg"
+            />
+            <SocialIcon
+              href={media?.whatsapp}
+              alt="Whatsapp"
+              src="/icons/whatsapp.svg"
+            />
+            <SocialIcon
+              href={media?.youtube}
+              alt="Youtube"
+              src="/icons/youtube.svg"
+            />
           </div>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12 w-full">
@@ -145,12 +190,18 @@ const Footer: FC<FooterProps> = ({ addresses, logo, media, title, timings, email
             </p>
             <div className="text-secondary/70 text-sm flex flex-col items-center sm:items-start gap-y-3 font-medium">
               {email && (
-                <Link href={`mailto:${email}`} className="hover:text-secondary hover:underline transition-all flex items-center gap-2">
+                <Link
+                  href={`mailto:${email}`}
+                  className="hover:text-secondary hover:underline transition-all flex items-center gap-2"
+                >
                   <Mail className="size-4" /> {email}
                 </Link>
               )}
               {phoneNo && (
-                <Link href={`tel:${phoneNo}`} className="hover:text-secondary hover:underline transition-all flex items-center gap-2">
+                <Link
+                  href={`tel:${phoneNo}`}
+                  className="hover:text-secondary hover:underline transition-all flex items-center gap-2"
+                >
                   <Phone className="size-4" /> {phoneNo}
                 </Link>
               )}
