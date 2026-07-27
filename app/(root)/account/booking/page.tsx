@@ -42,8 +42,8 @@ const BookingPage = () => {
 
       {isPending ? (
         <CustomLoading />
-      ) : !data ? (
-        <NoDataPage />
+      ) : !data || data.length === 0 ? (
+        <NoDataPage title="No Appointments" />
       ) : (
         <div className=" flex flex-col gap-5 items-center flex-wrap overflow-y-auto  ">
           {data?.map((appointment) => (

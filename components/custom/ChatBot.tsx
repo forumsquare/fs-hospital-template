@@ -7,7 +7,7 @@ import { MessageInput } from "../ui/message-input";
 import { MessageList } from "../ui/message-list";
 import useChatMessageStore from "@/stores/chatMessage";
 import { Message } from "../ui/chat-message";
-import { ChevronDown, X } from "lucide-react";
+import { ChevronDown, X, MessageCircle } from "lucide-react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import {
@@ -273,12 +273,13 @@ export default function ChatBot() {
     <div ref={chatRef}>
       <div className={cn("fixed bottom-4 right-4 z-[1000]", pathname.includes("doctor") && "!bottom-20 lg:!bottom-4")}>
         <Button
+          variant="default"
+          aria-label={isOpen ? "Close chat" : "Open chat"}
           className={cn(
-            "hover:scale-[1.1] transition-all duration-200 active:!scale-[0.9] !z-[1000] p-0 rounded-full h-12 w-12 !bg-card relative",
-            isOpen && "!bg-white !z-[2000000000000000]  ring-2"
+            "hover:scale-[1.1] transition-all duration-200 active:!scale-[0.9] !z-[1000] p-0 rounded-full h-14 w-14 !bg-primary !text-primary-foreground shadow-xl shadow-black/25 ring-2 ring-white/60 relative",
+            isOpen && "!bg-white !text-primary !z-[2000000000000000] ring-primary/30"
           )}
           onClick={() => setIsOpen(!isOpen)}
-          variant="outline"
         >
           {!isOpen && unreadData?.unreadCount > 0 && (
             <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-[10px] font-bold text-white shadow-sm border border-white">
@@ -286,15 +287,9 @@ export default function ChatBot() {
             </span>
           )}
           {isOpen ? (
-            <ChevronDown className="h-4 w-4 animate-spin-once" />
+            <ChevronDown className="!h-5 !w-5 animate-spin-once" />
           ) : (
-            <Image
-              className="animate-pulse !transition-all duration-600"
-              src="/icons/chat.svg"
-              alt="chatbot"
-              width={24}
-              height={24}
-            />
+            <MessageCircle className="!h-7 !w-7 animate-pulse" />
           )}
         </Button>
       </div>

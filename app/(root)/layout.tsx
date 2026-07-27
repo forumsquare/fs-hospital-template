@@ -10,7 +10,7 @@ export default async function Layout({
 }>) {
   const store = await getStoreInfoSSR();
   return (
-    <section className="relative">
+    <section className="relative flex min-h-screen flex-col">
       {/* Background container with absolute positioning */}
       <div className="absolute inset-0 -z-10 -top-10">
         <div
@@ -18,7 +18,9 @@ export default async function Layout({
           style={{ backgroundSize: "250px" }}
         />
       </div>
-      {children}
+      {/* flex-1 pushes the footer to the bottom of the screen even when a page's
+          content is short (e.g. loading / empty states). */}
+      <div className="flex-1">{children}</div>
       <ChatBot />
       <Footer
         addresses={(store.addressList && store.addressList.length > 0) ? store.addressList : [addressVal]}

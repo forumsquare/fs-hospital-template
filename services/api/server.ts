@@ -73,7 +73,7 @@ export const getProceduresBySpecializationSSR = async (specializationId: string)
 };
 
 export const getFacilitiesBySpecializationSSR = async (specializationId: string): Promise<FacilityType[]> => {
-  const path = `${apiEndpoints.facilities.list.replace(":storeId", storeId)}?categoryId=${specializationId}`;
+  const path = `${apiEndpoints.facilities.list.replace(":storeId", storeId)}?specialization=${specializationId}`;
   return fetchPublicData<FacilityType[]>(path, ["facilities", specializationId]);
 };
 
