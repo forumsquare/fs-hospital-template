@@ -8,6 +8,13 @@ import { motion } from "framer-motion";
 import { Clock } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { formatDurationMinutes } from "@/lib/utils";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export const ModelCard = ({
   active,
@@ -35,10 +42,18 @@ export const ModelCard = ({
           <h3 className="font-bold text-neutral-800 text-2xl">
             {active.name}
           </h3>
-          {active.duration && (
-            <div className="flex items-center text-xs font-bold bg-slate-100 px-3 py-1 rounded-full text-slate-600 gap-1.5 whitespace-nowrap">
-              <Clock className="size-3.5" /> {active.duration}
-            </div>
+          {formatDurationMinutes(active.duration) && (
+            <TooltipProvider delayDuration={150}>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <div className="flex cursor-default items-center text-xs font-bold bg-slate-100 px-3 py-1 rounded-full text-slate-600 gap-1.5 whitespace-nowrap">
+                    <Clock className="size-3.5" />{" "}
+                    {formatDurationMinutes(active.duration)}
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent>Tentative Duration for procedure</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           )}
         </div>
 

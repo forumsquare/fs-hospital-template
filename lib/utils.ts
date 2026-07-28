@@ -61,6 +61,21 @@ export function formatAmount(amount: number, fraction?: number): string {
   return formatter.format(amount);
 }
 
+/**
+ * Formats a procedure/treatment duration as a whole number of minutes, e.g.
+ * "45 min". Tolerates legacy values like "45 mins" by extracting the leading
+ * number. Returns null when no usable number is present.
+ */
+export function formatDurationMinutes(
+  duration?: string | number | null,
+): string | null {
+  if (duration === null || duration === undefined || duration === "")
+    return null;
+  const mins = parseInt(String(duration).trim(), 10);
+  if (!Number.isFinite(mins)) return null;
+  return `${mins} min`;
+}
+
 export const formatDate = (date: Date): string => {
   const day = String(date.getDate()).padStart(2, "0"); // Get day and pad with zero if needed
   const month = String(date.getMonth() + 1).padStart(2, "0"); // Get month (0-indexed) and pad

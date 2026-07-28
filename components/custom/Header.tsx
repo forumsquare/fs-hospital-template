@@ -43,7 +43,7 @@ const HeaderSection = ({ logo, name }: { logo: string; name: string }) => {
         <MobileSideBar data={data} logo={logo} name={name} navList={navList} />
       </div>
       <header className="hidden  fixed z-[999999] top-10 right-0 left-0  flex-center  lg:flex items-center justify-center ">
-        <div className="fixed w-[41rem]  h-[3.5rem] left-1/2  -translate-x-1/2 rounded-full backdrop-blur-lg bg-white/40  border-black/[0.08] border"></div>
+        <div className="fixed w-[43rem]  h-[3.5rem] left-1/2  -translate-x-1/2 rounded-full backdrop-blur-lg bg-white/40  border-black/[0.08] border"></div>
         <nav className="flex fixed items-center  ">
           <ul className="flex !w-[41rem]  items-center justify-around px-4 gap-y-1 flex-nowrap  gap-x-6  ">
             <Image
@@ -75,9 +75,10 @@ const HeaderSection = ({ logo, name }: { logo: string; name: string }) => {
                         variant={"destructive"}
                         className="absolute -top-2 -right-2 h-4 !w-4 p-0 flex justify-center items-center"
                       >
-                        {data}
+                        {data}16
                       </Badge>
                     )}
+
                     <span>{title}</span>
 
                     {pathname === href && (

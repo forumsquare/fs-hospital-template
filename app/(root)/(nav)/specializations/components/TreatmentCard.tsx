@@ -4,9 +4,15 @@ import React, { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { TreatmentType } from "@/models/schema";
 import TreatmentModal from "./TreatmentModal";
-import { cn, formatAmount } from "@/lib/utils";
+import { cn, formatAmount, formatDurationMinutes } from "@/lib/utils";
 import { CustomButton } from "@/components/custom/CustomButtons";
 import { ArrowRightIcon, Clock } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const TestTreatmentCards = ({
   treatments,
@@ -26,7 +32,7 @@ const TestTreatmentCards = ({
   };
 
   return (
-    <>
+    <TooltipProvider delayDuration={150}>
       <ul
         className={cn(
           "mx-auto w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7  ",
@@ -65,10 +71,16 @@ const TestTreatmentCards = ({
             <div className="p-6 sm:p-8 flex-1 flex flex-col">
               <div className="flex justify-between items-start mb-4">
                 <h4 className="text-xl font-bold line-clamp-2">{treatment.name}</h4>
-                {treatment.duration && (
-                  <div className="flex items-center text-xs text-slate-500 gap-1 whitespace-nowrap ml-4">
-                    <Clock className="size-4" /> {treatment.duration}
-                  </div>
+                {formatDurationMinutes(treatment.duration) && (
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <div className="flex cursor-default items-center text-xs text-slate-500 gap-1 whitespace-nowrap ml-4">
+                        <Clock className="size-4" />{" "}
+                        {formatDurationMinutes(treatment.duration)}
+                      </div>
+                    </TooltipTrigger>
+                    <TooltipContent>Tentative Duration for procedure</TooltipContent>
+                  </Tooltip>
                 )}
               </div>
 
@@ -82,6 +94,9 @@ const TestTreatmentCards = ({
               <div className="flex items-center justify-between mt-auto">
                 {treatment.amount && treatment.amount > 0 ? (
                   <div className="flex flex-col">
+                    <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400 blur-[0.6px] select-none">
+                      Tentative Price
+                    </span>
                     <span className="text-lg font-bold text-green-600">
                       {formatAmount(treatment.amount - (treatment.amount * (treatment.discount || 0)) / 100)}
                     </span>
@@ -92,7 +107,12 @@ const TestTreatmentCards = ({
                     ) : null}
                   </div>
                 ) : (
-                  <span className="text-sm font-semibold text-primary">Price on request</span>
+                  <div className="flex flex-col">
+                    <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400 blur-[0.6px] select-none">
+                      Tentative Price
+                    </span>
+                    <span className="text-sm font-semibold text-primary">Price on request</span>
+                  </div>
                 )}
                 <button
                   onClick={() => handleTreatmentClick(treatment)}
@@ -116,7 +136,7 @@ const TestTreatmentCards = ({
           />
         )}
       </AnimatePresence>
-    </>
+    </TooltipProvider>
   );
 };
 
