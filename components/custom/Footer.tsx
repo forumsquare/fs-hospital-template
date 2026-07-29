@@ -160,7 +160,7 @@ const Footer: FC<FooterProps> = ({
               alt="Instagram"
               src="/icons/instagram.svg"
             />
-            <SocialIcon href={media?.x} alt="X" src="/icons/twitter.svg" />
+            <SocialIcon href={media?.x} alt="X" src="/icons/x-logo.svg" />
             <SocialIcon
               href={media?.linkedin}
               alt="LinkedIn"

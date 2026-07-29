@@ -8,7 +8,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
-const DoctorCard = ({
+export const DoctorCard = ({
   doctor,
   onBookAppointment,
 }: {

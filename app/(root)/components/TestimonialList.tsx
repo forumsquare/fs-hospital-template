@@ -28,28 +28,29 @@ export const Testimonial: FC<TestimonialProps> = ({
     <div
       className={cn(
         "bg-card w-full max-w-[300px] sm:max-w-full border border-border rounded-3xl transition-all p-2 h-full flex flex-col justify-between ",
-        className
+        className,
       )}
     >
       {testimonial && (
-        <blockquote className="p-6 md:p-8 relative">
-          <Image
+        <blockquote className="p-6 md:p-8 relative flex">
+          {/* <Image
             src="/icons/quote-open.svg"
             alt="quote-open"
-            className=" w-5 h-5 absolute  top-2 left-2 "
+            className=" w-5 h-5"
             width={25}
             height={25}
-          />
+          /> */}
           <p className="font-sans break-words italic text-sm text-card-foreground leading-relaxed tracking-wide font-medium">
-            {testimonial}
+            <span className="text-lg"> &ldquo;</span> {testimonial}{" "}
+            <span className="text-lg"> &ldquo;</span>
           </p>
-          <Image
+          {/* <Image
             src="/icons/quote-close.svg"
             alt="quote"
-            className="w-4 h-4 absolute right-2 bottom-2 "
+            className="w-4 h-4 "
             width={25}
             height={25}
-          />
+          /> */}
         </blockquote>
       )}
       <div className="flex items-center justify-between px-4 py-2 gap-3 pt-auto">
@@ -91,8 +92,8 @@ const TestimonialList = ({ testimonials }: TestimonialListProps) => {
             Testimonials
           </h2>
           <p className="text-sm font-sans italic text-slate-500 font-medium leading-relaxed">
-            Hear from our patients about their experiences and the exceptional care
-            they received from our dedicated team.
+            Hear from our patients about their experiences and the exceptional
+            care they received from our dedicated team.
           </p>
         </div>
 
@@ -115,7 +116,7 @@ const TestimonialList = ({ testimonials }: TestimonialListProps) => {
               rating={review.rating}
               testimonial={review.testimonial}
               userName={review.userName}
-            // date={review.}
+              // date={review.}
             />
           ))}
         </InfiniteMovingCards>

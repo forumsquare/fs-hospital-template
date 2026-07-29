@@ -1,10 +1,13 @@
 'use client';
 import TestTreatmentCards from "../components/TreatmentCard";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { TransitionPanel } from "@/components/ui/transition-panel";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Facilites from "../components/Facilities";
+import { DoctorCard } from "@/app/(root)/components/DoctorsList";
+import { useGetDoctorListQuery } from "@/services/query/doctorQuery";
 import {
     Carousel,
     CarouselContent,
@@ -17,16 +20,18 @@ import { useGetCategoriesQuery } from "@/services/query/categoriesQuery";
 import CustomLoading from "@/components/custom/CustomLoading";
 import { useGetProceduresListQuery } from "@/services/query/procedureQuery";
 import { useGetFacilitiesQuery } from "@/services/query/facilitiesQuery";
-import { CategoryType, FacilityType, ProcedureType } from "@/models/schema";
+import { CategoryType, DoctorType, FacilityType, ProcedureType } from "@/models/schema";
 import { ChevronLeft, ChevronRight, Verified } from "lucide-react";
 
 interface SpecializationClientProps {
     initialCategories: CategoryType[];
     initialProcedures?: ProcedureType[];
     initialFacilities?: FacilityType[];
+    initialDoctors?: DoctorType[];
 }
 
-const SpecializationClient = ({ initialCategories, initialProcedures, initialFacilities }: SpecializationClientProps) => {
+const SpecializationClient = ({ initialCategories, initialProcedures, initialFacilities, initialDoctors }: SpecializationClientProps) => {
+    const router = useRouter();
     const { data: categories } = useGetCategoriesQuery({
         initialData: initialCategories
     });
@@ -69,6 +74,18 @@ const SpecializationClient = ({ initialCategories, initialProcedures, initialFac
     const { data: facilitiesList, isPending: facilitiesPending } = useGetFacilitiesQuery(categoryId, {
         initialData: isFirstCategory ? initialFacilities : undefined
     });
+
+    // Doctors are fetched store-wide, then filtered to the active specialization
+    // by category name (same match the home-page doctors list uses).
+    const { data: doctors } = useGetDoctorListQuery({ initialData: initialDoctors });
+    const activeSpecName = sortedCategories[activeIndex]?.name;
+    const specDoctors = useMemo(
+        () =>
+            ((doctors ?? []) as DoctorType[]).filter((doctor) =>
+                doctor.categories?.some((cat) => cat.name === activeSpecName),
+            ),
+        [doctors, activeSpecName],
+    );
 
 
     const formattedProcedures = (procedures as ProcedureType[])?.map((proc) => ({
@@ -194,6 +211,29 @@ const SpecializationClient = ({ initialCategories, initialProcedures, initialFac
                             </article>
                         ))}
                     </TransitionPanel>
+                    <h4 className="font-bold text-3xl mt-10">
+                        Doctors
+                    </h4>
+                    <p className="text-sm font-sans italic text-muted-foreground tracking-wide font-medium pb-5">
+                        {activeSpecName
+                            ? `Meet our specialists in ${activeSpecName}.`
+                            : "Meet our specialists."}
+                    </p>
+                    {specDoctors.length === 0 ? (
+                        <p className="text-sm text-muted-foreground pb-4">
+                            No doctors available for this specialization.
+                        </p>
+                    ) : (
+                        <div className="flex w-full flex-wrap justify-center gap-7">
+                            {specDoctors.map((doctor) => (
+                                <DoctorCard
+                                    key={doctor.id}
+                                    doctor={doctor}
+                                    onBookAppointment={(id) => router.push(`/doctor/${id}`)}
+                                />
+                            ))}
+                        </div>
+                    )}
                     <h4 className="font-bold text-3xl mt-10">
                         Facilities
                     </h4>

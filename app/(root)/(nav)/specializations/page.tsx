@@ -1,5 +1,5 @@
 import SpecializationClient from "./components/SpecializationClient";
-import { getCategoriesSSR, getProceduresBySpecializationSSR, getFacilitiesBySpecializationSSR, getStoreInfoSSR } from "@/services/api/server";
+import { getCategoriesSSR, getProceduresBySpecializationSSR, getFacilitiesBySpecializationSSR, getStoreInfoSSR, getDoctorsListSSR } from "@/services/api/server";
 import { Metadata } from "next";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -17,9 +17,10 @@ const SpecializationPage = async () => {
     const categories = (rawCategories || []).sort((a, b) => a.name.localeCompare(b.name));
     const firstCategoryId = categories?.[0]?.specializationId || categories?.[0]?.id;
 
-    const [procedures, facilities] = await Promise.all([
+    const [procedures, facilities, doctors] = await Promise.all([
       firstCategoryId ? getProceduresBySpecializationSSR(firstCategoryId) : Promise.resolve([]),
       firstCategoryId ? getFacilitiesBySpecializationSSR(firstCategoryId) : Promise.resolve([]),
+      getDoctorsListSSR().catch(() => []),
     ]);
 
     return (
@@ -27,11 +28,12 @@ const SpecializationPage = async () => {
         initialCategories={categories || []}
         initialProcedures={procedures || []}
         initialFacilities={facilities || []}
+        initialDoctors={doctors || []}
       />
     );
   } catch (error) {
     console.error("Error in SpecializationPage SSR:", error);
-    return <SpecializationClient initialCategories={[]} initialProcedures={[]} initialFacilities={[]} />;
+    return <SpecializationClient initialCategories={[]} initialProcedures={[]} initialFacilities={[]} initialDoctors={[]} />;
   }
 };
 

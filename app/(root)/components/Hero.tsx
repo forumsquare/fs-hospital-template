@@ -30,7 +30,7 @@ const Hero = ({ store }: { store: StoreInfoType }) => {
 
       {/* Content */}
       <div className="relative z-10 space-y-6 sm:space-y-9 flex flex-col items-center  !w-fit ">
-        <TimingButton />
+        <TimingButton timings={store.timings} />
         <div className="space-y-2 px-4">
           <h1 className="text-4xl sm:text-7xl font-[900] tracking-tight text-slate-900 drop-shadow-sm leading-tight">
             {store.name}

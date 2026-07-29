@@ -10,7 +10,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 
@@ -69,11 +69,62 @@ export const CustomToolTip = ({
   );
 };
 
-export const TimingButton = () => {
+type Timing = { day: number; fromTime: string; toTime: string };
+
+// Is the hospital open right now, based on its configured timings? Times are
+// stored as UTC timestamps; parsing with `new Date()` converts them to the
+// viewer's local clock — the same conversion the footer uses to display hours —
+// so the status stays consistent with the shown timings.
+const isHospitalOpen = (timings?: Timing[]) => {
+  // No timings configured: we can't claim it's closed, so keep it available.
+  if (!timings || timings.length === 0) return true;
+  const now = new Date();
+  const day = now.getDay();
+  const nowMinutes = now.getHours() * 60 + now.getMinutes();
+  return timings.some((t) => {
+    if (t.day !== day) return false;
+    const from = new Date(t.fromTime);
+    const to = new Date(t.toTime);
+    if (Number.isNaN(from.getTime()) || Number.isNaN(to.getTime())) return false;
+    const fromMinutes = from.getHours() * 60 + from.getMinutes();
+    const toMinutes = to.getHours() * 60 + to.getMinutes();
+    return nowMinutes >= fromMinutes && nowMinutes <= toMinutes;
+  });
+};
+
+export const TimingButton = ({ timings }: { timings?: Timing[] }) => {
+  // Resolved on the client (viewer's clock) after mount, and refreshed every
+  // minute. `null` = not yet determined (SSR / first paint) -> neutral styling,
+  // which keeps server and client markup identical (no hydration mismatch).
+  const [status, setStatus] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    const update = () => setStatus(isHospitalOpen(timings));
+    update();
+    const id = setInterval(update, 60_000);
+    return () => clearInterval(id);
+  }, [timings]);
+
+  const open = status === true;
+  const label =
+    status === null ? "Open Hours" : open ? "Available Now" : "Closed";
+
   return (
-    <button className=" text-sm px-8 py-2 rounded-full  bg-gradient-to-br from-orange-200 to-red-300  flex items-center justify-center gap-x-2 shadow-lg shadow-orange-600/30 font-bold font-sans text-orange-800  ">
-      <div className="w-2 h-2 rounded-full  bg-orange-500  " />
-      <span className="animate-pulse">Available Now</span>
+    <button
+      className={cn(
+        "text-sm px-8 py-2 rounded-full flex items-center justify-center gap-x-2 shadow-lg font-bold font-sans transition-colors",
+        open
+          ? "bg-gradient-to-br from-orange-200 to-red-300 text-orange-800 shadow-orange-600/30"
+          : "bg-gradient-to-br from-slate-200 to-slate-300 text-slate-600 shadow-slate-500/20",
+      )}
+    >
+      <div
+        className={cn(
+          "w-2 h-2 rounded-full",
+          open ? "bg-orange-500 animate-pulse" : "bg-slate-400",
+        )}
+      />
+      <span className={open ? "animate-pulse" : ""}>{label}</span>
     </button>
   );
 };
