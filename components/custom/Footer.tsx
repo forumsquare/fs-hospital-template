@@ -57,17 +57,21 @@ const TimingsInfo = ({
       <ul className="space-y-2">
         {days.map((day, index) => {
           const dayTimings = timingsByDay[index];
-          if (!dayTimings || dayTimings.length === 0) return null;
+          const isClosed = !dayTimings || dayTimings.length === 0;
 
           return (
             <li key={index}>
               <div className="px-6 flex gap-x-3 items-center justify-between my-3 text-gray-400 flex-col sm:flex-row">
                 <p className=" text-left">{day}</p>
                 <div className="flex flex-col text-xs text-right whitespace-nowrap">
-                  <p>
-                    {formatTime(dayTimings[0].fromTime)} -{" "}
-                    {formatTime(dayTimings[dayTimings.length - 1].toTime)}
-                  </p>
+                  {isClosed ? (
+                    <p className="text-gray-500 italic !text-center">Closed</p>
+                  ) : (
+                    <p>
+                      {formatTime(dayTimings[0].fromTime)} -{" "}
+                      {formatTime(dayTimings[dayTimings.length - 1].toTime)}
+                    </p>
+                  )}
                 </div>
               </div>
             </li>

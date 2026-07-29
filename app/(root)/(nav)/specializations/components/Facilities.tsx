@@ -6,6 +6,27 @@ import { FacilityType, TreatmentType } from "@/models/schema";
 import { cn } from "@/lib/utils";
 import FacilitesModel from "./FicalitiesModel";
 
+// Renders the facility's actual backend image (from `images[0]`), falling back
+// to a local placeholder only when there is genuinely no image or it fails to
+// load. Keeps its own error state so one broken URL doesn't affect the others.
+const FacilityImage = ({ src, alt }: { src: string; alt: string }) => {
+  const [errored, setErrored] = useState(false);
+  const usePlaceholder = errored || !src;
+  return (
+    <Image
+      src={usePlaceholder ? "/icons/hospital.svg" : src}
+      alt={alt}
+      width={320}
+      height={180}
+      onError={() => setErrored(true)}
+      className={cn(
+        "w-full h-full transition-transform duration-500 group-hover:scale-105",
+        usePlaceholder ? "object-contain p-10 opacity-30" : "object-cover",
+      )}
+    />
+  );
+};
+
 const Facilites = ({
   facilities,
   showHorizontal,
@@ -29,7 +50,7 @@ const Facilites = ({
         className={cn(
           "mx-auto w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7 mb-8 ",
           showHorizontal &&
-          "flex-row flex-nowrap overflow-x-auto sm:py-3 pb-8 px-6 md:px-16 justify-start scrollbar-hide"
+            "flex-row flex-nowrap overflow-x-auto sm:py-3 pb-8 px-6 md:px-16 justify-start scrollbar-hide",
         )}
       >
         {facilities.map((facility) => (
@@ -39,20 +60,18 @@ const Facilites = ({
             whileHover={{ y: -5 }}
             onClick={() => handleTreatmentClick(facility)}
           >
-            <div className="rounded-2xl overflow-hidden mb-6 aspect-video bg-slate-50">
-              <Image
-                src={facility.image || "https://lh3.googleusercontent.com/aida-public/AB6AXuCstbqzyyuLm5qCQhe2HB1bp39zPiR0v_XHFMSKt8bxWWm91Li4qBmJYFvpOKea1-uJDafqaNY0vuCyeIyJ-RzF4A-3LMup23IPtVyb9Gbrn6OUaeuaEUFLYYYc9xUoUmrHd1MdtlKx934__KVoy25HhFm1kjnHkTwJel3L5xPj5T8ec0B8AhyCDRSG_RvWVAB6_i0jLJcEnU67Stef8sMGUgU4_vDJo2bFRH9bpqMWUhst49UDEp3qucLsrXQtRgs57quXHJM8PQY"}
+            <div className="rounded-2xl overflow-hidden mb-6 aspect-video bg-slate-100">
+              <FacilityImage
+                // SSR data carries the raw `images` array; the client-mapped
+                // shape carries a singular `image`. Support both so the real
+                // backend image always renders.
+                src={(facility as any).images?.[0] || facility.image || ""}
                 alt={facility.name}
-                width={320}
-                height={180}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-              // onError={(e) => {
-              //   const target = e.target as HTMLImageElement;
-              //   target.src = "/icons/image.svg";
-              // }}
               />
             </div>
-            <h5 className="text-xl font-bold mb-2 text-slate-900 line-clamp-1">{facility.name}</h5>
+            <h5 className="text-xl font-bold mb-2 text-slate-900 line-clamp-1">
+              {facility.name}
+            </h5>
             <p className="text-slate-500 text-sm line-clamp-2">
               {facility.description}
             </p>
