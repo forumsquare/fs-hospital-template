@@ -29,7 +29,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
+import { useSession } from "@/hooks/useSession";
+import { toast } from "sonner";
 
 const ITEMS_PER_PAGE = 12;
 
@@ -45,10 +47,27 @@ const ReviewsClient: React.FC<ReviewsClientProps> = ({
   initialDoctorId,
 }) => {
   const router = useRouter();
+  const pathname = usePathname();
+  // Session is read from a cookie (no fetch/redirect on page load); it's only
+  // consulted when the user clicks "Write a Review".
+  const { isLoggedIn, isSessionLoading } = useSession();
   const { data: doctorsList, isPending: doctorsPending } =
     useGetDoctorListQuery({
       initialData: initialDoctors,
     });
+
+  // Reviews are verified: a user reviews a doctor from a completed appointment.
+  // Only checked on click — logged-out users go to login, logged-in users go to
+  // their bookings (which lists completed visits they can rate).
+  const handleWriteReview = () => {
+    if (isSessionLoading) return;
+    if (!isLoggedIn) {
+      router.push(`/signup?redirect=${pathname}`);
+      return;
+    }
+    toast.info("Open a completed appointment to write your review.");
+    router.push("/account/booking");
+  };
 
   const [selectedDoctor, setSelectedDoctor] = useState(
     initialDoctorId || initialDoctors?.[0]?.id || "",
@@ -136,7 +155,11 @@ const ReviewsClient: React.FC<ReviewsClientProps> = ({
             </p>
           </div>
         </div>
-        <button className="bg-primary text-white w-full md:w-auto px-8 py-3.5 md:py-4 rounded-2xl font-bold flex items-center justify-center gap-3 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300">
+        <button
+          type="button"
+          onClick={handleWriteReview}
+          className="bg-primary text-white w-full md:w-auto px-8 py-3.5 md:py-4 rounded-2xl font-bold flex items-center justify-center gap-3 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
+        >
           <Edit3 className="w-5 h-5" />
           Write a Review
         </button>

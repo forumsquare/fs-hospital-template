@@ -102,7 +102,9 @@ export function EditAccountForm({ profile }: EditAccountFormProps) {
             label="Phone Number"
             name="phone"
             placeholder="Enter your mobile number"
-            leading={<InputIcon src="/icons/phone.svg" alt="mobile" />}
+            leading={
+              <span className="text-sm text-slate-700 font-semibold">+91</span>
+            }
             disabled={profile.authType === AuthType.PHONE}
             className="sm:col-span-2"
           />

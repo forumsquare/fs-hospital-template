@@ -12,7 +12,12 @@ type FooterProps = {
   media: SocialMediaType;
   logo: string;
   title: string;
-  timings?: { day: number; fromTime: string; toTime: string; addressId?: string | null }[];
+  timings?: {
+    day: number;
+    fromTime: string;
+    toTime: string;
+    addressId?: string | null;
+  }[];
   email?: string | null;
   phoneNo?: string | null;
 };
@@ -21,7 +26,12 @@ const TimingsInfo = ({
   timings,
   primaryAddressId,
 }: {
-  timings?: { day: number; fromTime: string; toTime: string; addressId?: string | null }[];
+  timings?: {
+    day: number;
+    fromTime: string;
+    toTime: string;
+    addressId?: string | null;
+  }[];
   primaryAddressId?: string;
 }) => {
   const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -226,9 +236,9 @@ const Footer: FC<FooterProps> = ({
               )}
             </div>
           </ul>
-          <div className="sm:col-span-2 lg:col-span-1 flex flex-col items-center sm:items-start">
+          {/* <div className="sm:col-span-2 lg:col-span-1 flex flex-col items-center sm:items-start">
             <TimingsInfo timings={timings} primaryAddressId={addresses?.[0]?.id} />
-          </div>
+          </div> */}
         </div>
       </div>
       <p className="mb-5 mt-2 text-center text-white/50 font-medium tracking-wide  text-sm">

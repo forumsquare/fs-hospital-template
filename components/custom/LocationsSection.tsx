@@ -5,6 +5,7 @@ import Image from "next/image";
 import { AddressType } from "@/models/schema";
 import { MapPin, Phone, Clock, Navigation } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 type BranchTiming = {
   day: number;
@@ -39,20 +40,23 @@ export default function LocationsSection({
   if (!addresses || addresses.length === 0) return null;
 
   const selectedAddress = addresses[selectedIdx];
-  const query = selectedAddress.lat && selectedAddress.lng
-    ? `${selectedAddress.lat},${selectedAddress.lng}`
-    : encodeURIComponent(`${selectedAddress.address}, ${selectedAddress.city}`);
+  const query =
+    selectedAddress.lat && selectedAddress.lng
+      ? `${selectedAddress.lat},${selectedAddress.lng}`
+      : encodeURIComponent(
+          `${selectedAddress.address}, ${selectedAddress.city}`,
+        );
 
   // Timings for the currently selected branch, grouped by weekday.
   const branchTimings = (timings ?? []).filter(
-    (t) => t.addressId === selectedAddress.id
+    (t) => t.addressId === selectedAddress.id,
   );
   const timingsByDay = branchTimings.reduce(
     (acc, t) => {
       (acc[t.day] ??= []).push(t);
       return acc;
     },
-    {} as Record<number, BranchTiming[]>
+    {} as Record<number, BranchTiming[]>,
   );
   const hasBranchTimings = branchTimings.length > 0;
 
@@ -68,21 +72,32 @@ export default function LocationsSection({
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
+        <div
+          className={cn([
+            "grid grid-cols-1 md:grid-cols-2  gap-8 mb-20",
+            addresses.length > 2 && "lg:grid-cols-3",
+          ])}
+        >
           {addresses.map((address, idx) => (
-            <div 
-              key={idx} 
+            <div
+              key={idx}
               onClick={() => setSelectedIdx(idx)}
               className={`cursor-pointer bg-white rounded-[24px] p-8 transition-all duration-300 border flex flex-col h-full ${
-                selectedIdx === idx 
-                  ? "border-blue-500 shadow-[0_8px_40px_rgb(59,130,246,0.1)] ring-1 ring-blue-500" 
+                selectedIdx === idx
+                  ? "border-blue-500 shadow-[0_8px_40px_rgb(59,130,246,0.1)] ring-1 ring-blue-500"
                   : "border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_40px_rgb(0,0,0,0.08)]"
               }`}
             >
-              <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-6 transition-colors ${
-                selectedIdx === idx ? "bg-blue-600 text-white" : "bg-blue-50 text-blue-600"
-              }`}>
-                <MapPin className={`w-6 h-6 ${selectedIdx === idx ? "fill-white/20" : "fill-blue-600/20"}`} />
+              <div
+                className={`w-12 h-12 rounded-xl flex items-center justify-center mb-6 transition-colors ${
+                  selectedIdx === idx
+                    ? "bg-blue-600 text-white"
+                    : "bg-blue-50 text-blue-600"
+                }`}
+              >
+                <MapPin
+                  className={`w-6 h-6 ${selectedIdx === idx ? "fill-white/20" : "fill-blue-600/20"}`}
+                />
               </div>
 
               <h3 className="text-xl font-bold text-slate-900 mb-3">
@@ -90,14 +105,17 @@ export default function LocationsSection({
               </h3>
 
               <p className="text-slate-500 text-sm leading-relaxed mb-6 flex-1">
-                {address.address}, {address.area && `${address.area},`} {address.city}, {address.state} {address.zipcode}
+                {address.address}, {address.area && `${address.area},`}{" "}
+                {address.city}, {address.state} {address.zipcode}
               </p>
 
               <div className="space-y-4">
                 {(address.contactNo || (address as any).phone?.[0]) && (
                   <div className="flex items-center text-slate-600 text-sm">
                     <Phone className="w-4 h-4 mr-3 text-slate-400" />
-                    <span>+91 {address.contactNo || (address as any).phone?.[0]}</span>
+                    <span>
+                      +91 {address.contactNo || (address as any).phone?.[0]}
+                    </span>
                   </div>
                 )}
 
@@ -129,7 +147,9 @@ export default function LocationsSection({
               <h3 className="text-lg font-bold text-slate-900">Timings</h3>
             </div>
             <p className="text-slate-500 text-sm mb-5">
-              {selectedAddress.area || selectedAddress.city || "Selected branch"}
+              {selectedAddress.area ||
+                selectedAddress.city ||
+                "Selected branch"}
             </p>
 
             {hasBranchTimings ? (
@@ -149,7 +169,7 @@ export default function LocationsSection({
                         <span className="text-slate-600 whitespace-nowrap tabular-nums">
                           {formatTimingTime(dayTimings[0].fromTime)} -{" "}
                           {formatTimingTime(
-                            dayTimings[dayTimings.length - 1].toTime
+                            dayTimings[dayTimings.length - 1].toTime,
                           )}
                         </span>
                       )}
