@@ -1,4 +1,5 @@
 import { formatTime, formatDate } from "@/lib/utils";
+import { genderList } from "@/constants/list";
 import { useBookingStore } from "@/stores/booking";
 import {
   CalendarDays,
@@ -107,7 +108,8 @@ export const BookingInfo = ({
                   <div className="flex justify-between text-gray-600 pt-2 border-t border-blue-100 mt-2">
                     <span>
                       Gender:{" "}
-                      {patientInfo?.gender === "MALE" ? "Male" : "Female"}
+                      {genderList.find((g) => g.value === patientInfo?.gender)
+                        ?.label ?? patientInfo?.gender}
                     </span>
                     <span>Age: {patientInfo?.age}</span>
                   </div>

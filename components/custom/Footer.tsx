@@ -12,15 +12,17 @@ type FooterProps = {
   media: SocialMediaType;
   logo: string;
   title: string;
-  timings?: { day: number; fromTime: string; toTime: string }[];
+  timings?: { day: number; fromTime: string; toTime: string; addressId?: string | null }[];
   email?: string | null;
   phoneNo?: string | null;
 };
 
 const TimingsInfo = ({
   timings,
+  primaryAddressId,
 }: {
-  timings?: { day: number; fromTime: string; toTime: string }[];
+  timings?: { day: number; fromTime: string; toTime: string; addressId?: string | null }[];
+  primaryAddressId?: string;
 }) => {
   const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
@@ -41,14 +43,27 @@ const TimingsInfo = ({
 
   if (!timings || timings.length === 0) return null;
 
+  // Timings are per-branch; the footer shows the primary (first) branch only.
+  // Fall back to legacy store-wide timings (no addressId) when the primary
+  // branch has none, so existing stores keep showing their hours.
+  const branchTimings = primaryAddressId
+    ? timings.filter((t) => t.addressId === primaryAddressId)
+    : [];
+  const primaryTimings =
+    branchTimings.length > 0
+      ? branchTimings
+      : timings.filter((t) => t.addressId == null);
+
+  if (primaryTimings.length === 0) return null;
+
   // Group timings by day
-  const timingsByDay = timings.reduce(
+  const timingsByDay = primaryTimings.reduce(
     (acc, t) => {
       if (!acc[t.day]) acc[t.day] = [];
       acc[t.day].push(t);
       return acc;
     },
-    {} as Record<number, typeof timings>,
+    {} as Record<number, typeof primaryTimings>,
   );
 
   return (
@@ -212,7 +227,7 @@ const Footer: FC<FooterProps> = ({
             </div>
           </ul>
           <div className="sm:col-span-2 lg:col-span-1 flex flex-col items-center sm:items-start">
-            <TimingsInfo timings={timings} />
+            <TimingsInfo timings={timings} primaryAddressId={addresses?.[0]?.id} />
           </div>
         </div>
       </div>

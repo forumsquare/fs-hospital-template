@@ -6,15 +6,55 @@ import { AddressType } from "@/models/schema";
 import { MapPin, Phone, Clock, Navigation } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-export default function LocationsSection({ addresses }: { addresses: AddressType[] }) {
+type BranchTiming = {
+  day: number;
+  fromTime: string;
+  toTime: string;
+  addressId?: string | null;
+};
+
+const DAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+const formatTimingTime = (value: string) => {
+  try {
+    return new Date(value).toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    });
+  } catch {
+    return value;
+  }
+};
+
+export default function LocationsSection({
+  addresses,
+  timings,
+}: {
+  addresses: AddressType[];
+  timings?: BranchTiming[];
+}) {
   const [selectedIdx, setSelectedIdx] = React.useState(0);
-  
+
   if (!addresses || addresses.length === 0) return null;
-  
+
   const selectedAddress = addresses[selectedIdx];
-  const query = selectedAddress.lat && selectedAddress.lng 
-    ? `${selectedAddress.lat},${selectedAddress.lng}` 
+  const query = selectedAddress.lat && selectedAddress.lng
+    ? `${selectedAddress.lat},${selectedAddress.lng}`
     : encodeURIComponent(`${selectedAddress.address}, ${selectedAddress.city}`);
+
+  // Timings for the currently selected branch, grouped by weekday.
+  const branchTimings = (timings ?? []).filter(
+    (t) => t.addressId === selectedAddress.id
+  );
+  const timingsByDay = branchTimings.reduce(
+    (acc, t) => {
+      (acc[t.day] ??= []).push(t);
+      return acc;
+    },
+    {} as Record<number, BranchTiming[]>
+  );
+  const hasBranchTimings = branchTimings.length > 0;
 
   return (
     <section className="w-full py-10 sm:py-20">
@@ -70,16 +110,59 @@ export default function LocationsSection({ addresses }: { addresses: AddressType
           ))}
         </div>
 
-        {/* Global Network Map Representation */}
-        <div className="rounded-[32px] overflow-hidden bg-[#f8fbff] aspect-[4/5] sm:aspect-[16/9] md:aspect-[21/9] relative shadow-2xl border border-slate-100">
-          <iframe
-            style={{ height: "100%", width: "100%", border: 0 }}
-            src={`https://www.google.com/maps/embed/v1/place?q=${query}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8"}`}
-            allowFullScreen
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-            title="Google Maps"
-          ></iframe>
+        {/* Map + timings for the selected branch */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2 rounded-[32px] overflow-hidden bg-[#f8fbff] aspect-[4/5] sm:aspect-[16/9] relative shadow-2xl border border-slate-100">
+            <iframe
+              style={{ height: "100%", width: "100%", border: 0 }}
+              src={`https://www.google.com/maps/embed/v1/place?q=${query}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8"}`}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="Google Maps"
+            ></iframe>
+          </div>
+
+          <div className="rounded-[32px] border border-slate-100 bg-white p-6 sm:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] flex flex-col">
+            <div className="flex items-center gap-2 mb-1">
+              <Clock className="w-5 h-5 text-blue-600" />
+              <h3 className="text-lg font-bold text-slate-900">Timings</h3>
+            </div>
+            <p className="text-slate-500 text-sm mb-5">
+              {selectedAddress.area || selectedAddress.city || "Selected branch"}
+            </p>
+
+            {hasBranchTimings ? (
+              <ul className="space-y-2.5">
+                {DAY_NAMES.map((day, index) => {
+                  const dayTimings = timingsByDay[index];
+                  const isClosed = !dayTimings || dayTimings.length === 0;
+                  return (
+                    <li
+                      key={index}
+                      className="flex items-center justify-between gap-3 text-sm"
+                    >
+                      <span className="font-medium text-slate-700">{day}</span>
+                      {isClosed ? (
+                        <span className="text-slate-400 italic">Closed</span>
+                      ) : (
+                        <span className="text-slate-600 whitespace-nowrap tabular-nums">
+                          {formatTimingTime(dayTimings[0].fromTime)} -{" "}
+                          {formatTimingTime(
+                            dayTimings[dayTimings.length - 1].toTime
+                          )}
+                        </span>
+                      )}
+                    </li>
+                  );
+                })}
+              </ul>
+            ) : (
+              <p className="text-sm text-slate-400 italic mt-2">
+                Timings not available for this branch.
+              </p>
+            )}
+          </div>
         </div>
       </div>
     </section>

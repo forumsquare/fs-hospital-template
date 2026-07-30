@@ -52,7 +52,12 @@ export default async function HomePage() {
       <TreatmentsList procedures={procedures} />
       <TestimonialList testimonials={testimonials} />
       {/* <PreFooter store={store} /> */}
-      {store.addressList && <LocationsSection addresses={store.addressList} />}
+      {store.addressList && (
+        <LocationsSection
+          addresses={store.addressList}
+          timings={store.timings}
+        />
+      )}
     </section>
   );
 }

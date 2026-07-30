@@ -61,6 +61,7 @@ export const StoreInfoSchema = z.object({
     day: z.number(),
     fromTime: z.string(),
     toTime: z.string(),
+    addressId: z.string().nullable().optional(),
   })).optional(),
 });
 
@@ -76,7 +77,7 @@ export const PatientInfoSchema = z.object({
   age: z
     .string()
     .refine((value) => parseInt(value) < 150, "Age must be less than 150"),
-  gender: z.enum(["MALE", "FEMALE"]),
+  gender: z.enum(["MALE", "FEMALE", "OTHER", "PREFER_NOT_TO_SAY"]),
   comment: z.string().optional(),
 });
 

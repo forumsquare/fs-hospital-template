@@ -3,6 +3,8 @@ import { DropDownItemType, NavType, Rating } from "@/models/types";
 export const genderList: DropDownItemType[] = [
   { label: "Male", value: "MALE" },
   { label: "Female", value: "FEMALE" },
+  { label: "Others", value: "OTHER" },
+  { label: "Prefer not to say", value: "PREFER_NOT_TO_SAY" },
 ];
 
 export const navList: NavType[] = [
