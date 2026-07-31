@@ -1,4 +1,4 @@
-import { ReviewType as ReviewEnum, slotType } from "@/lib/enum";
+import { slotType } from "@/lib/enum";
 import { Description } from "@radix-ui/react-dialog";
 import { date, z } from "zod";
 
@@ -309,9 +309,10 @@ export const NotificationSchema = z.object({
   id: z.string().uuid(),
   title: z.string(),
   content: z.string(),
-  type: z.enum(Object.values(ReviewEnum) as [string, ...string[]]),
+  type: z.string(),
   data: z.object({
     id: z.string(),
+    senderType: z.string().optional(),
   }),
   isRead: z.boolean(),
   createdAt: z.string(),

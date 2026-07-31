@@ -1,6 +1,6 @@
 import { apiEndpoints } from "@/constants/api";
 import { qKey } from "@/lib/utils";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   getNotifications,
   getUnreadCount,
@@ -39,9 +39,17 @@ export const useGetUnreadCountQuery = () => {
 };
 
 export const useMarkAsReadQuery = () => {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationKey: qKey(apiEndpoints.notification.updateSingle),
     mutationFn: (notificationId: string) => markAsRead(notificationId),
-    onSuccess: () => {},
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: qKey(apiEndpoints.notification.history),
+      });
+      queryClient.invalidateQueries({
+        queryKey: qKey(apiEndpoints.notification.unreadCount),
+      });
+    },
   });
 };

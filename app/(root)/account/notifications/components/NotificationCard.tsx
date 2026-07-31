@@ -3,6 +3,7 @@
 import { cn, formatTime } from "@/lib/utils";
 import { NotificationType } from "@/models/schema";
 import { useMarkAsReadQuery } from "@/services/query/notificationsQuery";
+import useChatMessageStore from "@/stores/chatMessage";
 import { Icon } from "@radix-ui/react-select";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -17,10 +18,21 @@ export const NotificationCard = ({
   // console.log(notification);
   const router = useRouter();
   const { mutateAsync: markAsRead } = useMarkAsReadQuery();
+  const { setIsChatOpen } = useChatMessageStore();
 
   const handleClick = () => {
-    markAsRead(notification.id);
-    router.push(`/account/booking/${notification.data.id}`);
+    if (!notification.isRead) {
+      markAsRead(notification.id);
+    }
+    // Persisted notifications carry `type` ("APPOINTMENT" | "CHAT") plus a
+    // `data.id` for the related entity. Chat notifications open the global
+    // chat panel (mirroring the real-time toast), everything else routes to
+    // the related booking.
+    if (notification.type === "CHAT") {
+      setIsChatOpen(true);
+    } else {
+      router.push(`/account/booking/${notification.data.id}`);
+    }
   };
   return (
     <div

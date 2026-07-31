@@ -75,7 +75,7 @@ const HeaderSection = ({ logo, name }: { logo: string; name: string }) => {
                         variant={"destructive"}
                         className="absolute -top-2 -right-2 h-4 !w-4 p-0 flex justify-center items-center"
                       >
-                        {data}16
+                        {data}
                       </Badge>
                     )}
 
