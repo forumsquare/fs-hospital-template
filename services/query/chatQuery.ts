@@ -4,6 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getMessages, getUnreadCount, sendMessage, updateSeenByChatId } from "../api/chat";
 import useChatMessageStore from "@/stores/chatMessage";
 import { useSession } from "@/hooks/useSession";
+import { useStoreId } from "@/components/providers/StoreProvider";
 
 export const useGetMessagesQuery = (data: { page: number; limit: number }) => {
   const { chatRoomId } = useChatMessageStore();
@@ -49,9 +50,10 @@ export const useUpdateSeenMutation = () => {
 
 export const useGetUnreadCountQuery = () => {
   const { isLoggedIn } = useSession();
+  const storeId = useStoreId();
   return useQuery({
-    queryKey: qKey(apiEndpoints.chat.getUnreadCount),
-    queryFn: getUnreadCount,
+    queryKey: qKey([apiEndpoints.chat.getUnreadCount, storeId]),
+    queryFn: () => getUnreadCount(storeId),
     // ChatBot renders on every page, so without this the endpoint was called
     // on every route while signed out and 401'd each time.
     enabled: isLoggedIn,

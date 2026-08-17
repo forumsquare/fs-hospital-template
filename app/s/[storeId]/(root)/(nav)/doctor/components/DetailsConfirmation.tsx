@@ -5,7 +5,6 @@ import { CustomButton, SubmitButton } from "@/components/custom/CustomButtons";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useBookSlotMutation } from "@/services/query/appointmentQuery";
-import { address_id } from "@/constants/constant";
 import CustomLoading from "@/components/custom/CustomLoading";
 import { Loader2 } from "lucide-react";
 
@@ -34,7 +33,7 @@ const DetailsConfirmation = () => {
       consultantId: doctorInfo?.id,
       date: bookingDate.toISOString(),
       time: bookingTime?.toISOString(),
-      addressId: bookingAddress?.id || address_id,
+      addressId: bookingAddress?.id ?? "",
       age: patientInfo?.age,
       name: patientInfo?.name,
       phoneNo: patientInfo?.phone,

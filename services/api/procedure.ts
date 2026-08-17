@@ -1,10 +1,10 @@
 import { apiEndpoints, StatusCode } from "@/constants/api";
-import { storeId } from "@/constants/constant";
 import { apiInstance, handleErr } from "@/lib/utils";
 import { ProcedureType } from "@/models/schema";
 import { APISnapshotType } from "@/models/types";
 
 export const getProceduresList = async (
+    storeId: string,
     specializationId?: string
 ): Promise<ProcedureType[]> => {
     try {

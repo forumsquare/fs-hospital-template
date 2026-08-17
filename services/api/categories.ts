@@ -1,9 +1,8 @@
 import { apiEndpoints, StatusCode } from "@/constants/api";
-import { storeId } from "@/constants/constant";
 import { apiInstance, handleErr } from "@/lib/utils";
 import { APISnapshotType } from "@/models/types";
 
-export const getCategories = async (): Promise<
+export const getCategories = async (storeId: string): Promise<
   {
     id: string;
     name: string;

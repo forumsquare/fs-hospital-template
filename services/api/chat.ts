@@ -1,5 +1,5 @@
 import { apiEndpoints, StatusCode } from "@/constants/api";
-import { storeId, wsBaseUrl } from "@/constants/constant";
+import { wsBaseUrl } from "@/constants/constant";
 import { getCookie } from "@/lib/serverCom";
 import { accessToken, apiInstance, handleErr } from "@/lib/utils";
 import { APISnapshotType } from "@/models/types";
@@ -73,7 +73,7 @@ export const updateSeenByChatId = async (data: {
   }
 };
 
-export const getUnreadCount = async () => {
+export const getUnreadCount = async (storeId: string) => {
   try {
     const response = await apiInstance.get<APISnapshotType>(
       apiEndpoints.chat.getUnreadCount + "?storeId=" + storeId,

@@ -15,7 +15,6 @@ import { Button } from "@/components/ui/button";
 import AddressSelector from "./AddressSelector";
 import { useGetSlotsQuery } from "@/services/query/doctorQuery";
 import { useParams } from "next/navigation";
-import { address_id } from "@/constants/constant";
 import CustomLoading from "@/components/custom/CustomLoading";
 import NoDataPage from "@/components/custom/NoDataPage";
 import { toast } from "sonner";

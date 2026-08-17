@@ -15,7 +15,7 @@ const AuthPage = () => {
     <section className="gap-y-12 flex flex-col h-fit">
       <div className="gap-y-7 flex-1 flex flex-col ">
         <div className="space-y-1 my-5 text-center">
-          <h4 className="font-bold text-4xl ">Welcome to Episkin </h4>
+          <h4 className="font-bold text-4xl ">Welcome</h4>
           <p className="text-black/50 font-semibold text-sm">
             Log in to book appointments, view your visit details, and more — all
             at your fingertips.
