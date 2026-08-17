@@ -63,6 +63,18 @@ export const StoreInfoSchema = z.object({
     toTime: z.string(),
     addressId: z.string().nullable().optional(),
   })).optional(),
+  // Per-hospital branding tokens (set from the dashboard). Colors are hex;
+  // the template converts them to HSL CSS variables. See lib/theme.ts.
+  theme: z
+    .object({
+      primary: z.string().nullish(),
+      secondary: z.string().nullish(),
+      accent: z.string().nullish(),
+      background: z.string().nullish(),
+      font: z.string().nullish(),
+      radius: z.string().nullish(),
+    })
+    .nullish(),
 });
 
 export type StoreInfoType = z.infer<typeof StoreInfoSchema>;

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { StoreProvider } from "@/components/providers/StoreProvider";
 import { getStoreInfoSSR } from "@/services/api/server";
+import { themeStyle } from "@/lib/theme";
 
 export async function generateMetadata({
   params,
@@ -23,8 +24,9 @@ export async function generateMetadata({
 }
 
 /**
- * Tenant root: makes the resolved storeId available to client components.
- * Per-tenant theming is injected here in a later step.
+ * Tenant root: seeds storeId for client components and injects the hospital's
+ * branding as CSS variables. `display: contents` cascades the vars to the whole
+ * subtree without adding a layout box. Unset tokens fall back to globals.css.
  */
 export default async function TenantLayout({
   children,
@@ -34,5 +36,20 @@ export default async function TenantLayout({
   params: Promise<{ storeId: string }>;
 }) {
   const { storeId } = await params;
-  return <StoreProvider storeId={storeId}>{children}</StoreProvider>;
+
+  let theme: Awaited<ReturnType<typeof getStoreInfoSSR>>["theme"] = null;
+  try {
+    const store = await getStoreInfoSSR(storeId);
+    theme = store.theme ?? null;
+  } catch {
+    // Fall back to the default theme if the store can't be fetched.
+  }
+
+  return (
+    <StoreProvider storeId={storeId}>
+      <div style={{ display: "contents", ...themeStyle(theme) }}>
+        {children}
+      </div>
+    </StoreProvider>
+  );
 }
