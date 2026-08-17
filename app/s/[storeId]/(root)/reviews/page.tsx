@@ -4,8 +4,13 @@ import ReviewsClient from "./components/ReviewsClient";
 import { UserReviewType } from "@/models/schema";
 import { Metadata } from "next";
 
-export async function generateMetadata(): Promise<Metadata> {
-  const store = await getStoreInfoSSR();
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ storeId: string }>;
+}): Promise<Metadata> {
+  const { storeId } = await params;
+  const store = await getStoreInfoSSR(storeId);
   return {
     title: `Patient Reviews | ${store.name}`,
     description: "Read what our patients have to say about their experiences and treatments.",
@@ -15,10 +20,11 @@ export async function generateMetadata(): Promise<Metadata> {
 
 const ITEMS_PER_PAGE = 12;
 
-export default async function ReviewsPage({ searchParams }: { searchParams: Promise<{ id?: string }> }) {
+export default async function ReviewsPage({ params, searchParams }: { params: Promise<{ storeId: string }>; searchParams: Promise<{ id?: string }> }) {
+  const { storeId } = await params;
   const { id } = await searchParams;
   try {
-    const doctorsList = await getDoctorsListSSR();
+    const doctorsList = await getDoctorsListSSR(storeId);
     const initialDoctorId = id || doctorsList?.[0]?.id || "";
 
     let initialReviews: UserReviewType[] = [];

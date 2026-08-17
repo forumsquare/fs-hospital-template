@@ -5,10 +5,13 @@ import { getStoreInfoSSR } from "@/services/api/server";
 
 export default async function Layout({
   children,
+  params,
 }: Readonly<{
   children: React.ReactNode;
+  params: Promise<{ storeId: string }>;
 }>) {
-  const store = await getStoreInfoSSR();
+  const { storeId } = await params;
+  const store = await getStoreInfoSSR(storeId);
   return (
     <section className="relative flex min-h-screen flex-col">
       {/* Background container with absolute positioning */}

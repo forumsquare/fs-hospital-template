@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { UserSchema, UserType } from "@/models/schema";
-import { EditAccountForm } from "@/app/(root)/account/edit/components/EditAccountForm";
+import { EditAccountForm } from "./components/EditAccountForm";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { toast, Toaster } from "sonner";
 import { CustomHeader } from "@/components/custom/CustomHeader";

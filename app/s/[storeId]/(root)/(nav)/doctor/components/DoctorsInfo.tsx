@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { ArrowRight, Star, GraduationCap, Briefcase, Languages, ShieldCheck } from "lucide-react";
-import { Testimonial } from "@/app/(root)/components/TestimonialList";
+import { Testimonial } from "../../../components/TestimonialList";
 import { DoctorDetailsType, UserReviewType } from "@/models/schema";
 import { useGetDoctorReviewsQuery } from "@/services/query/doctorQuery";
 import CustomLoading from "@/components/custom/CustomLoading";

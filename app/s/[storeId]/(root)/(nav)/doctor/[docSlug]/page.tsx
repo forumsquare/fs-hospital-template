@@ -10,15 +10,16 @@ import { getStoreInfoSSR } from "@/services/api/server";
 
 interface DoctorPageProps {
   params: Promise<{
+    storeId: string;
     docSlug: string;
   }>;
 }
 
 export async function generateMetadata({ params }: DoctorPageProps): Promise<Metadata> {
-  const { docSlug } = await params;
+  const { storeId, docSlug } = await params;
   try {
     const doctorInfo = await getDoctorByIdSSR(docSlug);
-    const store = await getStoreInfoSSR();
+    const store = await getStoreInfoSSR(storeId);
     if (!doctorInfo) return { title: "Doctor Not Found" };
 
     const categories = doctorInfo.categories.map(c => c.name).join(", ");
@@ -27,7 +28,7 @@ export async function generateMetadata({ params }: DoctorPageProps): Promise<Met
       description: doctorInfo.description.substring(0, 160),
     };
   } catch (error) {
-    const store = await getStoreInfoSSR().catch(() => ({ name: "Hospital" }));
+    const store = await getStoreInfoSSR(storeId).catch(() => ({ name: "Hospital" }));
     return { title: `Doctor Profile | ${store.name}` };
   }
 }

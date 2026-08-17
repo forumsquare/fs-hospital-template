@@ -6,7 +6,7 @@ import { TransitionPanel } from "@/components/ui/transition-panel";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Facilites from "../components/Facilities";
-import { DoctorCard } from "@/app/(root)/components/DoctorsList";
+import { DoctorCard } from "../../../components/DoctorsList";
 import { useGetDoctorListQuery } from "@/services/query/doctorQuery";
 import {
   Carousel,

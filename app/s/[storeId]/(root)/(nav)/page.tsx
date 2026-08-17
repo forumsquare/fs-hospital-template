@@ -12,8 +12,13 @@ import {
 } from "@/services/api/server";
 import { Metadata } from "next";
 
-export async function generateMetadata(): Promise<Metadata> {
-  const store = await getStoreInfoSSR();
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ storeId: string }>;
+}): Promise<Metadata> {
+  const { storeId } = await params;
+  const store = await getStoreInfoSSR(storeId);
   return {
     title: `${store.name} - ${store.tagline}`,
     description: store.about ?? "",
@@ -23,13 +28,18 @@ export async function generateMetadata(): Promise<Metadata> {
 
 import LocationsSection from "@/components/custom/LocationsSection";
 
-export default async function HomePage() {
+export default async function HomePage({
+  params,
+}: {
+  params: Promise<{ storeId: string }>;
+}) {
+  const { storeId } = await params;
   const [doctorsResult, proceduresResult, testimonialsResult, storeResult] =
     await Promise.allSettled([
-      getDoctorsListSSR(),
-      getProceduresListSSR(),
-      getTestimonialsSSR(),
-      getStoreInfoSSR(),
+      getDoctorsListSSR(storeId),
+      getProceduresListSSR(storeId),
+      getTestimonialsSSR(storeId),
+      getStoreInfoSSR(storeId),
     ]);
 
   const doctors =

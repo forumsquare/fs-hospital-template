@@ -43,6 +43,15 @@
 			"database_id": "54d5db25-dfa5-4e84-b5b1-492ae592c213"
 		}
 	],
+	"kv_namespaces": [
+		{
+			// Tenant map (host:<hostname> -> {storeId,status,templateId}),
+			// written by fs_api, read by middleware.ts. Same namespace as fs_api.
+			"binding": "TENANTS",
+			"id": "5547031369cc46dc96e1ec36dfa40e28",
+			"preview_id": "4f05ee8ad8864884add78c6767562984"
+		}
+	],
 	"durable_objects": {
 		"bindings": [
 			{ "name": "NEXT_CACHE_DO_QUEUE", "class_name": "DOQueueHandler" },

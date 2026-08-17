@@ -1,5 +1,5 @@
 "use client";
-import TestTreatmentCards from "@/app/(root)/(nav)/specializations/components/TreatmentCard";
+import TestTreatmentCards from "../(nav)/specializations/components/TreatmentCard";
 import { ProcedureType } from "@/models/schema";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
