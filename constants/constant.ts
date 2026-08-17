@@ -1,4 +1,4 @@
-export const wsBaseUrl = "wss://fs.kiranchowdarapu7.workers.dev";
+export const wsBaseUrl = "wss://api.forumsquare.in";
 // export const wsBaseUrl = "ws://localhost:8787";
 export const storeId = "ff7b53d0-2891-4791-b8d0-fe6320a05a1a";
 

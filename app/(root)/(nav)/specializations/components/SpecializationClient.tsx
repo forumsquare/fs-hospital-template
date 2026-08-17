@@ -116,7 +116,7 @@ const SpecializationClient = ({
     })) || [];
 
   return (
-    <section className=" rounded-2xl sm:mt-14 space-y-7 mx-0 sm:mx-5 px-6 sm:px-10 py-14 sm:mx-auto">
+    <section className=" rounded-2xl sm:mt-14 space-y-7 mx-0  px-6 sm:px-10 py-14 sm:mx-auto">
       <h2 className="text-primary font-extrabold text-3xl sm:text-4xl px-2">
         Our Specializations
       </h2>

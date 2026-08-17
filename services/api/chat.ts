@@ -90,5 +90,5 @@ export const getUnreadCount = async () => {
   }
 };
 
-// websocat -v --text "ws://fs.kiranchowdarapu7.workers.dev/ws/chat?storeId=ff7b53d0-2891-4791-b8d0-fe6320a05a1a"
+// websocat -v --text "wss://api.forumsquare.in/ws/chat?storeId=ff7b53d0-2891-4791-b8d0-fe6320a05a1a"
 // --header "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIzNjAxMDMzOC0zZTYzLTRkYTUtYTZmYS03ZTYxZjI4NmMwZDIiLCJhdXRoVHlwZSI6IkVNQUlMIiwidHlwZSI6IlVTRVIiLCJleHAiOjE3NDU0NzQ0MTN9.CYHvCEG7ZE-B1BFDP8nn0mKFqaH3dAmFq09b2-CUAuM"

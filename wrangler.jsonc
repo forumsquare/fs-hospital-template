@@ -1,0 +1,37 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"main": ".open-next/worker.js",
+	"name": "fs-hospital-template",
+	"account_id": "f082e4d1d7a8566f5881d9b601366f78",
+	"compatibility_date": "2026-08-17",
+	"compatibility_flags": [
+		"nodejs_compat",
+		"global_fetch_strictly_public"
+	],
+	"assets": {
+		"directory": ".open-next/assets",
+		"binding": "ASSETS"
+	},
+	"services": [
+		{
+			// Self-reference service binding, the service name must match the worker name
+			// see https://opennext.js.org/cloudflare/caching
+			"binding": "WORKER_SELF_REFERENCE",
+			"service": "fs-hospital-template"
+		}
+	],
+	"r2_buckets": [
+		// Use R2 incremental cache
+		// See https://opennext.js.org/cloudflare/caching
+		{
+			"binding": "NEXT_INC_CACHE_R2_BUCKET",
+			// The R2 bucket created in Stage 1 (page/ISR cache).
+			"bucket_name": "template-inc-cache"
+		}
+	],
+	"images": {
+		// Enable image optimization
+		// see https://opennext.js.org/cloudflare/howtos/image
+		"binding": "IMAGES"
+	}
+}
