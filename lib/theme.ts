@@ -1,12 +1,11 @@
-import type { CSSProperties } from "react";
 import type { StoreInfoType } from "@/models/schema";
 
 type StoreTheme = NonNullable<StoreInfoType["theme"]>;
 
 /**
  * Convert a hex color ("#3b82f6" or "#39f") to the `H S% L%` triple that the
- * shadcn CSS variables expect (they are used as `hsl(var(--primary))`). Values
- * that aren't hex (already a triple, or an unknown format) pass through as-is.
+ * shadcn CSS variables expect (used as `hsl(var(--primary))`). Values that
+ * aren't hex (already a triple, or an unknown format) pass through as-is.
  */
 function toHslTriple(value: string): string {
   const input = value.trim();
@@ -57,39 +56,50 @@ function lightnessOf(triple: string): number {
   return parseFloat(parts[2] ?? "50") || 50;
 }
 
+/** Strip characters that could break out of the <style> context (defense in depth). */
+function safe(value: string): string {
+  return value.replace(/[<>{};]/g, "").trim();
+}
+
 const DARK_FG = "0 0% 9%";
 const LIGHT_FG = "0 0% 98%";
 
 /** Set a color var plus a contrasting `-foreground` var for readable text. */
 function setPair(
-  style: Record<string, string>,
+  vars: Record<string, string>,
   name: string,
   value: string
 ): void {
-  const triple = toHslTriple(value);
-  style[`--${name}`] = triple;
-  style[`--${name}-foreground`] = lightnessOf(triple) > 55 ? DARK_FG : LIGHT_FG;
+  const triple = safe(toHslTriple(value));
+  if (!triple) return;
+  vars[`--${name}`] = triple;
+  vars[`--${name}-foreground`] = lightnessOf(triple) > 55 ? DARK_FG : LIGHT_FG;
 }
 
 /**
- * Inline CSS-variable style for a tenant's theme. Only overrides the tokens the
- * hospital actually set — everything else falls back to the defaults in
- * globals.css. Returned object is spread onto a wrapper in the tenant layout.
+ * Build a `:root { … }` CSS string overriding the shadcn tokens the hospital
+ * set. Only overrides provided tokens — everything else keeps the globals.css
+ * defaults. Returns "" when there's nothing to theme. Injected as a <style> tag
+ * in the tenant layout; correct because each SSR response serves one tenant.
  */
-export function themeStyle(theme: StoreTheme | null | undefined): CSSProperties {
-  const style: Record<string, string> = {};
-  if (!theme) return style as CSSProperties;
+export function themeCss(theme: StoreTheme | null | undefined): string {
+  if (!theme) return "";
 
-  if (theme.primary) setPair(style, "primary", theme.primary);
-  if (theme.secondary) setPair(style, "secondary", theme.secondary);
-  if (theme.accent) setPair(style, "accent", theme.accent);
+  const vars: Record<string, string> = {};
+  if (theme.primary) setPair(vars, "primary", theme.primary);
+  if (theme.secondary) setPair(vars, "secondary", theme.secondary);
+  if (theme.accent) setPair(vars, "accent", theme.accent);
   if (theme.background) {
-    const triple = toHslTriple(theme.background);
-    style["--background"] = triple;
-    // Body text should stay readable on a custom background.
-    style["--foreground"] = lightnessOf(triple) > 55 ? DARK_FG : LIGHT_FG;
+    const triple = safe(toHslTriple(theme.background));
+    if (triple) {
+      vars["--background"] = triple;
+      vars["--foreground"] = lightnessOf(triple) > 55 ? DARK_FG : LIGHT_FG;
+    }
   }
-  if (theme.radius) style["--radius"] = theme.radius;
+  if (theme.radius) vars["--radius"] = safe(theme.radius);
 
-  return style as CSSProperties;
+  const decls = Object.entries(vars)
+    .map(([k, v]) => `${k}:${v}`)
+    .join(";");
+  return decls ? `:root{${decls}}` : "";
 }

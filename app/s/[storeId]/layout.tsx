@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { StoreProvider } from "@/components/providers/StoreProvider";
 import { getStoreInfoSSR } from "@/services/api/server";
-import { themeStyle } from "@/lib/theme";
+import { themeCss } from "@/lib/theme";
 
 export async function generateMetadata({
   params,
@@ -45,11 +45,12 @@ export default async function TenantLayout({
     // Fall back to the default theme if the store can't be fetched.
   }
 
+  const css = themeCss(theme);
+
   return (
     <StoreProvider storeId={storeId}>
-      <div style={{ display: "contents", ...themeStyle(theme) }}>
-        {children}
-      </div>
+      {css ? <style dangerouslySetInnerHTML={{ __html: css }} /> : null}
+      {children}
     </StoreProvider>
   );
 }
