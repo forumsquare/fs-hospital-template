@@ -15,12 +15,16 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      # Job-level so every sub-step (incl. the R2 cache upload) is authenticated.
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22 # wrangler 4.x requires Node >= 22
 
       - name: Install dependencies
         run: npm ci
@@ -34,6 +38,3 @@ jobs:
 
       - name: Deploy to Cloudflare Workers
         run: npx opennextjs-cloudflare deploy
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
