@@ -1,10 +1,9 @@
 import { apiEndpoints, StatusCode } from "@/constants/api";
-import { storeId } from "@/constants/constant";
 import { apiInstance, handleErr } from "@/lib/utils";
 import { APISnapshotType } from "@/models/types";
 import { TestimonialType } from "@/models/schema";
 
-export const getTestimonials = async ({ page, limit }: { page: number, limit: number }): Promise<TestimonialType[]> => {
+export const getTestimonials = async ({ storeId, page, limit }: { storeId: string, page: number, limit: number }): Promise<TestimonialType[]> => {
     try {
         const response = await apiInstance.get<APISnapshotType>(
             apiEndpoints.testimonials.list.replace(":storeId", storeId)

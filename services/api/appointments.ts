@@ -1,5 +1,4 @@
 import { apiEndpoints, StatusCode } from "@/constants/api";
-// import { consultant_id, storeId } from "@/constants/constant";
 import { apiInstance, handleErr, toLocalISOString } from "@/lib/utils";
 import {
   AppointmentHistoryType,

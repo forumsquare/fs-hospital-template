@@ -1,7 +1,6 @@
 import "server-only";
 
 import { apiEndpoints, StatusCode } from "@/constants/api";
-import { storeId } from "@/constants/constant";
 import { CategoryType, DoctorDetailsType, DoctorType, FacilityType, ProcedureType, StoreInfoType, TestimonialType, UserReviewType } from "@/models/schema";
 import { APISnapshotType } from "@/models/types";
 
@@ -28,17 +27,17 @@ const fetchPublicData = async <T>(path: string, tags: string[] = []): Promise<T>
   return payload.data as T;
 };
 
-export const getDoctorsListSSR = async (): Promise<DoctorType[]> => {
+export const getDoctorsListSSR = async (storeId: string): Promise<DoctorType[]> => {
   const path = apiEndpoints.consultant.list.replace(":storeId", storeId);
   return fetchPublicData<DoctorType[]>(path, ["doctors"]);
 };
 
-export const getProceduresListSSR = async (): Promise<ProcedureType[]> => {
+export const getProceduresListSSR = async (storeId: string): Promise<ProcedureType[]> => {
   const path = apiEndpoints.procedures.list.replace(":storeId", storeId);
   return fetchPublicData<ProcedureType[]>(path, ["procedures"]);
 };
 
-export const getTestimonialsSSR = async (): Promise<TestimonialType[]> => {
+export const getTestimonialsSSR = async (storeId: string): Promise<TestimonialType[]> => {
   const path = apiEndpoints.testimonials.list.replace(":storeId", storeId);
   return fetchPublicData<TestimonialType[]>(path, ["testimonials"]);
 };
@@ -48,7 +47,7 @@ export const getDoctorByIdSSR = async (id: string): Promise<DoctorDetailsType> =
   return fetchPublicData<DoctorDetailsType>(path, ["doctors", id]);
 };
 
-export const getCategoriesSSR = async (): Promise<CategoryType[]> => {
+export const getCategoriesSSR = async (storeId: string): Promise<CategoryType[]> => {
   const path = apiEndpoints.categories.list.replace(":storeId", storeId);
   return fetchPublicData<CategoryType[]>(path, ["categories"]);
 };
@@ -67,17 +66,17 @@ export const getDoctorReviewsSSR = async (data: {
   return fetchPublicData<UserReviewType[]>(path, ["reviews", data.doctorId]);
 };
 
-export const getProceduresBySpecializationSSR = async (specializationId: string): Promise<ProcedureType[]> => {
+export const getProceduresBySpecializationSSR = async (storeId: string, specializationId: string): Promise<ProcedureType[]> => {
   const path = `${apiEndpoints.procedures.list.replace(":storeId", storeId)}?specialization=${specializationId}`;
   return fetchPublicData<ProcedureType[]>(path, ["procedures", specializationId]);
 };
 
-export const getFacilitiesBySpecializationSSR = async (specializationId: string): Promise<FacilityType[]> => {
+export const getFacilitiesBySpecializationSSR = async (storeId: string, specializationId: string): Promise<FacilityType[]> => {
   const path = `${apiEndpoints.facilities.list.replace(":storeId", storeId)}?specialization=${specializationId}`;
   return fetchPublicData<FacilityType[]>(path, ["facilities", specializationId]);
 };
 
-export const getStoreInfoSSR = async (): Promise<StoreInfoType> => {
+export const getStoreInfoSSR = async (storeId: string): Promise<StoreInfoType> => {
   const path = apiEndpoints.store.get.replace(":storeId", storeId);
   return fetchPublicData<StoreInfoType>(path, ["store"]);
 };

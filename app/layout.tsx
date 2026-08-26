@@ -16,18 +16,12 @@ import AppProvider from "@/lib/AppProvider";
 //   weight: "100 900",
 // });
 
-import { getStoreInfoSSR } from "@/services/api/server";
-
-export async function generateMetadata(): Promise<Metadata> {
-  const store = await getStoreInfoSSR();
-  return {
-    title: {
-      default: `${store.name} - ${store.tagline}`,
-      template: `%s | ${store.name}`,
-    },
-    description: store.about ?? "",
-  };
-}
+// Per-tenant metadata is set in app/s/[storeId]/layout.tsx (the root layout has
+// no storeId). This is only a neutral fallback for the not-found/coming-soon
+// pages that render outside any tenant.
+export const metadata: Metadata = {
+  title: "Forumsquare",
+};
 
 // const manrope = Manrope({ subsets: ["latin"] });
 // const quicksand = Quicksand({ subsets: ["latin"] });

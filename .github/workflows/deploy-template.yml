@@ -1,0 +1,40 @@
+name: Deploy Template (Cloudflare Workers)
+
+# Builds the OpenNext template on Linux (Windows can't build it) and deploys it
+# to the client Cloudflare account. With no custom route attached, the Worker is
+# served at fs-hospital-template.<subdomain>.workers.dev — a staging URL that does
+# NOT affect the live episkin.forumsquare.in site (still on Vercel) until cutover.
+
+on:
+  push:
+    # phase-2a-opennext keeps this isolated from main (the live Vercel site).
+    # main is included so it keeps deploying after we merge later.
+    branches: [main, phase-2a-opennext]
+  workflow_dispatch: {} # lets you run it manually from the Actions tab
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      # Job-level so every sub-step (incl. the R2 cache upload) is authenticated.
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22 # wrangler 4.x requires Node >= 22
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build (OpenNext)
+        run: npx opennextjs-cloudflare build
+        env:
+          # NEXT_PUBLIC_* values are baked into the bundle at build time.
+          NEXT_PUBLIC_API_URL: https://api.forumsquare.in
+          NODE_OPTIONS: --max-old-space-size=4096
+
+      - name: Deploy to Cloudflare Workers
+        run: npx opennextjs-cloudflare deploy

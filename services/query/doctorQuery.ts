@@ -1,6 +1,7 @@
 import { apiEndpoints } from "@/constants/api";
 import { qKey } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
+import { useStoreId } from "@/components/providers/StoreProvider";
 import {
   getConsultantAddresses,
   getDoctorById,
@@ -10,9 +11,10 @@ import {
 } from "../api/doctor";
 
 export const useGetDoctorListQuery = (options?: { initialData?: any }) => {
+  const storeId = useStoreId();
   return useQuery({
-    queryKey: qKey(apiEndpoints.consultant.list),
-    queryFn: getDoctorsList,
+    queryKey: qKey([apiEndpoints.consultant.list, storeId]),
+    queryFn: () => getDoctorsList(storeId),
     ...options
   });
 };
@@ -34,9 +36,10 @@ export const useGetDoctorReviewsQuery = (
   },
   options?: { initialData?: any }
 ) => {
+  const storeId = useStoreId();
   return useQuery({
-    queryKey: qKey([apiEndpoints.consultant.getReviews, data.doctorId, data.page.toString(), data.limit.toString(), data.sortBy, data.isAscending.toString()]),
-    queryFn: () => getDoctorReviews(data),
+    queryKey: qKey([apiEndpoints.consultant.getReviews, storeId, data.doctorId, data.page.toString(), data.limit.toString(), data.sortBy, data.isAscending.toString()]),
+    queryFn: () => getDoctorReviews({ ...data, storeId }),
     ...options
   });
 };

@@ -1,11 +1,12 @@
 import { apiEndpoints, StatusCode } from "@/constants/api";
-import { storeId } from "@/constants/constant";
 import { apiInstance, handleErr } from "@/lib/utils";
 import { APISnapshotType } from "@/models/types";
 
 export const getServicesList = async ({
+  storeId,
   categoryId,
 }: {
+  storeId: string;
   categoryId: string;
 }) => {
   try {

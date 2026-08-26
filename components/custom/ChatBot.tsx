@@ -17,7 +17,7 @@ import {
   useUpdateSeenMutation,
 } from "@/services/query/chatQuery";
 import { StatusCode } from "@/constants/api";
-import { storeId } from "@/constants/constant";
+import { useStoreId } from "@/components/providers/StoreProvider";
 import { getCookie } from "@/lib/serverCom";
 import { auth } from "@/lib/firebase";
 import AskForLogin from "./AskForLogin";
@@ -47,6 +47,7 @@ const Comp = ({
   });
 
   const { mutate: sendMessageMutate } = useSendMessageMutation();
+  const storeId = useStoreId();
   const { mutate: updateSeenMutate } = useUpdateSeenMutation();
 
   console.log({ messages })

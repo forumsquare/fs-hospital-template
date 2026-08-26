@@ -1,11 +1,10 @@
 import { apiEndpoints, StatusCode } from "@/constants/api";
-import { storeId } from "@/constants/constant";
 import { apiInstance, handleErr } from "@/lib/utils";
 import { AddressType, DoctorDetailsType, DoctorType, UserReviewType } from "@/models/schema";
 import { APISnapshotType } from "@/models/types";
 import { format } from "date-fns";
 
-export const getDoctorsList = async (): Promise<DoctorType[]> => {
+export const getDoctorsList = async (storeId: string): Promise<DoctorType[]> => {
   try {
     const response = await apiInstance.get<APISnapshotType>(
       apiEndpoints.consultant.list.replace(":storeId", storeId)
@@ -36,12 +35,14 @@ export const getDoctorById = async (
 };
 
 export const getDoctorReviews = async ({
+  storeId,
   doctorId,
   page,
   limit,
   sortBy,
   isAscending,
 }: {
+  storeId: string;
   doctorId: string;
   page: number;
   limit: number;
