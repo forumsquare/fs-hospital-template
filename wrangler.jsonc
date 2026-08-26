@@ -63,5 +63,64 @@
 			"tag": "v1",
 			"new_sqlite_classes": ["DOQueueHandler", "BucketCachePurge"]
 		}
-	]
+	],
+	"env": {
+		"staging": {
+			"name": "fs-hospital-template-staging",
+			"account_id": "f082e4d1d7a8566f5881d9b601366f78",
+			// Suffix wildcard: matches every `<sub>-staging.forumsquare.in` tenant.
+			// It can NOT match staging-api / staging-dashboard (those are PREFIX
+			// hosts), so it never touches the API or dashboard. Never widen this to
+			// `*.forumsquare.in/*` — that pattern took the production API down once.
+			"routes": [
+				{ "pattern": "*-staging.forumsquare.in/*", "zone_name": "forumsquare.in" }
+			],
+			"assets": {
+				"directory": ".open-next/assets",
+				"binding": "ASSETS"
+			},
+			"services": [
+				{
+					// Self-reference — service name MUST equal this env's worker name.
+					"binding": "WORKER_SELF_REFERENCE",
+					"service": "fs-hospital-template-staging"
+				}
+			],
+			"r2_buckets": [
+				{
+					"binding": "NEXT_INC_CACHE_R2_BUCKET",
+					"bucket_name": "template-inc-cache-staging"
+				}
+			],
+			"images": {
+				"binding": "IMAGES"
+			},
+			"d1_databases": [
+				{
+					"binding": "NEXT_TAG_CACHE_D1",
+					"database_name": "template-tag-cache-staging",
+					"database_id": "cef589f2-2c61-4bba-8134-4ae911f68656"
+				}
+			],
+			"kv_namespaces": [
+				{
+					// Same staging TENANTS namespace fs-staging writes to.
+					"binding": "TENANTS",
+					"id": "85b1ae293da84804b25c85021f51b7ef"
+				}
+			],
+			"durable_objects": {
+				"bindings": [
+					{ "name": "NEXT_CACHE_DO_QUEUE", "class_name": "DOQueueHandler" },
+					{ "name": "NEXT_CACHE_DO_PURGE", "class_name": "BucketCachePurge" }
+				]
+			},
+			"migrations": [
+				{
+					"tag": "v1",
+					"new_sqlite_classes": ["DOQueueHandler", "BucketCachePurge"]
+				}
+			]
+		}
+	}
 }
